@@ -89,24 +89,26 @@ const social = data.video?.socialLinks;
           compact
         />
       </header>
-      <aside class="article-media" aria-label="Artikelmedia">
-        <MediaFrame
-          title={data.title}
-          video={data.video}
-          image={data.heroImage}
-        />
-      </aside>
+      <div class="article-sidebar">
+        <aside class="article-media" aria-label="Artikelmedia">
+          <MediaFrame
+            title={data.title}
+            video={data.video}
+            image={data.heroImage}
+          />
+        </aside>
+        {
+          related.length > 0 && (
+            <section class="article-related" aria-labelledby="related-heading">
+              <>
+                <h2 id="related-heading">Fler upplevelser</h2>
+                <ArticleGrid articles={related} compact />
+              </>
+            </section>
+          )
+        }
+      </div>
       <div class="article-body prose"><slot /></div>
-      {
-        related.length > 0 && (
-          <section class="article-related" aria-labelledby="related-heading">
-            <>
-              <h2 id="related-heading">Fler upplevelser</h2>
-              <ArticleGrid articles={related} compact />
-            </>
-          </section>
-        )
-      }
     </div>
   </article>
 </BaseLayout>

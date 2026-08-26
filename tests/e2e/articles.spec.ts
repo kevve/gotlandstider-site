@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
-import { articlePath, draftArticleSlugs, publicArticleSlugs } from "./fixtures";
+import { articlePath, draftArticleSlugs } from "./fixtures";
 
-test("archive lists every public article once and no drafts", async ({
+test("archive lists every published article once and no drafts", async ({
   page,
 }) => {
   await page.goto("/articles/");
@@ -19,8 +19,15 @@ test("archive lists every public article once and no drafts", async ({
     );
 
   const articleLinks = new Set(hrefs.filter((href) => href !== "/articles/"));
+  const publishedArticles = await page.request.get(
+    "/generated/content/articles.json",
+  );
+  const articlePayload = (await publishedArticles.json()) as {
+    items: Array<{ slug: string }>;
+  };
+
   expect([...articleLinks].sort()).toEqual(
-    publicArticleSlugs.map(articlePath).sort(),
+    articlePayload.items.map((article) => articlePath(article.slug)).sort(),
   );
 
   for (const slug of draftArticleSlugs) {
@@ -46,11 +53,31 @@ test("article body begins directly below the intro on desktop", async ({
 
   const intro = await page.locator(".article-intro").boundingBox();
   const body = await page.locator(".article-body").boundingBox();
+  const media = await page.locator(".article-media").boundingBox();
+  const related = await page.locator(".article-related").boundingBox();
 
   expect(intro).not.toBeNull();
   expect(body).not.toBeNull();
+  expect(media).not.toBeNull();
+  expect(related).not.toBeNull();
   expect(body!.y).toBeGreaterThanOrEqual(intro!.y + intro!.height);
   expect(body!.y).toBeLessThan(intro!.y + intro!.height + 48);
+  expect(related!.y).toBeGreaterThanOrEqual(media!.y + media!.height);
+  expect(related!.y).toBeLessThan(media!.y + media!.height + 48);
+});
+
+test("article related stories remain below the body on mobile", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
+
+  const body = await page.locator(".article-body").boundingBox();
+  const related = await page.locator(".article-related").boundingBox();
+
+  expect(body).not.toBeNull();
+  expect(related).not.toBeNull();
+  expect(related!.y).toBeGreaterThanOrEqual(body!.y + body!.height);
 });
 
 test("YouTube article renders its heading and privacy-friendly embed", async ({

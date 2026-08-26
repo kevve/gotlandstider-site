@@ -81,7 +81,9 @@ test("compatibility feeds and discovery resources remain public", async ({
   expect(articles.status()).toBe(200);
   expect(articles.headers()["content-type"]).toContain("application/json");
   const articlePayload = await articles.json();
-  expect(articlePayload.items).toHaveLength(16);
+  expect(articlePayload.items.length).toBeGreaterThan(0);
+  if (process.env.CONTENT_SOURCE !== "sanity")
+    expect(articlePayload.items).toHaveLength(16);
   expect(
     articlePayload.items.every((item: { draft: boolean }) => !item.draft),
   ).toBe(true);
