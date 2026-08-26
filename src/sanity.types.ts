@@ -56,6 +56,17 @@ export type Seo = {
   noIndex?: boolean;
 };
 
+export type PublisherMetadata = {
+  _type: "publisherMetadata";
+  source?: string;
+  sourceId?: string;
+  intakeFolder?: string;
+  bundleSha256?: string;
+  createdAt?: string;
+  youtubeStatus?: string;
+  youtubeVideoId?: string;
+};
+
 export type MigrationMetadata = {
   _type: "migrationMetadata";
   sourceSystem?: string;
@@ -137,6 +148,7 @@ export type Article = {
   homepage?: HomepagePresentation;
   seo?: Seo;
   migration?: MigrationMetadata;
+  publisherMetadata?: PublisherMetadata;
 };
 
 export type SanityImageCrop = {
@@ -265,6 +277,7 @@ export type AllSanitySchemaTypes =
   | Heading
   | SocialLinks
   | Seo
+  | PublisherMetadata
   | MigrationMetadata
   | HomepagePresentation
   | ArticleVideo
