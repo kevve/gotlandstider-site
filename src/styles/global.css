@@ -1018,6 +1018,9 @@ iframe {
   width: min(100%, 22.5rem);
   margin-inline: auto;
 }
+.article-sidebar {
+  display: contents;
+}
 .article-body {
   grid-area: body;
   padding: 2rem 1.5rem;
@@ -1285,11 +1288,17 @@ iframe {
   .article-detail-grid {
     grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
     grid-template-areas:
-      "intro media"
-      "body media"
-      "related related";
+      "intro sidebar"
+      "body sidebar";
     align-items: start;
     column-gap: 2.5rem;
+  }
+  .article-sidebar {
+    display: grid;
+    grid-area: sidebar;
+    grid-template-areas: "media" "related";
+    align-content: start;
+    gap: 2.5rem;
   }
   .article-media {
     width: 100%;
