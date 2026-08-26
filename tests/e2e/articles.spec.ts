@@ -36,9 +36,9 @@ test("YouTube article renders its heading and privacy-friendly embed", async ({
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Höst på Gotland 2026: fem tips värda omvägen",
   );
-  await expect(
-    page.locator("#så-får-du-ut-mer-av-höstdagen"),
-  ).toHaveText("Så får du ut mer av höstdagen");
+  await expect(page.locator("#så-får-du-ut-mer-av-höstdagen")).toHaveText(
+    "Så får du ut mer av höstdagen",
+  );
   await expect(page.locator('iframe[src*="youtube"]')).toHaveCount(1);
 });
 
