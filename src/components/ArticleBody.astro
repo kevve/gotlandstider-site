@@ -1,7 +1,10 @@
 ---
 import { getEntry, render } from "astro:content";
 import { PortableText } from "astro-portabletext";
+import type { TypedObject } from "astro-portabletext/types";
+import GithubSlugger from "github-slugger";
 import type { ArticleEntry } from "../lib/content";
+import PortableTextHeading from "./PortableTextHeading.astro";
 
 interface Props {
   article: ArticleEntry;
@@ -22,11 +25,41 @@ if (article.source === "markdown" && !MarkdownContent) {
 if (article.source === "sanity" && !article.body?.length) {
   throw new Error(`Portable Text article body not found: ${article.data.slug}`);
 }
+
+type TextBlock = TypedObject & {
+  style?: string;
+  children?: Array<TypedObject & { text?: string }>;
+};
+
+const headingSlugger = new GithubSlugger();
+const portableTextBody = article.body?.map((value) => {
+  const block = value as TextBlock;
+  if (
+    block._type !== "block" ||
+    (block.style !== "h2" && block.style !== "h3")
+  ) {
+    return value;
+  }
+
+  const heading =
+    block.children?.map((child) => child.text ?? "").join("") ?? "";
+  return { ...block, headingId: headingSlugger.slug(heading) };
+});
+
+const portableTextComponents = {
+  block: {
+    h2: PortableTextHeading,
+    h3: PortableTextHeading,
+  },
+};
 ---
 
 {
   article.source === "sanity" ? (
-    <PortableText value={article.body ?? []} />
+    <PortableText
+      value={portableTextBody ?? []}
+      components={portableTextComponents}
+    />
   ) : (
     MarkdownContent && <MarkdownContent />
   )

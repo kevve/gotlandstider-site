@@ -1,0 +1,19 @@
+---
+import type { BlockProps } from "astro-portabletext/types";
+
+type HeadingNode = BlockProps["node"] & { headingId?: string };
+
+interface Props extends Omit<BlockProps, "node"> {
+  node: HeadingNode;
+}
+
+const { node } = Astro.props;
+---
+
+{
+  node.style === "h2" ? (
+    <h2 id={node.headingId}><slot /></h2>
+  ) : (
+    <h3 id={node.headingId}><slot /></h3>
+  )
+}
