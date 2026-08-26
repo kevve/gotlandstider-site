@@ -541,6 +541,9 @@ iframe {
     color 0.2s,
     border 0.2s;
 }
+.archive-heading > a {
+  display: none;
+}
 .archive-heading > a:hover,
 .mobile-archive-link:hover {
   color: #bc8a6f;
@@ -1281,7 +1284,10 @@ iframe {
   }
   .article-detail-grid {
     grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
-    grid-template-areas: "intro media" "body related";
+    grid-template-areas:
+      "intro media"
+      "body media"
+      "related related";
     align-items: start;
     column-gap: 2.5rem;
   }

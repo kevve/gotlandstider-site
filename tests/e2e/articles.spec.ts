@@ -28,6 +28,31 @@ test("archive lists every public article once and no drafts", async ({
   }
 });
 
+test("home archive shows its all-articles link only below the cards on mobile", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await expect(page.locator(".archive-heading > a")).toBeHidden();
+  await expect(page.locator(".mobile-archive-link")).toBeVisible();
+});
+
+test("article body begins directly below the intro on desktop", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
+
+  const intro = await page.locator(".article-intro").boundingBox();
+  const body = await page.locator(".article-body").boundingBox();
+
+  expect(intro).not.toBeNull();
+  expect(body).not.toBeNull();
+  expect(body!.y).toBeGreaterThanOrEqual(intro!.y + intro!.height);
+  expect(body!.y).toBeLessThan(intro!.y + intro!.height + 48);
+});
+
 test("YouTube article renders its heading and privacy-friendly embed", async ({
   page,
 }) => {
