@@ -15,6 +15,7 @@ interface Props {
   keywords?: string;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
   activeNav?: "home" | "articles";
+  noIndex?: boolean;
 }
 
 const {
@@ -28,6 +29,7 @@ const {
   keywords,
   structuredData,
   activeNav,
+  noIndex = false,
 } = Astro.props;
 
 const canonical = canonicalUrl(canonicalPath);
@@ -46,7 +48,9 @@ const isPreview =
     <title>{title}</title>
     <meta name="description" content={description} />
     {keywords && <meta name="keywords" content={keywords} />}
-    {isPreview && <meta name="robots" content="noindex, nofollow" />}
+    {(isPreview || noIndex) && (
+      <meta name="robots" content="noindex, nofollow" />
+    )}
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={ogTitle} />

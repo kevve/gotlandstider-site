@@ -1,7 +1,7 @@
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getMarkdownArticles } from "./content/markdown";
+import type { ArticleData, ArticleEntry } from "./content/types";
 
-export type ArticleEntry = CollectionEntry<"articles">;
-export type ArticleVideo = NonNullable<ArticleEntry["data"]["video"]>;
+export type { ArticleData, ArticleEntry, ArticleVideo } from "./content/types";
 
 export interface CardPresentation {
   cardImage: string;
@@ -9,7 +9,7 @@ export interface CardPresentation {
   subtitle: string;
 }
 
-export type SerializedArticle = ArticleEntry["data"] & {
+export type SerializedArticle = ArticleData & {
   urlPath: string;
   sourceFile: string;
 };
@@ -27,7 +27,7 @@ export interface HomepageArchiveCandidate {
 }
 
 export async function getPublishedArticles(): Promise<ArticleEntry[]> {
-  const entries = await getCollection("articles", ({ data }) => !data.draft);
+  const entries = await getArticlesFromConfiguredSource();
   assertUniqueSlugs(entries);
   return entries.sort(compareArticlesNewestFirst);
 }
@@ -89,12 +89,12 @@ export function getArchiveCardPresentation(
 
 /** Preserve the established public JSON feed shape without an intermediate build artifact. */
 export function serializeArticle(article: ArticleEntry): SerializedArticle {
-  const { video, homepage, ...data } = article.data;
+  const { video, homepage, seo: _seo, ...data } = article.data;
 
   return {
     ...data,
     urlPath: articlePath(article.data.slug),
-    sourceFile: legacySourcePath(article),
+    sourceFile: article.sourceFile,
     ...(video ? { video } : {}),
     ...(homepage ? { homepage } : {}),
   };
@@ -114,16 +114,12 @@ export function serializeHomepageCandidate(
     badge: presentation.badge,
     subtitle: presentation.subtitle,
     urlPath: articlePath(article.data.slug),
-    sourceFile: legacySourcePath(article),
+    sourceFile: article.sourceFile,
   };
 }
 
 export function articlePath(slug: string): string {
   return `/articles/${slug}/`;
-}
-
-function legacySourcePath(article: ArticleEntry): string {
-  return `content/articles/${article.id}.md`;
 }
 
 function compareArticlesNewestFirst(
@@ -135,6 +131,29 @@ function compareArticlesNewestFirst(
   }
 
   return right.data.publishedAt.localeCompare(left.data.publishedAt);
+}
+
+let configuredArticles: Promise<ArticleEntry[]> | undefined;
+
+function getArticlesFromConfiguredSource(): Promise<ArticleEntry[]> {
+  if (configuredArticles) return configuredArticles;
+
+  const source = process.env.CONTENT_SOURCE || "markdown";
+  if (source === "markdown") {
+    configuredArticles = getMarkdownArticles();
+    return configuredArticles;
+  }
+
+  if (source === "sanity") {
+    configuredArticles = import("./content/sanity").then(
+      ({ getSanityArticles }) => getSanityArticles(),
+    );
+    return configuredArticles;
+  }
+
+  throw new Error(
+    `Unsupported CONTENT_SOURCE=${source}. Use "markdown" or "sanity".`,
+  );
 }
 
 function assertUniqueSlugs(entries: ArticleEntry[]): void {

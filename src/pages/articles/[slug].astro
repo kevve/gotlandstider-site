@@ -1,5 +1,5 @@
 ---
-import { render } from "astro:content";
+import ArticleBody from "../../components/ArticleBody.astro";
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import {
   getPublishedArticles,
@@ -18,7 +18,8 @@ interface Props {
 }
 const { article } = Astro.props;
 const related = await getRelatedArticles(article.data.slug, 4);
-const { Content } = await render(article);
 ---
 
-<ArticleLayout article={article} related={related}><Content /></ArticleLayout>
+<ArticleLayout article={article} related={related}>
+  <ArticleBody article={article} />
+</ArticleLayout>

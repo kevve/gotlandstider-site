@@ -63,6 +63,13 @@ const homepage = z.object({
     .optional(),
 });
 
+const seo = z.object({
+  title: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
+  image: publicAssetPath.optional(),
+  noIndex: z.boolean().default(false),
+});
+
 const articles = defineCollection({
   loader: glob({
     base: "./src/content/articles",
@@ -84,6 +91,7 @@ const articles = defineCollection({
       draft: z.boolean().default(false),
       video: video.optional(),
       homepage: homepage.optional(),
+      seo: seo.optional(),
     })
     .superRefine((article, context) => {
       if (

@@ -13,7 +13,9 @@ interface Props {
 const { article, related } = Astro.props;
 const { data } = article;
 const path = `/articles/${data.slug}/`;
-const image = data.video?.thumbnail || data.heroImage;
+const title = data.seo?.title || `${data.title} | Gotlandstider`;
+const description = data.seo?.description || data.excerpt;
+const image = data.seo?.image || data.video?.thumbnail || data.heroImage;
 const iso = (value: Date | string) =>
   value instanceof Date ? value.toISOString() : String(value);
 const graph: Record<string, unknown>[] = [
@@ -51,13 +53,14 @@ const social = data.video?.socialLinks;
 ---
 
 <BaseLayout
-  title={`${data.title} | Gotlandstider`}
-  description={data.excerpt}
+  title={title}
+  description={description}
   canonicalPath={path}
   image={image}
   ogType={data.video ? "video.other" : "article"}
   structuredData={structuredData}
   activeNav="articles"
+  noIndex={data.seo?.noIndex}
 >
   <article class="article-page">
     <a class="back-link" href={withBase("/articles/")}

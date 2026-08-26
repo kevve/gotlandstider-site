@@ -25,6 +25,7 @@ jobs:
       - name: Build Astro preview
         uses: withastro/action@v6
         env:
+          CONTENT_SOURCE: sanity
           DEPLOY_TARGET: github-pages-preview
 
   deploy:

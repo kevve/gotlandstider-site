@@ -20,7 +20,9 @@ const HOMEPAGE_IMAGES = [
 ];
 
 export const GET: APIRoute = async () => {
-  const articles = await getPublishedArticles();
+  const articles = (await getPublishedArticles()).filter(
+    (article) => !article.data.seo?.noIndex,
+  );
   const latest = articles.reduce(
     (date, article) =>
       article.data.publishedAt > date ? article.data.publishedAt : date,

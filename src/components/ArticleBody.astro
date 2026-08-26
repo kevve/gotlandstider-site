@@ -1,0 +1,33 @@
+---
+import { getEntry, render } from "astro:content";
+import { PortableText } from "astro-portabletext";
+import type { ArticleEntry } from "../lib/content";
+
+interface Props {
+  article: ArticleEntry;
+}
+
+const { article } = Astro.props;
+const markdownEntry =
+  article.source === "markdown"
+    ? await getEntry("articles", article.id)
+    : undefined;
+const MarkdownContent = markdownEntry
+  ? (await render(markdownEntry)).Content
+  : undefined;
+
+if (article.source === "markdown" && !MarkdownContent) {
+  throw new Error(`Markdown article body not found: ${article.id}`);
+}
+if (article.source === "sanity" && !article.body?.length) {
+  throw new Error(`Portable Text article body not found: ${article.data.slug}`);
+}
+---
+
+{
+  article.source === "sanity" ? (
+    <PortableText value={article.body ?? []} />
+  ) : (
+    MarkdownContent && <MarkdownContent />
+  )
+}
