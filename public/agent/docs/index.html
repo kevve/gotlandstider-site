@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Gotlandstider public content feeds</title>
+    <style>
+      :root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+      body { max-width: 52rem; margin: 0 auto; padding: 2rem; line-height: 1.6; }
+      h1, h2 { line-height: 1.2; }
+      li { margin-block: 1rem; }
+      li span { display: block; }
+      code { overflow-wrap: anywhere; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Gotlandstider public content feeds</h1>
+      <p>
+        These unauthenticated, read-only JSON resources expose the same published content used by
+        <a href="/">www.gotlandstider.se</a>. Draft source content is not included.
+      </p>
+      <h2>Endpoints</h2>
+      <ul>
+      <li>
+        <a href="/generated/content/articles.json"><code>GET /generated/content/articles.json</code></a>
+        <span>All published Gotlandstider articles in reverse chronological order.</span>
+      </li>
+      <li>
+        <a href="/generated/content/featured.json"><code>GET /generated/content/featured.json</code></a>
+        <span>The published articles selected for featured placement.</span>
+      </li>
+      <li>
+        <a href="/generated/content/homepage.json"><code>GET /generated/content/homepage.json</code></a>
+        <span>The featured video and complete pool of published, non-featured homepage archive candidates.</span>
+      </li>
+      </ul>
+      <h2>Machine-readable discovery</h2>
+      <ul>
+        <li><a href="/.well-known/api-catalog">RFC 9727 API catalog</a></li>
+        <li><a href="/agent/openapi.json">OpenAPI 3.1 service description</a></li>
+        <li><a href="/agent/site.jsonld">JSON-LD site description</a></li>
+      </ul>
+      <p>Responses may be cached and change whenever new content is published.</p>
+    </main>
+  </body>
+</html>

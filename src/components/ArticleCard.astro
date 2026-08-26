@@ -1,0 +1,49 @@
+---
+import type { ArticleEntry } from "../lib/content";
+import {
+  getArchiveCardPresentation,
+  getCardPresentation,
+} from "../lib/content";
+import { withBase } from "../lib/urls";
+
+interface Props {
+  article: ArticleEntry;
+  compact?: boolean;
+  randomCandidate?: boolean;
+  archive?: boolean;
+}
+
+const {
+  article,
+  compact = false,
+  randomCandidate = false,
+  archive = false,
+} = Astro.props;
+const card = archive
+  ? getArchiveCardPresentation(article)
+  : getCardPresentation(article);
+---
+
+<article
+  class:list={["article-card", { compact }]}
+  data-random-card={randomCandidate || undefined}
+>
+  <a href={withBase(`/articles/${article.data.slug}/`)}>
+    <div class="card-image">
+      <span class:list={["card-badge", { light: card.badge === "Tips" }]}
+        >{card.badge}</span
+      >
+      <img
+        src={withBase(card.cardImage)}
+        alt={article.data.title}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div class="card-copy">
+      {!compact && <span class="card-subtitle">{card.subtitle}</span>}
+      <h3>{article.data.title}</h3>
+      {!compact && <p>{article.data.excerpt}</p>}
+    </div>
+  </a>
+</article>

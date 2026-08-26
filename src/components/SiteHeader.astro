@@ -1,0 +1,79 @@
+---
+import { withBase } from "../lib/urls";
+
+interface Props {
+  active?: "home" | "articles";
+}
+
+const { active } = Astro.props;
+const home = withBase("/");
+const archive = withBase("/articles/");
+---
+
+<nav class="site-nav" aria-label="Huvudnavigation">
+  <div class="nav-inner">
+    <a href={home} class="wordmark" aria-label="Gotlandstider, startsida"
+      >Gotlandstider.</a
+    >
+
+    <div class="desktop-nav">
+      <a href={`${home}#stories`}>Upplevelser</a>
+      <a href={`${home}#house`}>Sommarhuset</a>
+      <a
+        href={archive}
+        aria-current={active === "articles" ? "page" : undefined}
+        class:list={{ active: active === "articles" }}>Arkivet</a
+      >
+      <a href="#contact" class="contact-link">Kontakt</a>
+    </div>
+
+    <button
+      class="menu-button"
+      type="button"
+      aria-label="Öppna meny"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-button
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <a href={`${home}#stories`}>Upplevelser</a>
+    <a href={`${home}#house`}>Sommarhuset</a>
+    <a href={archive} aria-current={active === "articles" ? "page" : undefined}
+      >Arkivet</a
+    >
+    <a href="#contact">Kontakt</a>
+  </div>
+</nav>
+
+<script>
+  const button =
+    document.querySelector<HTMLButtonElement>("[data-menu-button]");
+  const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+
+  const closeMenu = () => {
+    if (!button || !menu) return;
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-label", "Öppna meny");
+    menu.hidden = true;
+  };
+
+  button?.addEventListener("click", () => {
+    if (!menu) return;
+    const open = button.getAttribute("aria-expanded") === "true";
+    button.setAttribute("aria-expanded", String(!open));
+    button.setAttribute("aria-label", open ? "Öppna meny" : "Stäng meny");
+    menu.hidden = open;
+  });
+
+  menu
+    ?.querySelectorAll("a")
+    .forEach((link) => link.addEventListener("click", closeMenu));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
+  });
+  window.matchMedia("(min-width: 768px)").addEventListener("change", closeMenu);
+</script>

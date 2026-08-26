@@ -1,0 +1,37 @@
+---
+import { withBase } from "../lib/urls";
+---
+
+<section id="about" class="about-section section-anchor">
+  <div class="about-grid">
+    <div class="about-image" data-reveal>
+      <picture>
+        <source
+          media="(max-width: 768px)"
+          srcset={withBase("/content/about-kevinhenrik-mobile.webp")}
+        />
+        <img
+          src={withBase("/content/about-kevinhenrik.webp")}
+          alt="Kevin och Henrik i grönskande natur"
+          loading="lazy"
+        />
+      </picture>
+      <blockquote>Alla årstider är Gotlandstider.</blockquote>
+    </div>
+    <div class="about-copy" data-reveal>
+      <span>Grundarna</span>
+      <h2>Hej, det är vi som är <br /><em>Kevin &amp; Henrik.</em></h2>
+      <p>
+        Vår resa började med en enkel kärlek till ön. Vi ville skapa något mer
+        än bara ännu ett konto på sociala medier; nämligen en plattform som
+        fångar Gotlands själ - från det karga kalkstenslandskapet, till värmen
+        och drivkraften hos de lokala entreprenörerna.
+      </p>
+      <p>
+        Just nu förverkligar vi drömmen att bygga ett sommarhus i Ljugarn,
+        samtidigt som vi hjälper företag att nå ut med sina unika upplevelser.
+      </p>
+      <div class="signature">Gotlandstider</div>
+    </div>
+  </div>
+</section>

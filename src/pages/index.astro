@@ -1,0 +1,105 @@
+---
+import AboutSection from "../components/AboutSection.astro";
+import ArticleGrid from "../components/ArticleGrid.astro";
+import FeaturedExperience from "../components/FeaturedExperience.astro";
+import Hero from "../components/Hero.astro";
+import HouseProjectSection from "../components/HouseProjectSection.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getFeaturedArticle, getPublishedArticles } from "../lib/content";
+import { canonicalUrl, withBase } from "../lib/urls";
+
+const featured = await getFeaturedArticle();
+const articles = await getPublishedArticles();
+const archiveCandidates = articles.filter(
+  (article) => article.data.slug !== featured.data.slug,
+);
+const description =
+  "För dig som letar inspiration till nya platser, restauranger, loppisar och upplevelser på ön. Alla årstider är Gotlandstider.";
+const video = featured.data.video;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "Gotlandstider",
+      alternateName: "Gotlandstider - Din guide till det gotländska ö-livet",
+      url: "https://www.gotlandstider.se",
+      logo: canonicalUrl("/favicon-v2.svg"),
+      image: canonicalUrl("/content/hero-coastline.webp"),
+      email: "info@gotlandstider.se",
+      description:
+        "Upptäck Gotlands dolda pärlor och följ resan mot ett arkitektritat sommarhus i Ljugarn. Året runt.",
+      knowsAbout: [
+        "Gotland Restips",
+        "Gotländska Entreprenörer",
+        "Husbygge & Arkitektur",
+        "Hem & Hus",
+        "Inredning & Design",
+        "Loppis",
+        "Gotland",
+        "Ljugarn",
+        "Content Production",
+      ],
+      areaServed: { "@type": "AdministrativeArea", name: "Gotlands län" },
+      founders: [
+        { "@type": "Person", name: "Kevin" },
+        { "@type": "Person", name: "Henrik" },
+      ],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Ljugarn",
+        addressRegion: "Gotland",
+        postalCode: "623 65",
+        addressCountry: "SE",
+      },
+      sameAs: [
+        "https://www.instagram.com/gotlandstider/",
+        "https://www.tiktok.com/@gotlandstider",
+      ],
+    },
+    ...(video
+      ? [
+          {
+            "@type": "VideoObject",
+            name: featured.data.title,
+            description: featured.data.excerpt,
+            thumbnailUrl: canonicalUrl(video.thumbnail),
+            uploadDate: featured.data.publishedAt,
+            embedUrl: video.embedUrl,
+            ...(video.provider === "legacy-local" && video.legacySources?.webm
+              ? { contentUrl: canonicalUrl(video.legacySources.webm) }
+              : {}),
+          },
+        ]
+      : []),
+  ],
+};
+---
+
+<BaseLayout
+  title="Gotlandstider | Din guide till Gotland"
+  description={description}
+  keywords="Gotland, Visby, Ljugarn, Resguide Gotland, Restips Gotland, Tips, Loppis, Loppisar Visby, Husbygge Ljugarn, Sommarhus Gotland, Sommarställe"
+  ogTitle="Gotlandstider | Din guide till det gotländska ö-livet"
+  ogDescription="Upptäck öns dolda pärlor och följ resan mot ett arkitektritat sommarhus i Ljugarn."
+  canonicalPath="/"
+  structuredData={structuredData}
+  activeNav="home"
+>
+  <Hero />
+  <FeaturedExperience article={featured} />
+  <section class="home-archive">
+    <div class="section-shell">
+      <div class="archive-heading" data-reveal>
+        <div><span>Arkivet</span><h2>Upptäck mer från Gotland</h2></div>
+        <a href={withBase("/articles/")}>Se alla artiklar →</a>
+      </div>
+      <ArticleGrid articles={archiveCandidates} randomize />
+      <a class="mobile-archive-link" href={withBase("/articles/")}
+        >Se alla artiklar →</a
+      >
+    </div>
+  </section>
+  <HouseProjectSection />
+  <AboutSection />
+</BaseLayout>

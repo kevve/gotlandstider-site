@@ -1,0 +1,36 @@
+---
+import SocialLinks from "./SocialLinks.astro";
+import { withBase } from "../lib/urls";
+---
+
+<header class="home-hero">
+  <picture class="hero-media">
+    <source
+      media="(max-width: 768px)"
+      srcset={withBase("/content/hero-coastline-mobile.webp")}
+    />
+    <img
+      src={withBase("/content/hero-coastline.webp")}
+      alt="Solnedgång över raukar vid Gotlands norra kust på Fårö"
+      fetchpriority="high"
+    />
+  </picture>
+  <div class="hero-overlay"></div>
+  <div class="hero-content" data-reveal>
+    <h1>Upplev det <br /><em>gotländska ö-livet.</em></h1>
+    <p>
+      Din guide till Gotlands bästa upplevelser. Unika platser, entreprenörskap,
+      och inspiration inom hem och inredning. Från Fårö i norr till Hoburgen i
+      söder. Året runt.
+    </p>
+    <a class="primary-button" href="#stories">Upplevelser från ön</a>
+    <div class="social-divider">
+      <span></span><em>Följ i sociala medier</em><span></span>
+    </div>
+    <SocialLinks
+      instagram="https://www.instagram.com/gotlandstider/"
+      tiktok="https://www.tiktok.com/@gotlandstider"
+      compact
+    />
+  </div>
+</header>

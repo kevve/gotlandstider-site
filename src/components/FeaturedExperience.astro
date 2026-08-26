@@ -1,0 +1,48 @@
+---
+import type { ArticleEntry } from "../lib/content";
+import HighlightList from "./HighlightList.astro";
+import MediaFrame from "./MediaFrame.astro";
+import SocialLinks from "./SocialLinks.astro";
+
+interface Props {
+  article: ArticleEntry;
+}
+
+const { article } = Astro.props;
+const { data } = article;
+const hero = data.homepage?.hero;
+const heading = hero?.heading;
+const social = data.video?.socialLinks;
+---
+
+<section id="stories" class="featured-section section-anchor">
+  <div class="section-shell">
+    <div class="section-heading centered" data-reveal>
+      <span>Redaktionellt</span>
+      <h2>Upplevelser från ön</h2>
+    </div>
+
+    <div class="featured-grid">
+      <div class="featured-copy" data-reveal>
+        <h3>
+          {heading?.prefix || data.title}
+          {heading?.accent && <> <em>{heading.accent}</em></>}
+        </h3>
+        <p>{hero?.description || data.excerpt}</p>
+      </div>
+
+      <div class="featured-media" data-reveal>
+        <MediaFrame title={data.title} video={data.video} priority />
+        <SocialLinks
+          instagram={social?.instagram}
+          tiktok={social?.tiktok}
+          compact
+        />
+      </div>
+
+      <div class="featured-highlights" data-reveal>
+        <HighlightList items={hero?.highlights} />
+      </div>
+    </div>
+  </div>
+</section>

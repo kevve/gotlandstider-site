@@ -1,0 +1,142 @@
+---
+import SocialLinks from "./SocialLinks.astro";
+import { withBase } from "../lib/urls";
+
+const cards = [
+  {
+    label: "Tomten",
+    title: "Att hitta det perfekta läget",
+    image: "/content/house-letatomt.webp",
+    mobile: "/content/house-letatomt-mobile.webp",
+    alt: "Letar efter tomt i Ljugarn",
+  },
+  {
+    label: "Arkitektur",
+    title: "Idéer börjar ta form",
+    image: "/content/house-ritahus.webp",
+    mobile: "/content/house-ritahus-mobile.webp",
+    alt: "Bygger ett arkitektritat hus",
+  },
+  {
+    label: "Förberedelser",
+    title: "Beskär träd på naturtomten",
+    image: "/content/house-rensatomt.webp",
+    mobile: "/content/house-rensatomt-mobile.webp",
+    alt: "Rensar träd och förbereder tomten",
+  },
+];
+---
+
+<section id="house" class="house-section section-anchor">
+  <div class="section-shell">
+    <div class="section-heading centered house-heading" data-reveal>
+      <span>Projekt Ljugarn</span>
+      <h2>Drömmen om ett sommarhus</h2>
+      <p>
+        Gotland är en plats att besöka året om. Förutom att guida dig till öns
+        bästa platser, har vi hittat hem på östra Gotland i sommarbyn Ljugarn.
+        Följ med på resan mot ett tidlöst, arkitektritat, sommarhus på
+        östkusten.
+      </p>
+    </div>
+
+    <div class="house-grid">
+      {
+        cards.map((card, index) => (
+          <button
+            class="house-card"
+            type="button"
+            data-house-trigger
+            data-image={withBase(card.image)}
+            data-alt={card.alt}
+            data-reveal
+            style={`--reveal-delay: ${index * 100}ms`}
+            aria-label={`Öppna bild i helskärm: ${card.alt}`}
+          >
+            <span class="house-image">
+              <img
+                src={withBase(card.image)}
+                srcset={`${withBase(card.mobile)} 500w, ${withBase(card.image)} 1200w`}
+                sizes="(max-width: 768px) 100vw, 33vw"
+                alt={card.alt}
+                loading="lazy"
+              />
+            </span>
+            <span class="house-copy">
+              <>
+                <small>{card.label}</small>
+                <strong>{card.title}</strong>
+              </>
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="house-social" data-reveal>
+      <div class="social-divider">
+        <span></span><em>Se mer av husbygget</em><span></span>
+      </div>
+      <SocialLinks
+        instagram="https://www.instagram.com/gotlandstider/"
+        tiktok="https://www.tiktok.com/@gotlandstider"
+        compact
+      />
+    </div>
+  </div>
+</section>
+
+<dialog
+  class="image-dialog"
+  data-house-dialog
+  aria-labelledby="house-dialog-title"
+>
+  <h2 id="house-dialog-title" class="sr-only">Bild från Projekt Ljugarn</h2>
+  <button
+    type="button"
+    class="dialog-close"
+    data-house-close
+    aria-label="Stäng bildvisning">×</button
+  >
+  <img src="" alt="" data-house-dialog-image />
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>(
+    "[data-house-dialog]",
+  );
+  const dialogImage = dialog?.querySelector<HTMLImageElement>(
+    "[data-house-dialog-image]",
+  );
+  const closeButton =
+    dialog?.querySelector<HTMLButtonElement>("[data-house-close]");
+  let activeTrigger: HTMLButtonElement | null = null;
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-house-trigger]")
+    .forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        if (!dialog || !dialogImage) return;
+        activeTrigger = trigger;
+        dialogImage.src = trigger.dataset.image || "";
+        dialogImage.alt = trigger.dataset.alt || "Bild från Projekt Ljugarn";
+        dialog.showModal();
+        document.body.classList.add("dialog-open");
+        closeButton?.focus();
+      });
+    });
+
+  const closeDialog = () => dialog?.close();
+  closeButton?.addEventListener("click", closeDialog);
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) closeDialog();
+  });
+  dialog?.addEventListener("close", () => {
+    document.body.classList.remove("dialog-open");
+    if (dialogImage) {
+      dialogImage.src = "";
+      dialogImage.alt = "";
+    }
+    activeTrigger?.focus();
+  });
+</script>

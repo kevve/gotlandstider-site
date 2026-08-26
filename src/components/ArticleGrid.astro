@@ -1,0 +1,90 @@
+---
+import type { ArticleEntry } from "../lib/content";
+import ArticleCard from "./ArticleCard.astro";
+
+interface Props {
+  articles: ArticleEntry[];
+  randomize?: boolean;
+  compact?: boolean;
+  archive?: boolean;
+}
+
+const {
+  articles,
+  randomize = false,
+  compact = false,
+  archive = false,
+} = Astro.props;
+---
+
+<div
+  class:list={["article-grid", { "random-archive": randomize, compact }]}
+  data-article-grid={randomize || undefined}
+>
+  {
+    articles.map((article) => (
+      <ArticleCard
+        article={article}
+        compact={compact}
+        randomCandidate={randomize}
+        archive={archive}
+      />
+    ))
+  }
+</div>
+
+{randomize && <div class="archive-dots" data-archive-dots aria-hidden="true" />}
+
+<script>
+  const grid = document.querySelector<HTMLElement>("[data-article-grid]");
+  const dots = document.querySelector<HTMLElement>("[data-archive-dots]");
+  if (grid) {
+    const cards = Array.from(
+      grid.querySelectorAll<HTMLElement>("[data-random-card]"),
+    );
+    for (let index = cards.length - 1; index > 0; index -= 1) {
+      const target = Math.floor(Math.random() * (index + 1));
+      [cards[index], cards[target]] = [cards[target], cards[index]];
+    }
+    cards.forEach((card, index) => {
+      card.hidden = index >= 3;
+      if (index < 3) grid.append(card);
+    });
+    grid.classList.add("is-random-ready");
+
+    const visibleCards = cards.slice(0, 3);
+    if (dots) {
+      visibleCards.forEach((_, index) => {
+        const dot = document.createElement("span");
+        if (index === 0) dot.classList.add("active");
+        dots.append(dot);
+      });
+      let frame = 0;
+      grid.addEventListener(
+        "scroll",
+        () => {
+          cancelAnimationFrame(frame);
+          frame = requestAnimationFrame(() => {
+            const first = visibleCards[0];
+            if (!first) return;
+            const gap =
+              Number.parseFloat(getComputedStyle(grid).columnGap) || 0;
+            const active = Math.max(
+              0,
+              Math.min(
+                2,
+                Math.round(grid.scrollLeft / (first.offsetWidth + gap)),
+              ),
+            );
+            dots
+              .querySelectorAll("span")
+              .forEach((dot, index) =>
+                dot.classList.toggle("active", index === active),
+              );
+          });
+        },
+        { passive: true },
+      );
+    }
+  }
+</script>

@@ -1,0 +1,130 @@
+---
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { canonicalUrl, withBase } from "../lib/urls";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  image?: string;
+  ogType?: "website" | "article" | "video.other";
+  ogTitle?: string;
+  ogDescription?: string;
+  keywords?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  activeNav?: "home" | "articles";
+}
+
+const {
+  title,
+  description,
+  canonicalPath = "/",
+  image = "/content/hero-coastline.webp",
+  ogType = "website",
+  ogTitle = title,
+  ogDescription = description,
+  keywords,
+  structuredData,
+  activeNav,
+} = Astro.props;
+
+const canonical = canonicalUrl(canonicalPath);
+const socialImage = canonicalUrl(image);
+const isPreview =
+  import.meta.env.BASE_URL !== "/" ||
+  Astro.site?.hostname !== "www.gotlandstider.se";
+---
+
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {keywords && <meta name="keywords" content={keywords} />}
+    {isPreview && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Gotlandstider" />
+    <meta property="og:locale" content="sv_SE" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={socialImage} />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon-v2.svg")} />
+    <link rel="apple-touch-icon" href={withBase("/favicon-v2.svg")} />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    {
+      structuredData && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(structuredData)}
+        />
+      )
+    }
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Hoppa till innehållet</a>
+    <SiteHeader active={activeNav} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <script>
+      const revealItems =
+        document.querySelectorAll<HTMLElement>("[data-reveal]");
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        revealItems.forEach((item) => (item.dataset.visible = "true"));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries, currentObserver) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              (entry.target as HTMLElement).dataset.visible = "true";
+              currentObserver.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -24px" },
+        );
+        revealItems.forEach((item) => observer.observe(item));
+      }
+
+      document
+        .querySelectorAll<HTMLVideoElement>("[data-local-video]")
+        .forEach((video) => {
+          const mediaObserver =
+            "IntersectionObserver" in window
+              ? new IntersectionObserver(
+                  ([entry]) => {
+                    if (!entry.isIntersecting && !video.paused) video.pause();
+                  },
+                  { threshold: 0.45 },
+                )
+              : null;
+          mediaObserver?.observe(video);
+
+          const updateFit = () => {
+            const isFullscreen = document.fullscreenElement === video;
+            video.classList.toggle("is-fullscreen", isFullscreen);
+          };
+          video.addEventListener("fullscreenchange", updateFit);
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,213 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Gotlandstider public content feeds",
+    "version": "1.0.0",
+    "description": "Read-only JSON representations of the published Gotlandstider article and homepage content."
+  },
+  "servers": [
+    {
+      "url": "https://www.gotlandstider.se"
+    }
+  ],
+  "paths": {
+    "/generated/content/articles.json": {
+      "get": {
+        "operationId": "getArticles",
+        "summary": "Article index",
+        "description": "All published Gotlandstider articles in reverse chronological order.",
+        "responses": {
+          "200": {
+            "description": "Current published content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generated/content/featured.json": {
+      "get": {
+        "operationId": "getFeaturedArticles",
+        "summary": "Featured article index",
+        "description": "The published articles selected for featured placement.",
+        "responses": {
+          "200": {
+            "description": "Current published content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturedArticleCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generated/content/homepage.json": {
+      "get": {
+        "operationId": "getHomepageContent",
+        "summary": "Homepage content",
+        "description": "The featured video and complete pool of published, non-featured homepage archive candidates.",
+        "responses": {
+          "200": {
+            "description": "Current published content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomepageContent"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContentItem": {
+        "type": "object",
+        "required": [
+          "title",
+          "slug",
+          "excerpt",
+          "publishedAt",
+          "urlPath"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "urlPath": {
+            "type": "string"
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "draft": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      },
+      "ArticleCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentItem"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "FeaturedArticleCollection": {
+        "type": "object",
+        "required": [
+          "articles"
+        ],
+        "properties": {
+          "articles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentItem"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "HomepageArchiveCandidate": {
+        "type": "object",
+        "required": [
+          "title",
+          "slug",
+          "excerpt",
+          "publishedAt",
+          "cardImage",
+          "badge",
+          "subtitle",
+          "urlPath"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "cardImage": {
+            "type": "string"
+          },
+          "badge": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "urlPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "HomepageContent": {
+        "type": "object",
+        "required": [
+          "featuredVideo",
+          "archiveCandidates"
+        ],
+        "properties": {
+          "featuredVideo": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ContentItem"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "archiveCandidates": {
+            "type": "array",
+            "description": "All published non-featured articles eligible for randomized homepage archive cards.",
+            "items": {
+              "$ref": "#/components/schemas/HomepageArchiveCandidate"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

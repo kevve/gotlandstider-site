@@ -1,0 +1,41 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://www.gotlandstider.se/#website",
+  "name": "Gotlandstider",
+  "url": "https://www.gotlandstider.se/",
+  "inLanguage": "sv-SE",
+  "description": "Gotlandstider is a Swedish guide to Gotland's places, people, food, culture, nature, and island life.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Gotlandstider",
+    "url": "https://www.gotlandstider.se/",
+    "email": "info@gotlandstider.se"
+  },
+  "hasPart": [
+    {
+      "@type": "Dataset",
+      "name": "Article index",
+      "description": "All published Gotlandstider articles in reverse chronological order.",
+      "url": "https://www.gotlandstider.se/generated/content/articles.json",
+      "encodingFormat": "application/json",
+      "inLanguage": "sv-SE"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Featured article index",
+      "description": "The published articles selected for featured placement.",
+      "url": "https://www.gotlandstider.se/generated/content/featured.json",
+      "encodingFormat": "application/json",
+      "inLanguage": "sv-SE"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Homepage content",
+      "description": "The featured video and complete pool of published, non-featured homepage archive candidates.",
+      "url": "https://www.gotlandstider.se/generated/content/homepage.json",
+      "encodingFormat": "application/json",
+      "inLanguage": "sv-SE"
+    }
+  ]
+}

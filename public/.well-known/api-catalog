@@ -1,0 +1,84 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://www.gotlandstider.se/.well-known/api-catalog",
+      "item": [
+        {
+          "href": "https://www.gotlandstider.se/generated/content/articles.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://www.gotlandstider.se/generated/content/featured.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://www.gotlandstider.se/generated/content/homepage.json",
+          "type": "application/json"
+        }
+      ]
+    },
+    {
+      "anchor": "https://www.gotlandstider.se/generated/content/articles.json",
+      "service-desc": [
+        {
+          "href": "https://www.gotlandstider.se/agent/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://www.gotlandstider.se/agent/docs/",
+          "type": "text/html"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://www.gotlandstider.se/agent/site.jsonld",
+          "type": "application/ld+json"
+        }
+      ]
+    },
+    {
+      "anchor": "https://www.gotlandstider.se/generated/content/featured.json",
+      "service-desc": [
+        {
+          "href": "https://www.gotlandstider.se/agent/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://www.gotlandstider.se/agent/docs/",
+          "type": "text/html"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://www.gotlandstider.se/agent/site.jsonld",
+          "type": "application/ld+json"
+        }
+      ]
+    },
+    {
+      "anchor": "https://www.gotlandstider.se/generated/content/homepage.json",
+      "service-desc": [
+        {
+          "href": "https://www.gotlandstider.se/agent/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://www.gotlandstider.se/agent/docs/",
+          "type": "text/html"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://www.gotlandstider.se/agent/site.jsonld",
+          "type": "application/ld+json"
+        }
+      ]
+    }
+  ]
+}

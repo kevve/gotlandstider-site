@@ -1,0 +1,25 @@
+---
+interface Highlight {
+  label: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  items?: Highlight[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+<div class="highlight-list">
+  {
+    items.map((item) => (
+      <div class="highlight-item">
+        <span>{item.label}</span>
+        <h4>{item.title}</h4>
+        <p>{item.description}</p>
+      </div>
+    ))
+  }
+</div>

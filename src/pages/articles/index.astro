@@ -1,0 +1,32 @@
+---
+import ArticleGrid from "../../components/ArticleGrid.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCardPresentation, getPublishedArticles } from "../../lib/content";
+const articles = await getPublishedArticles();
+const description =
+  "Ett växande arkiv med guider, berättelser, videor och uppdateringar från Gotland, Ljugarn och livet på ön.";
+const image = articles[0]
+  ? getCardPresentation(articles[0]).cardImage
+  : "/content/hero-coastline.webp";
+---
+
+<BaseLayout
+  title="Arkiv | Gotlandstider"
+  description={description}
+  ogDescription="Utforska Gotlandstiders arkiv med videor, guider, berättelser och uppdateringar från Gotland och Ljugarn."
+  image={image}
+  canonicalPath="/articles/"
+  activeNav="articles"
+>
+  <section class="archive-hero">
+    <div>
+      <span>Arkivet</span><h1>Upptäck mer från Gotland</h1><p>
+        Ett växande arkiv med tips, guider och upplevelser från Gotland, Ljugarn
+        och alla våra andra favoritplatser på ön.
+      </p>
+    </div>
+  </section>
+  <section class="archive-list" aria-label="Alla artiklar">
+    <ArticleGrid articles={articles} archive />
+  </section>
+</BaseLayout>

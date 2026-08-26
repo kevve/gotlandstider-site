@@ -1,0 +1,109 @@
+---
+import type { ArticleEntry } from "../lib/content";
+import { canonicalUrl, withBase } from "../lib/urls";
+import ArticleGrid from "../components/ArticleGrid.astro";
+import MediaFrame from "../components/MediaFrame.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  article: ArticleEntry;
+  related: ArticleEntry[];
+}
+const { article, related } = Astro.props;
+const { data } = article;
+const path = `/articles/${data.slug}/`;
+const image = data.video?.thumbnail || data.heroImage;
+const iso = (value: Date | string) =>
+  value instanceof Date ? value.toISOString() : String(value);
+const graph: Record<string, unknown>[] = [
+  {
+    "@type": "Article",
+    headline: data.title,
+    description: data.excerpt,
+    image: canonicalUrl(image),
+    datePublished: iso(data.publishedAt),
+    dateModified: iso(data.updatedAt),
+    inLanguage: "sv-SE",
+    mainEntityOfPage: canonicalUrl(path),
+    author: { "@type": "Organization", name: "Gotlandstider" },
+    publisher: {
+      "@type": "Organization",
+      name: "Gotlandstider",
+      logo: { "@type": "ImageObject", url: canonicalUrl("/favicon-v2.svg") },
+    },
+  },
+];
+if (data.video)
+  graph.push({
+    "@type": "VideoObject",
+    name: data.title,
+    description: data.excerpt,
+    thumbnailUrl: canonicalUrl(data.video.thumbnail),
+    uploadDate: iso(data.publishedAt),
+    embedUrl: data.video.embedUrl,
+    ...(data.video.provider === "legacy-local" && data.video.legacySources?.webm
+      ? { contentUrl: canonicalUrl(data.video.legacySources.webm) }
+      : {}),
+  });
+const structuredData = { "@context": "https://schema.org", "@graph": graph };
+const social = data.video?.socialLinks;
+---
+
+<BaseLayout
+  title={`${data.title} | Gotlandstider`}
+  description={data.excerpt}
+  canonicalPath={path}
+  image={image}
+  ogType={data.video ? "video.other" : "article"}
+  structuredData={structuredData}
+  activeNav="articles"
+>
+  <article class="article-page">
+    <a class="back-link" href={withBase("/articles/")}
+      ><span aria-hidden="true">←</span> Tillbaka till arkivet</a
+    >
+    <div class="article-detail-grid">
+      <header class="article-intro">
+        <h1>{data.title}</h1>
+        <p>{data.excerpt}</p>
+        <div class="article-tags">
+          {
+            [data.tags[1], data.tags[0], data.tags[2]]
+              .filter(Boolean)
+              .map((tag, index) =>
+              index === 0 ? (
+                <span class="primary-tag">{tag}</span>
+              ) : (
+                <span>{tag}</span>
+              ),
+            )
+          }
+        </div>
+        <SocialLinks
+          instagram={social?.instagram}
+          tiktok={social?.tiktok}
+          compact
+        />
+      </header>
+      <aside class="article-media" aria-label="Artikelmedia">
+        <MediaFrame
+          title={data.title}
+          video={data.video}
+          image={data.heroImage}
+        />
+      </aside>
+      <div class="article-body prose"><slot /></div>
+      {
+        related.length > 0 && (
+          <section class="article-related" aria-labelledby="related-heading">
+            <>
+              <h2 id="related-heading">Fler upplevelser</h2>
+              <ArticleGrid articles={related} compact />
+            </>
+          </section>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>

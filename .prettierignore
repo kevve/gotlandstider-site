@@ -1,0 +1,7 @@
+dist/
+node_modules/
+public/content/
+public/fonts/
+public/.well-known/
+public/agent/
+src/content/articles/
