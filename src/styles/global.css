@@ -967,6 +967,7 @@ iframe {
   gap: 2.5rem;
   grid-template-areas: "intro" "media" "body" "related";
 }
+.article-main,
 .article-intro {
   grid-area: intro;
 }
@@ -1018,6 +1019,7 @@ iframe {
   width: min(100%, 22.5rem);
   margin-inline: auto;
 }
+.article-main,
 .article-sidebar {
   display: contents;
 }
@@ -1287,15 +1289,22 @@ iframe {
   }
   .article-detail-grid {
     grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
-    grid-template-areas:
-      "intro sidebar"
-      "body sidebar";
+    grid-template-areas: none;
     align-items: start;
-    column-gap: 2.5rem;
+  }
+  .article-main {
+    display: grid;
+    grid-area: auto;
+    align-content: start;
+    gap: 2.5rem;
+  }
+  .article-main > .article-intro,
+  .article-main > .article-body {
+    grid-area: auto;
   }
   .article-sidebar {
     display: grid;
-    grid-area: sidebar;
+    grid-area: auto;
     grid-template-areas: "media" "related";
     align-content: start;
     gap: 2.5rem;
