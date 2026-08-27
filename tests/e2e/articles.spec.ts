@@ -80,6 +80,18 @@ test("article related stories remain below the body on mobile", async ({
   expect(related!.y).toBeGreaterThanOrEqual(body!.y + body!.height);
 });
 
+test("related story cards keep a rounded clipping boundary while hovered", async ({
+  page,
+}) => {
+  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
+
+  const card = page.locator(".article-related .article-card").first();
+  await card.hover();
+
+  await expect(card).toHaveCSS("border-radius", "17.6px");
+  await expect(card).toHaveCSS("overflow", "hidden");
+});
+
 test("YouTube article renders its heading and privacy-friendly embed", async ({
   page,
 }) => {
