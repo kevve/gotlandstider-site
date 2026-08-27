@@ -1,5 +1,6 @@
 ---
 import SiteFooter from "../components/SiteFooter.astro";
+import { serializeJsonLd } from "../lib/json";
 import SiteHeader from "../components/SiteHeader.astro";
 import { canonicalUrl, withBase } from "../lib/urls";
 import "../styles/global.css";
@@ -48,9 +49,11 @@ const isPreview =
     <title>{title}</title>
     <meta name="description" content={description} />
     {keywords && <meta name="keywords" content={keywords} />}
-    {(isPreview || noIndex) && (
-      <meta name="robots" content="noindex, nofollow" />
-    )}
+    {
+      (isPreview || noIndex) && (
+        <meta name="robots" content="noindex, nofollow" />
+      )
+    }
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={ogTitle} />
@@ -73,7 +76,7 @@ const isPreview =
         <script
           is:inline
           type="application/ld+json"
-          set:html={JSON.stringify(structuredData)}
+          set:html={serializeJsonLd(structuredData)}
         />
       )
     }
