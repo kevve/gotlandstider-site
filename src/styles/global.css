@@ -582,7 +582,7 @@ iframe {
   object-fit: cover;
   transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.article-card:hover img {
+.article-card:hover .card-image img {
   transform: scale(1.05);
 }
 .card-badge {
@@ -1098,18 +1098,18 @@ iframe {
 }
 .article-related .article-card {
   min-width: 72vw;
+  overflow: hidden;
+  border: 1px solid #e5dcd3;
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.7);
   scroll-snap-align: center;
 }
 .article-related .card-image {
   margin-bottom: 0;
-  border-radius: 1.1rem 1.1rem 0 0;
+  border-radius: 0;
 }
 .article-related .card-copy {
   padding: 1rem;
-  border: 1px solid #e5dcd3;
-  border-top: 0;
-  border-radius: 0 0 1.1rem 1.1rem;
-  background: rgba(255, 255, 255, 0.7);
 }
 .article-related .card-copy h3 {
   font-size: 1rem;
