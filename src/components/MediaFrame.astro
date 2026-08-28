@@ -2,10 +2,8 @@
 import { withBase } from "../lib/urls";
 
 interface VideoData {
-  provider: "youtube" | "legacy-local";
-  embedUrl: string;
+  youtubeVideoId: string;
   thumbnail: string;
-  legacySources?: { webm?: string; mp4?: string };
 }
 
 interface Props {
@@ -21,31 +19,15 @@ const fallbackImage = video?.thumbnail || image;
 
 <div class="media-frame">
   {
-    video?.provider === "youtube" ? (
+    video ? (
       <iframe
-        src={video.embedUrl}
+        src={`https://www.youtube-nocookie.com/embed/${video.youtubeVideoId}`}
         title={title}
         loading={priority ? "eager" : "lazy"}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
         referrerpolicy="strict-origin-when-cross-origin"
       />
-    ) : video?.provider === "legacy-local" ? (
-      <video
-        controls
-        playsinline
-        preload="none"
-        poster={withBase(video.thumbnail)}
-        data-local-video
-      >
-        {video.legacySources?.webm && (
-          <source src={withBase(video.legacySources.webm)} type="video/webm" />
-        )}
-        {video.legacySources?.mp4 && (
-          <source src={withBase(video.legacySources.mp4)} type="video/mp4" />
-        )}
-        <p>Din webbläsare stödjer tyvärr inte denna video.</p>
-      </video>
     ) : fallbackImage ? (
       <img
         src={withBase(fallbackImage)}

@@ -5,6 +5,7 @@ import ArticleGrid from "../components/ArticleGrid.astro";
 import MediaFrame from "../components/MediaFrame.astro";
 import SocialLinks from "../components/SocialLinks.astro";
 import BaseLayout from "./BaseLayout.astro";
+import { buildVideoJsonLd } from "../lib/seo";
 
 interface Props {
   article: ArticleEntry;
@@ -36,18 +37,7 @@ const graph: Record<string, unknown>[] = [
     },
   },
 ];
-if (data.video)
-  graph.push({
-    "@type": "VideoObject",
-    name: data.title,
-    description: data.excerpt,
-    thumbnailUrl: canonicalUrl(data.video.thumbnail),
-    uploadDate: iso(data.publishedAt),
-    embedUrl: data.video.embedUrl,
-    ...(data.video.provider === "legacy-local" && data.video.legacySources?.webm
-      ? { contentUrl: canonicalUrl(data.video.legacySources.webm) }
-      : {}),
-  });
+if (data.video) graph.push(buildVideoJsonLd(article));
 const structuredData = { "@context": "https://schema.org", "@graph": graph };
 const social = data.video?.socialLinks;
 ---
@@ -72,17 +62,9 @@ const social = data.video?.socialLinks;
           <h1>{data.title}</h1>
           <p>{data.excerpt}</p>
           <div class="article-tags">
-            {
-              [data.tags[1], data.tags[0], data.tags[2]]
-                .filter(Boolean)
-                .map((tag, index) =>
-                index === 0 ? (
-                  <span class="primary-tag">{tag}</span>
-                ) : (
-                  <span>{tag}</span>
-                ),
-              )
-            }
+            <span class="primary-tag">{data.primaryTag}</span>
+            <span>{data.locationTag}</span>
+            <span>{data.qualifierTag}</span>
           </div>
           <SocialLinks
             instagram={social?.instagram}

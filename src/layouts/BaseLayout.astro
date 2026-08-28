@@ -111,27 +111,6 @@ const isPreview =
         );
         revealItems.forEach((item) => observer.observe(item));
       }
-
-      document
-        .querySelectorAll<HTMLVideoElement>("[data-local-video]")
-        .forEach((video) => {
-          const mediaObserver =
-            "IntersectionObserver" in window
-              ? new IntersectionObserver(
-                  ([entry]) => {
-                    if (!entry.isIntersecting && !video.paused) video.pause();
-                  },
-                  { threshold: 0.45 },
-                )
-              : null;
-          mediaObserver?.observe(video);
-
-          const updateFit = () => {
-            const isFullscreen = document.fullscreenElement === video;
-            video.classList.toggle("is-fullscreen", isFullscreen);
-          };
-          video.addEventListener("fullscreenchange", updateFit);
-        });
     </script>
   </body>
 </html>

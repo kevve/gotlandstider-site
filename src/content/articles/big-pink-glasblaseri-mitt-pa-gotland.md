@@ -7,16 +7,14 @@ excerpt: Ett glasblåseri mitt på den gotländska landsbygden där hantverket s
 publishedAt: 2026-05-27
 updatedAt: 2026-05-27
 heroImage: /content/hero-coastline.webp
-tags:
-  - Gotland
-  - Hantverk
-  - Glasblåsning
-  - Utflykt
+primaryTag: Upplevelser & nöjen
+locationTag: Norrlanda
+qualifierTag: Hantverk
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/ZtFmkjCZRyo
+  youtubeVideoId: ZtFmkjCZRyo
+  uploadDate: 2026-05-27T19:42:16.000Z
   thumbnail: /content/big-pink-glasblaseri-mitt-pa-gotland-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DYXIzRNoEjN/

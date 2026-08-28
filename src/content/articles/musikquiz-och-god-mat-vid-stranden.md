@@ -5,22 +5,18 @@ excerpt: Du åker hit om du vill umgås med nära och kära i en gotländsk atmo
 publishedAt: 2026-01-03
 updatedAt: 2026-01-03
 heroImage: /content/story-brunan-ljugarn.webp
-tags:
-  - Ljugarn
-  - Mat & Dryck
-  - Tips
+primaryTag: Upplevelser & nöjen
+locationTag: Ljugarn
+qualifierTag: Musikquiz
 featured: false
 draft: false
 video:
-  provider: legacy-local
-  embedUrl: https://www.gotlandstider.se/#story-2
+  youtubeVideoId: 9q1Io_e3pj8
+  uploadDate: 2026-08-28T11:17:57.000Z
   thumbnail: /content/story-brunan-ljugarn.webp
   socialLinks:
     instagram: https://www.instagram.com/reel/DJUQIC3opEw/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7501347863666887958
-  legacySources:
-    webm: /content/story-brunan-ljugarn.webm
-    mp4: /content/story-brunan-ljugarn.mp4
 homepage:
   card:
     badge: Tips

@@ -6,10 +6,9 @@ excerpt: En exempelartikel för husresan i Ljugarn, med plats för uppdateringar
 publishedAt: 2026-01-05
 updatedAt: 2026-03-22
 heroImage: /content/house-ritahus.webp
-tags:
-  - Ljugarn
-  - Sommarhus
-  - Arkitektur
+primaryTag: Hem & inredning
+locationTag: Ljugarn
+qualifierTag: Husprojekt
 featured: false
 draft: true
 ---

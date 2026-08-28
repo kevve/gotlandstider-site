@@ -109,7 +109,7 @@ test("YouTube article renders its heading and privacy-friendly embed", async ({
   await expect(page.locator('iframe[src*="youtube"]')).toHaveCount(1);
 });
 
-test("legacy local-video article keeps both compatible source formats", async ({
+test("migrated article renders its canonical YouTube video", async ({
   page,
 }) => {
   await page.goto(articlePath("arets-loppis-favoriter"));
@@ -117,13 +117,9 @@ test("legacy local-video article keeps both compatible source formats", async ({
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Årets loppis-favoriter",
   );
-  await expect(page.locator("video")).toHaveCount(1);
-  await expect(page.locator('video source[type="video/webm"]')).toHaveAttribute(
+  await expect(page.locator("video")).toHaveCount(0);
+  await expect(page.locator("iframe")).toHaveAttribute(
     "src",
-    /story-loppisar-gotland\.webm$/,
-  );
-  await expect(page.locator('video source[type="video/mp4"]')).toHaveAttribute(
-    "src",
-    /story-loppisar-gotland\.mp4$/,
+    "https://www.youtube-nocookie.com/embed/ZKvaPamLcjs",
   );
 });

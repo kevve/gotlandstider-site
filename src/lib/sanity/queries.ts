@@ -12,19 +12,20 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
     excerpt,
     publishedAt,
     updatedAt,
-    tags,
+    "primaryTag": coalesce(primaryTag, tags[0]),
+    "locationTag": coalesce(locationTag, tags[1]),
+    "qualifierTag": coalesce(qualifierTag, tags[2]),
     featured,
     body,
     "heroImage": coalesce(heroImage.legacyPath, heroImage.asset->url),
     video {
-      provider,
-      embedUrl,
+      youtubeVideoId,
+      uploadDate,
       "thumbnail": coalesce(thumbnail.legacyPath, thumbnail.asset->url),
       socialLinks {
         "instagram": coalesce(instagram, null),
         "tiktok": coalesce(tiktok, null)
-      },
-      legacySources { webm, mp4 }
+      }
     },
     homepage {
       card { badge, subtitle },

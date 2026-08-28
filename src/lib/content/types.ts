@@ -1,8 +1,19 @@
 import type { CollectionEntry } from "astro:content";
 import type { TypedObject } from "astro-portabletext/types";
 
-export type ArticleData = CollectionEntry<"articles">["data"];
-export type ArticleVideo = NonNullable<ArticleData["video"]>;
+type MarkdownArticleData = CollectionEntry<"articles">["data"];
+
+export interface ArticleVideo {
+  youtubeVideoId: string;
+  uploadDate: string;
+  thumbnail: string;
+  socialLinks: { instagram: string | null; tiktok: string | null };
+}
+
+/** Normalized contract consumed by routes regardless of the configured source. */
+export type ArticleData = Omit<MarkdownArticleData, "video"> & {
+  video?: ArticleVideo;
+};
 
 export interface ArticleEntry {
   id: string;

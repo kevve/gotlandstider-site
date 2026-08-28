@@ -5,16 +5,14 @@ excerpt: "Tre somriga stopp på Gotland som faktiskt lever upp till förväntnin
 publishedAt: 2026-03-29
 updatedAt: 2026-03-29
 heroImage: /content/hero-coastline.webp
-tags:
-  - Gotland
-  - Guide
-  - Sommar
-  - Mat & Dryck
+primaryTag: Upplevelser & nöjen
+locationTag: Gotland
+qualifierTag: Sommar
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/83C-wTU5i1k
+  youtubeVideoId: 83C-wTU5i1k
+  uploadDate: 2026-03-29T20:22:31.000Z
   thumbnail: /content/tre-hypade-stallen-du-maste-besoka-youtube-cover.jpg
   socialLinks:
     instagram: null

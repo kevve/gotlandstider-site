@@ -12,8 +12,12 @@ const { node } = Astro.props;
 
 {
   node.style === "h2" ? (
-    <h2 id={node.headingId}><slot /></h2>
+    <h2 id={node.headingId}>
+      <slot />
+    </h2>
   ) : (
-    <h3 id={node.headingId}><slot /></h3>
+    <h3 id={node.headingId}>
+      <slot />
+    </h3>
   )
 }

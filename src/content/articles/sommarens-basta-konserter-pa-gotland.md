@@ -8,16 +8,14 @@ excerpt: Sommarens konserter under 2026 gör Gotland till ett ännu mer självkl
 publishedAt: 2026-05-09
 updatedAt: 2026-05-27
 heroImage: /content/hero-coastline.webp
-tags:
-  - Gotland
-  - Sommar
-  - Konserter
-  - Evenemang
+primaryTag: Upplevelser & nöjen
+locationTag: Gotland
+qualifierTag: Konserter
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/YP1fTXxSADQ
+  youtubeVideoId: YP1fTXxSADQ
+  uploadDate: 2026-05-09T12:26:29.000Z
   thumbnail: /content/sommarens-basta-konserter-pa-gotland-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DYHjHsDIb5g/

@@ -1,6 +1,7 @@
 import type { ArticleEntry } from "./content";
 import { articlePath } from "./content";
 import { canonicalUrl } from "./urls";
+import { buildVideoObject } from "./content/video";
 
 export const SITE_NAME = "Gotlandstider";
 export const DEFAULT_DESCRIPTION =
@@ -80,18 +81,5 @@ export function buildVideoJsonLd(article: ArticleEntry) {
     throw new Error(`Article ${article.data.slug} has no video metadata`);
   }
 
-  return {
-    "@type": "VideoObject",
-    name: article.data.title,
-    description: article.data.excerpt,
-    thumbnailUrl: canonicalUrl(video.thumbnail),
-    uploadDate: `${article.data.publishedAt}T00:00:00+00:00`,
-    embedUrl:
-      video.provider === "legacy-local"
-        ? canonicalUrl(articlePath(article.data.slug))
-        : video.embedUrl,
-    ...(video.legacySources?.webm
-      ? { contentUrl: canonicalUrl(video.legacySources.webm) }
-      : {}),
-  };
+  return buildVideoObject(video, article.data);
 }
