@@ -7,11 +7,9 @@ excerpt: Tre badplatser på Gotland som passar extra bra när du vill ha mer än
 publishedAt: 2026-04-22
 updatedAt: 2026-04-22
 heroImage: /content/hero-coastline.webp
-tags:
-  - Stränder
-  - Äventyr
-  - Fårö
-  - Guide
+primaryTag: Utflykter & natur
+locationTag: Gotland
+qualifierTag: Stränder
 featured: false
 draft: false
 video:

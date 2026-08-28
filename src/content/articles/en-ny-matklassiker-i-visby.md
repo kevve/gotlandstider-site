@@ -8,10 +8,9 @@ excerpt: Restaurang Bakfickan på Stora Torget har fått en systerkrog, i form a
 publishedAt: 2026-05-03
 updatedAt: 2026-05-03
 heroImage: /content/hero-coastline.webp
-tags:
-  - Visby
-  - Mat & Dryck
-  - Restaurang
+primaryTag: Mat & dryck
+locationTag: Visby
+qualifierTag: Restaurang
 featured: false
 draft: false
 video:

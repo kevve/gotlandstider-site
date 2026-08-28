@@ -6,10 +6,9 @@ excerpt: Ardre Strand, Ekeviken och Lausviken är tre fina val när du vill ha e
 publishedAt: 2026-03-21
 updatedAt: 2026-03-23
 heroImage: /content/lugna-strander-final-cover.jpg
-tags:
-  - Stränder
-  - Guide
-  - Sommar
+primaryTag: Utflykter & natur
+locationTag: Gotland
+qualifierTag: Stränder
 featured: false
 draft: false
 video:

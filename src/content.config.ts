@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { PRIMARY_TAGS, QUALIFIER_TAGS } from "./lib/content/taxonomy";
 
 const dateString = z.preprocess(
   (value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value),
@@ -86,7 +87,9 @@ const articles = defineCollection({
       publishedAt: dateString,
       updatedAt: dateString,
       heroImage: publicAssetPath,
-      tags: z.array(z.string().min(1)).min(1),
+      primaryTag: z.enum(PRIMARY_TAGS),
+      locationTag: z.string().trim().min(1).max(60),
+      qualifierTag: z.enum(QUALIFIER_TAGS),
       featured: z.boolean().default(false),
       draft: z.boolean().default(false),
       video: video.optional(),

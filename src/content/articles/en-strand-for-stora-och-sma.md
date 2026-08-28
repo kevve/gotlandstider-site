@@ -5,10 +5,9 @@ excerpt: Ett stenkast från Visby hittar du stranden Snäck, där möjligheterna
 publishedAt: 2026-01-03
 updatedAt: 2026-01-03
 heroImage: /content/story-strand-snack.webp
-tags:
-  - Visby
-  - Stränder
-  - Guide
+primaryTag: Utflykter & natur
+locationTag: Snäck
+qualifierTag: Stränder
 featured: false
 draft: false
 video:

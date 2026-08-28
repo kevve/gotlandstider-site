@@ -7,11 +7,9 @@ excerpt: Ett glasblåseri mitt på den gotländska landsbygden där hantverket s
 publishedAt: 2026-05-27
 updatedAt: 2026-05-27
 heroImage: /content/hero-coastline.webp
-tags:
-  - Gotland
-  - Hantverk
-  - Glasblåsning
-  - Utflykt
+primaryTag: Upplevelser & nöjen
+locationTag: Norrlanda
+qualifierTag: Hantverk
 featured: false
 draft: false
 video:

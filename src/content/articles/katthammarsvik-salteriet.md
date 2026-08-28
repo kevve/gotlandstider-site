@@ -6,11 +6,9 @@ excerpt: Katthammarsvik Salteriet är ett fint stopp på östra Gotland om du vi
 publishedAt: 2026-03-24
 updatedAt: 2026-03-24
 heroImage: /content/hero-coastline.webp
-tags:
-  - Katthammarsvik
-  - Östra Gotland
-  - Mat & Dryck
-  - Utflykt
+primaryTag: Mat & dryck
+locationTag: Katthammarsvik
+qualifierTag: Restaurang
 featured: false
 draft: true
 ---

@@ -8,11 +8,9 @@ excerpt: Sommarens konserter under 2026 gör Gotland till ett ännu mer självkl
 publishedAt: 2026-05-09
 updatedAt: 2026-05-27
 heroImage: /content/hero-coastline.webp
-tags:
-  - Gotland
-  - Sommar
-  - Konserter
-  - Evenemang
+primaryTag: Upplevelser & nöjen
+locationTag: Gotland
+qualifierTag: Konserter
 featured: false
 draft: false
 video:
