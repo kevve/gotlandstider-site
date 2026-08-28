@@ -40,7 +40,7 @@ npm test
 The source is selected at build time:
 
 ```sh
-# Transitional rollback source (default)
+# Repository content source (default)
 npm run build
 
 # Published documents from Sanity
@@ -49,7 +49,7 @@ npm run build:sanity
 
 `CONTENT_SOURCE=sanity` is intentionally strict: a missing document, image, body,
 or featured-article invariant fails the build instead of silently falling back to
-Markdown. Both providers map into the same site-facing type, so routes,
+Markdown. Both sources map into the same strict YouTube-only site-facing type, so routes,
 components, feeds, sitemap generation, and SEO stay source-independent.
 
 Sanity project and dataset identifiers are public configuration with defaults of
@@ -57,10 +57,10 @@ Sanity project and dataset identifiers are public configuration with defaults of
 `PUBLIC_SANITY_DATASET` if needed. No read token is committed or required for the
 public production dataset.
 
-During migration, Markdown remains in `src/content/articles/`. Its `slug` values
-are the public URL contract and must not be changed silently. Legacy local videos
-remain in `public/content/`; production video is not uploaded as a Sanity file
-asset.
+Markdown remains in `src/content/articles/` as a repository fallback. Its `slug`
+values are the public URL contract and must not be changed silently. Every video
+uses a canonical YouTube ID and upload date; video files are not served by the site
+or uploaded as Sanity file assets.
 
 Run `npm run check`, `npm run build`, and `npm test` before opening a pull request. The CI workflow additionally enforces formatting and runs the same browser regression coverage.
 
@@ -75,5 +75,5 @@ The preview has the `/gotlandstider-site` base path and must not be connected to
 Production cutover is a separate, explicit operation. It requires changing the deployment target to the root custom-domain configuration, adding the approved `CNAME`, validating Cloudflare redirects/headers and robots behavior, and comparing the final deployment against the current production site. Do not archive or modify the current production repository as part of normal work here.
 
 The preview now builds from published Sanity content. Markdown remains available as
-the rollback source and CI verifies both providers. Production DNS remains a separate
-approval.
+the repository fallback and CI verifies both content sources. Production DNS remains
+a separate approval.

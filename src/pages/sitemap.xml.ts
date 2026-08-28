@@ -5,6 +5,7 @@ import {
   type ArticleEntry,
 } from "../lib/content";
 import { canonicalUrl } from "../lib/urls";
+import { escapeXml, renderVideoSitemapXml } from "../lib/video-sitemap";
 
 export const prerender = true;
 
@@ -45,7 +46,7 @@ export const GET: APIRoute = async () => {
     ...articles.map((article) =>
       renderEntry({
         loc: canonicalUrl(articlePath(article.data.slug)),
-        lastmod: article.data.publishedAt,
+        lastmod: article.data.updatedAt,
         changefreq: "monthly",
         priority: "0.7",
         article,
@@ -102,43 +103,9 @@ function renderEntry({
   }
 
   if (article?.data.video) {
-    const { video } = article.data;
-    lines.push("      <video:video>");
-    lines.push(
-      `         <video:thumbnail_loc>${escapeXml(canonicalUrl(video.thumbnail))}</video:thumbnail_loc>`,
-    );
-    lines.push(
-      `         <video:title>${escapeXml(article.data.title)}</video:title>`,
-    );
-    lines.push(
-      `         <video:description>${escapeXml(article.data.excerpt)}</video:description>`,
-    );
-    if (video.legacySources?.webm) {
-      lines.push(
-        `         <video:content_loc>${escapeXml(canonicalUrl(video.legacySources.webm))}</video:content_loc>`,
-      );
-    } else {
-      lines.push(
-        `         <video:player_loc allow_embed="yes">${escapeXml(video.embedUrl)}</video:player_loc>`,
-      );
-    }
-    lines.push(
-      `         <video:publication_date>${article.data.publishedAt}T00:00:00+00:00</video:publication_date>`,
-    );
-    lines.push("         <video:family_friendly>yes</video:family_friendly>");
-    lines.push("         <video:live>no</video:live>");
-    lines.push("      </video:video>");
+    lines.push(...renderVideoSitemapXml(article));
   }
 
   lines.push("   </url>");
   return lines.join("\n");
-}
-
-function escapeXml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
 }

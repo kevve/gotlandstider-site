@@ -460,15 +460,11 @@ iframe {
   box-shadow: 0 20px 40px rgba(31, 41, 51, 0.22);
 }
 .media-frame iframe,
-.media-frame video,
 .media-frame img {
   width: 100%;
   height: 100%;
   border: 0;
   object-fit: cover;
-}
-.media-frame video.is-fullscreen {
-  object-fit: contain;
 }
 .featured-media .social-links {
   margin-top: 1.5rem;

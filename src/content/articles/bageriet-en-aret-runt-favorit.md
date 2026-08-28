@@ -13,8 +13,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/8L8enh1mPfo
+  youtubeVideoId: 8L8enh1mPfo
+  uploadDate: 2026-04-02T16:11:25.000Z
   thumbnail: /content/bageriet-en-aret-runt-favorit-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DWoVbCVCLpj/

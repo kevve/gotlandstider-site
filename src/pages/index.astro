@@ -7,6 +7,7 @@ import HouseProjectSection from "../components/HouseProjectSection.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getFeaturedArticle, getPublishedArticles } from "../lib/content";
 import { canonicalUrl, withBase } from "../lib/urls";
+import { buildVideoJsonLd } from "../lib/seo";
 
 const featured = await getFeaturedArticle();
 const articles = await getPublishedArticles();
@@ -57,21 +58,7 @@ const structuredData = {
         "https://www.tiktok.com/@gotlandstider",
       ],
     },
-    ...(video
-      ? [
-          {
-            "@type": "VideoObject",
-            name: featured.data.title,
-            description: featured.data.excerpt,
-            thumbnailUrl: canonicalUrl(video.thumbnail),
-            uploadDate: featured.data.publishedAt,
-            embedUrl: video.embedUrl,
-            ...(video.provider === "legacy-local" && video.legacySources?.webm
-              ? { contentUrl: canonicalUrl(video.legacySources.webm) }
-              : {}),
-          },
-        ]
-      : []),
+    ...(video ? [buildVideoJsonLd(featured)] : []),
   ],
 };
 ---

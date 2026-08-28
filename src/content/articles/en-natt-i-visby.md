@@ -16,8 +16,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/jZPEhnrZIzo
+  youtubeVideoId: jZPEhnrZIzo
+  uploadDate: 2026-04-22T20:13:59.000Z
   thumbnail: /content/en-natt-i-visby-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DXMmwY6iMK5/

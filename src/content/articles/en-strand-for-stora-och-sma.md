@@ -12,15 +12,12 @@ tags:
 featured: false
 draft: false
 video:
-  provider: legacy-local
-  embedUrl: https://www.gotlandstider.se/#story-3
+  youtubeVideoId: ZWoqOmLiLEQ
+  uploadDate: 2026-08-28T11:17:11.000Z
   thumbnail: /content/story-strand-snack.webp
   socialLinks:
     instagram: https://www.instagram.com/reel/DMQItODIMPC/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7528426362655231254
-  legacySources:
-    webm: /content/story-strand-snack.webm
-    mp4: /content/story-strand-snack.mp4
 homepage:
   card:
     badge: Guide

@@ -15,8 +15,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/ZtFmkjCZRyo
+  youtubeVideoId: ZtFmkjCZRyo
+  uploadDate: 2026-05-27T19:42:16.000Z
   thumbnail: /content/big-pink-glasblaseri-mitt-pa-gotland-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DYXIzRNoEjN/

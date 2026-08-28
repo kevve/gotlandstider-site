@@ -13,8 +13,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/vkuu7bHJBGM
+  youtubeVideoId: vkuu7bHJBGM
+  uploadDate: 2026-04-29T19:45:43.000Z
   thumbnail: /content/kalkstensgolv-till-sommarhuset-i-ljugarn-youtube-cover.jpg
   socialLinks:
     ? instagram

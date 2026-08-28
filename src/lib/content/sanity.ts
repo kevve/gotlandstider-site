@@ -2,6 +2,7 @@ import { sanityClient } from "sanity:client";
 import type { SANITY_ARTICLES_QUERY_RESULT } from "../../sanity.types";
 import { SANITY_ARTICLES_QUERY } from "../sanity/queries";
 import type { ArticleData, ArticleEntry } from "./types";
+import { normalizeArticleVideo } from "./video";
 
 type SanityArticle = SANITY_ARTICLES_QUERY_RESULT[number];
 
@@ -16,30 +17,33 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
     document.slug,
     "heroImage",
   );
-  const video = document.video
-    ? {
-        provider: document.video.provider,
-        embedUrl: document.video.embedUrl,
-        thumbnail: requiredString(
-          document.video.thumbnail,
-          document.slug,
-          "video.thumbnail",
-        ),
-        socialLinks: {
-          instagram: document.video.socialLinks?.instagram ?? null,
-          tiktok: document.video.socialLinks?.tiktok ?? null,
+  const videoDocument = document.video;
+  const video = videoDocument
+    ? normalizeArticleVideo(
+        {
+          youtubeVideoId: requiredString(
+            videoDocument.youtubeVideoId,
+            document.slug,
+            "video.youtubeVideoId",
+          ),
+          uploadDate: requiredString(
+            videoDocument.uploadDate,
+            document.slug,
+            "video.uploadDate",
+          ),
+          thumbnail: requiredString(
+            videoDocument.thumbnail,
+            document.slug,
+            "video.thumbnail",
+          ),
+          socialLinks: {
+            instagram: videoDocument.socialLinks?.instagram ?? null,
+            tiktok: videoDocument.socialLinks?.tiktok ?? null,
+          },
         },
-        ...(document.video.legacySources
-          ? { legacySources: document.video.legacySources }
-          : {}),
-      }
+        document.slug,
+      )
     : undefined;
-
-  if (video?.provider === "legacy-local" && !video.legacySources) {
-    throw new Error(
-      `Sanity article ${document.slug} has legacy-local video without sources`,
-    );
-  }
 
   const homepage = document.homepage
     ? {
