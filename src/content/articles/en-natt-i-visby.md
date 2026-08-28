@@ -8,11 +8,9 @@ excerpt: En natt i Visby under lågsäsong är det bästa sättet att börja en
 publishedAt: 2026-04-22
 updatedAt: 2026-04-22
 heroImage: /content/hero-coastline.webp
-tags:
-  - Visby
-  - Guide
-  - Året runt
-  - Weekend
+primaryTag: Upplevelser & nöjen
+locationTag: Visby
+qualifierTag: Weekend
 featured: false
 draft: false
 video:

@@ -1,5 +1,6 @@
 import { getMarkdownArticles } from "./content/markdown";
 import type { ArticleData, ArticleEntry } from "./content/types";
+import { orderedArticleTags } from "./content/taxonomy";
 
 export type { ArticleData, ArticleEntry, ArticleVideo } from "./content/types";
 
@@ -10,6 +11,7 @@ export interface CardPresentation {
 }
 
 export type SerializedArticle = ArticleData & {
+  tags: [string, string, string];
   urlPath: string;
   sourceFile: string;
 };
@@ -63,14 +65,13 @@ export async function getRelatedArticles(
 
 export function getCardPresentation(article: ArticleEntry): CardPresentation {
   const { data } = article;
-  const [firstTag, ...otherTags] = data.tags;
 
   return {
     cardImage: data.video?.thumbnail ?? data.heroImage,
-    badge: data.homepage?.card?.badge ?? firstTag,
+    badge: data.homepage?.card?.badge ?? data.primaryTag,
     subtitle:
       data.homepage?.card?.subtitle ??
-      (otherTags.length > 0 ? otherTags.slice(0, 2).join(" • ") : firstTag),
+      `${data.locationTag} • ${data.qualifierTag}`,
   };
 }
 
@@ -78,12 +79,11 @@ export function getArchiveCardPresentation(
   article: ArticleEntry,
 ): CardPresentation {
   const { data } = article;
-  const [metaPrefix, badge = metaPrefix, metaSuffix] = data.tags;
 
   return {
     cardImage: data.video?.thumbnail ?? data.heroImage,
-    badge,
-    subtitle: [metaPrefix, metaSuffix].filter(Boolean).join(" • "),
+    badge: data.primaryTag,
+    subtitle: `${data.locationTag} • ${data.qualifierTag}`,
   };
 }
 
@@ -93,6 +93,7 @@ export function serializeArticle(article: ArticleEntry): SerializedArticle {
 
   return {
     ...data,
+    tags: orderedArticleTags(article.data),
     urlPath: articlePath(article.data.slug),
     sourceFile: article.sourceFile,
     ...(video ? { video } : {}),

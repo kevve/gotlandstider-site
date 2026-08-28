@@ -6,10 +6,9 @@ excerpt: Bageriet i Visby är en varm och levande restaurang som är ett
 publishedAt: 2026-04-02
 updatedAt: 2026-04-02
 heroImage: /content/hero-coastline.webp
-tags:
-  - Visby
-  - Mat & Dryck
-  - Året runt
+primaryTag: Mat & dryck
+locationTag: Visby
+qualifierTag: Restaurang
 featured: false
 draft: false
 video:

@@ -5,10 +5,9 @@ excerpt: Du åker hit om du vill umgås med nära och kära i en gotländsk atmo
 publishedAt: 2026-01-03
 updatedAt: 2026-01-03
 heroImage: /content/story-brunan-ljugarn.webp
-tags:
-  - Ljugarn
-  - Mat & Dryck
-  - Tips
+primaryTag: Upplevelser & nöjen
+locationTag: Ljugarn
+qualifierTag: Musikquiz
 featured: false
 draft: false
 video:

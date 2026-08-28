@@ -62,17 +62,9 @@ const social = data.video?.socialLinks;
           <h1>{data.title}</h1>
           <p>{data.excerpt}</p>
           <div class="article-tags">
-            {
-              [data.tags[1], data.tags[0], data.tags[2]]
-                .filter(Boolean)
-                .map((tag, index) =>
-                  index === 0 ? (
-                    <span class="primary-tag">{tag}</span>
-                  ) : (
-                    <span>{tag}</span>
-                  ),
-                )
-            }
+            <span class="primary-tag">{data.primaryTag}</span>
+            <span>{data.locationTag}</span>
+            <span>{data.qualifierTag}</span>
           </div>
           <SocialLinks
             instagram={social?.instagram}

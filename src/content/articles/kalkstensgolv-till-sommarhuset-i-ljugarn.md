@@ -6,10 +6,9 @@ excerpt: Ett materialval för sommarhuset i Ljugarn där Norrvange kalksten frå
 publishedAt: 2026-04-29
 updatedAt: 2026-04-29
 heroImage: /content/hero-coastline.webp
-tags:
-  - Sommarhus
-  - Hus & Hem
-  - Ljugarn
+primaryTag: Hem & inredning
+locationTag: Ljugarn
+qualifierTag: Husprojekt
 featured: false
 draft: false
 video:

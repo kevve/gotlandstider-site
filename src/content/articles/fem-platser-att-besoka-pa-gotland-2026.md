@@ -6,10 +6,9 @@ excerpt: En guide till våra favoritplatser på Gotland inför sommarsäsongen 2
 publishedAt: 2026-01-03
 updatedAt: 2026-08-23
 heroImage: /content/story-5platser-gotland.webp
-tags:
-  - Gotland
-  - Guide
-  - Utflykt
+primaryTag: Upplevelser & nöjen
+locationTag: Gotland
+qualifierTag: Guide
 featured: false
 draft: false
 video:

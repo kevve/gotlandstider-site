@@ -6,10 +6,9 @@ excerpt: Vi har åkt Gotland runt för att hitta de bästa loppisarna. Här visa
 publishedAt: 2026-01-03
 updatedAt: 2026-01-03
 heroImage: /content/story-loppisar-gotland.webp
-tags:
-  - Gotland
-  - Loppis
-  - Inredning
+primaryTag: Loppis & second hand
+locationTag: Gotland
+qualifierTag: Loppisrunda
 featured: false
 draft: false
 video:

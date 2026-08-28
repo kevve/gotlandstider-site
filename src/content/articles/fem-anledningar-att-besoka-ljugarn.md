@@ -6,11 +6,9 @@ excerpt: Ljugarn passar dig som vill kombinera strand, restauranger, aktiviteter
 publishedAt: 2026-03-19
 updatedAt: 2026-03-19
 heroImage: /content/hero-coastline.webp
-tags:
-  - Ljugarn
-  - Guide
-  - Östra Gotland
-  - Mat & Dryck
+primaryTag: Upplevelser & nöjen
+locationTag: Ljugarn
+qualifierTag: Guide
 featured: false
 draft: false
 ---

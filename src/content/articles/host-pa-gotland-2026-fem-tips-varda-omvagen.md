@@ -7,11 +7,9 @@ excerpt: Här kommer våra fem bästa sätt att uppleva Gotland under hösten. A
 publishedAt: 2026-08-22
 updatedAt: 2026-08-22
 heroImage: /content/host-pa-gotland-2026-fem-tips-varda-omvagen-youtube-cover.jpg
-tags:
-  - Höst
-  - Guide
-  - Utflykt
-  - Gotland
+primaryTag: Utflykter & natur
+locationTag: Gotland
+qualifierTag: Höst
 featured: true
 draft: false
 video:

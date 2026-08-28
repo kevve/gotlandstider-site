@@ -7,11 +7,9 @@ excerpt: Bara 5-10 minuter norr om Visby hittar du Gotlands kanske bästa bageri
 publishedAt: 2026-04-13
 updatedAt: 2026-05-27
 heroImage: /content/hero-coastline.webp
-tags:
-  - bageri
-  - fika
-  - Visby
-  - Själsö
+primaryTag: Mat & dryck
+locationTag: Själsö
+qualifierTag: Bageri
 featured: false
 draft: false
 video:
