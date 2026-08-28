@@ -13,8 +13,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://youtube.com/embed/y2ODT6BNhhw
+  youtubeVideoId: y2ODT6BNhhw
+  uploadDate: 2026-03-29T14:44:39.000Z
   thumbnail: /content/lugna-strander-final-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DWJq9DRCLeS/

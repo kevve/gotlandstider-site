@@ -13,15 +13,12 @@ tags:
 featured: false
 draft: false
 video:
-  provider: legacy-local
-  embedUrl: https://www.gotlandstider.se/#story-1
+  youtubeVideoId: ZKvaPamLcjs
+  uploadDate: 2026-08-28T10:55:47.000Z
   thumbnail: /content/story-loppisar-gotland.webp
   socialLinks:
     instagram: https://www.instagram.com/reel/DSuzAP-iPaz/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7588184079967866134
-  legacySources:
-    webm: /content/story-loppisar-gotland.webm
-    mp4: /content/story-loppisar-gotland.mp4
 homepage:
   card:
     badge: Loppis

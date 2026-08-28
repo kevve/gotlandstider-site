@@ -13,8 +13,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/83C-wTU5i1k
+  youtubeVideoId: 83C-wTU5i1k
+  uploadDate: 2026-03-29T20:22:31.000Z
   thumbnail: /content/tre-hypade-stallen-du-maste-besoka-youtube-cover.jpg
   socialLinks:
     instagram: null

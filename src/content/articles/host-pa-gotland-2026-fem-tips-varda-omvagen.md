@@ -15,8 +15,8 @@ tags:
 featured: true
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/cCvfEhX29YU
+  youtubeVideoId: cCvfEhX29YU
+  uploadDate: 2026-08-22T17:10:18.000Z
   thumbnail: /content/host-pa-gotland-2026-fem-tips-varda-omvagen-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DQemTFpiDS8/

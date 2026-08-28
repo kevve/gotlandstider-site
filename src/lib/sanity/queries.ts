@@ -17,14 +17,13 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
     body,
     "heroImage": coalesce(heroImage.legacyPath, heroImage.asset->url),
     video {
-      provider,
-      embedUrl,
+      youtubeVideoId,
+      uploadDate,
       "thumbnail": coalesce(thumbnail.legacyPath, thumbnail.asset->url),
       socialLinks {
         "instagram": coalesce(instagram, null),
         "tiktok": coalesce(tiktok, null)
-      },
-      legacySources { webm, mp4 }
+      }
     },
     homepage {
       card { badge, subtitle },

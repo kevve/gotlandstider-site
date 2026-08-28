@@ -15,8 +15,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/f2rg5R3CSv8
+  youtubeVideoId: f2rg5R3CSv8
+  uploadDate: 2026-04-13T19:13:44.000Z
   thumbnail: /content/gotlands-kanske-basta-bageri-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DW3_J3riKah/

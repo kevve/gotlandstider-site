@@ -26,7 +26,14 @@ const social = data.video?.socialLinks;
       <div class="featured-copy" data-reveal>
         <h3>
           {heading?.prefix || data.title}
-          {heading?.accent && <> <em>{heading.accent}</em></>}
+          {
+            heading?.accent && (
+              <>
+                {" "}
+                <em>{heading.accent}</em>
+              </>
+            )
+          }
         </h3>
         <p>{hero?.description || data.excerpt}</p>
       </div>

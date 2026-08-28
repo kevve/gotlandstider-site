@@ -15,8 +15,8 @@ tags:
 featured: false
 draft: false
 video:
-  provider: youtube
-  embedUrl: https://www.youtube.com/embed/1HKyQlxN2wc
+  youtubeVideoId: 1HKyQlxN2wc
+  uploadDate: 2026-05-03T12:52:02.000Z
   thumbnail: /content/en-ny-matklassiker-i-visby-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DX4P0DzodM5/
