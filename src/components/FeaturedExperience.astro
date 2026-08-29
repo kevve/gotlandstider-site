@@ -39,7 +39,12 @@ const social = data.video?.socialLinks;
       </div>
 
       <div class="featured-media" data-reveal>
-        <MediaFrame title={data.title} video={data.video} priority />
+        <MediaFrame
+          title={data.title}
+          video={data.video}
+          image={data.coverImage}
+          priority
+        />
         <SocialLinks
           instagram={social?.instagram}
           tiktok={social?.tiktok}

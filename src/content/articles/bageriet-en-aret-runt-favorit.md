@@ -5,7 +5,7 @@ excerpt: Bageriet i Visby är en varm och levande restaurang som är ett
   självklart val för att äta gott under både lågsäsong och sommaren.
 publishedAt: 2026-04-02
 updatedAt: 2026-04-02
-heroImage: /content/hero-coastline.webp
+coverImage: /content/bageriet-en-aret-runt-favorit-youtube-cover.jpg
 primaryTag: Mat & dryck
 locationTag: Visby
 qualifierTag: Restaurang
@@ -14,7 +14,6 @@ draft: false
 video:
   youtubeVideoId: 8L8enh1mPfo
   uploadDate: 2026-04-02T16:11:25.000Z
-  thumbnail: /content/bageriet-en-aret-runt-favorit-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DWoVbCVCLpj/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7624147290512477462

@@ -6,7 +6,7 @@ excerpt: Ett glasblåseri mitt på den gotländska landsbygden där hantverket s
   borden i flertalet Michelin-krogar.
 publishedAt: 2026-05-27
 updatedAt: 2026-05-27
-heroImage: /content/hero-coastline.webp
+coverImage: /content/big-pink-glasblaseri-mitt-pa-gotland-youtube-cover.jpg
 primaryTag: Upplevelser & nöjen
 locationTag: Norrlanda
 qualifierTag: Hantverk
@@ -15,7 +15,6 @@ draft: false
 video:
   youtubeVideoId: ZtFmkjCZRyo
   uploadDate: 2026-05-27T19:42:16.000Z
-  thumbnail: /content/big-pink-glasblaseri-mitt-pa-gotland-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DYXIzRNoEjN/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7640114347494198550

@@ -3,7 +3,6 @@ import { withBase } from "../lib/urls";
 
 interface VideoData {
   youtubeVideoId: string;
-  thumbnail: string;
 }
 
 interface Props {
@@ -14,7 +13,6 @@ interface Props {
 }
 
 const { title, video, image, priority = false } = Astro.props;
-const fallbackImage = video?.thumbnail || image;
 ---
 
 <div class="media-frame">
@@ -28,9 +26,9 @@ const fallbackImage = video?.thumbnail || image;
         allowfullscreen
         referrerpolicy="strict-origin-when-cross-origin"
       />
-    ) : fallbackImage ? (
+    ) : image ? (
       <img
-        src={withBase(fallbackImage)}
+        src={withBase(image)}
         alt={title}
         loading={priority ? "eager" : "lazy"}
       />

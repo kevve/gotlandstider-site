@@ -8,7 +8,7 @@ export function renderVideoSitemapXml(article: ArticleEntry): string[] {
 
   const lines = [
     "      <video:video>",
-    `         <video:thumbnail_loc>${escapeXml(canonicalUrl(video.thumbnail))}</video:thumbnail_loc>`,
+    `         <video:thumbnail_loc>${escapeXml(canonicalUrl(article.data.coverImage))}</video:thumbnail_loc>`,
     `         <video:title>${escapeXml(article.data.title)}</video:title>`,
     `         <video:description>${escapeXml(article.data.excerpt)}</video:description>`,
   ];

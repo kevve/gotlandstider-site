@@ -5,7 +5,7 @@ excerpt: Ett materialval för sommarhuset i Ljugarn där Norrvange kalksten frå
   norra Gotland står mellan antikborstad struktur och normalslipad lugn.
 publishedAt: 2026-04-29
 updatedAt: 2026-04-29
-heroImage: /content/hero-coastline.webp
+coverImage: /content/kalkstensgolv-till-sommarhuset-i-ljugarn-youtube-cover.jpg
 primaryTag: Hem & inredning
 locationTag: Ljugarn
 qualifierTag: Husprojekt
@@ -14,7 +14,6 @@ draft: false
 video:
   youtubeVideoId: vkuu7bHJBGM
   uploadDate: 2026-04-29T19:45:43.000Z
-  thumbnail: /content/kalkstensgolv-till-sommarhuset-i-ljugarn-youtube-cover.jpg
   socialLinks:
     ? instagram
     ? tiktok

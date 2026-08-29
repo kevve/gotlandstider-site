@@ -6,7 +6,7 @@ excerpt: Här kommer våra fem bästa sätt att uppleva Gotland under hösten. A
   skördetider och loppisar.
 publishedAt: 2026-08-22
 updatedAt: 2026-08-22
-heroImage: /content/host-pa-gotland-2026-fem-tips-varda-omvagen-youtube-cover.jpg
+coverImage: /content/host-pa-gotland-2026-fem-tips-varda-omvagen-youtube-cover.jpg
 primaryTag: Utflykter & natur
 locationTag: Gotland
 qualifierTag: Höst
@@ -15,7 +15,6 @@ draft: false
 video:
   youtubeVideoId: cCvfEhX29YU
   uploadDate: 2026-08-22T17:10:18.000Z
-  thumbnail: /content/host-pa-gotland-2026-fem-tips-varda-omvagen-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DQemTFpiDS8/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7567403420164951318

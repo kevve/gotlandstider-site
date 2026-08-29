@@ -7,7 +7,7 @@ excerpt: Restaurang Bakfickan på Stora Torget har fått en systerkrog, i form a
   missa det här stället.
 publishedAt: 2026-05-03
 updatedAt: 2026-05-03
-heroImage: /content/hero-coastline.webp
+coverImage: /content/en-ny-matklassiker-i-visby-youtube-cover.jpg
 primaryTag: Mat & dryck
 locationTag: Visby
 qualifierTag: Restaurang
@@ -16,7 +16,6 @@ draft: false
 video:
   youtubeVideoId: 1HKyQlxN2wc
   uploadDate: 2026-05-03T12:52:02.000Z
-  thumbnail: /content/en-ny-matklassiker-i-visby-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DX4P0DzodM5/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7635662876304362774

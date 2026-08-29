@@ -6,12 +6,16 @@ type MarkdownArticleData = CollectionEntry<"articles">["data"];
 export interface ArticleVideo {
   youtubeVideoId: string;
   uploadDate: string;
-  thumbnail: string;
   socialLinks: { instagram: string | null; tiktok: string | null };
 }
 
 /** Normalized contract consumed by routes regardless of the configured source. */
-export type ArticleData = Omit<MarkdownArticleData, "video"> & {
+export type ArticleData = Omit<
+  MarkdownArticleData,
+  "video" | "coverImage" | "heroImage"
+> & {
+  /** The single effective image used everywhere the article needs artwork. */
+  coverImage: string;
   video?: ArticleVideo;
 };
 

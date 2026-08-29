@@ -5,7 +5,7 @@ excerpt: Vi har åkt Gotland runt för att hitta de bästa loppisarna. Här visa
   även Henrik upp årets fynd.
 publishedAt: 2026-01-03
 updatedAt: 2026-01-03
-heroImage: /content/story-loppisar-gotland.webp
+coverImage: /content/story-loppisar-gotland.webp
 primaryTag: Loppis & second hand
 locationTag: Gotland
 qualifierTag: Loppisrunda
@@ -14,7 +14,6 @@ draft: false
 video:
   youtubeVideoId: ZKvaPamLcjs
   uploadDate: 2026-08-28T10:55:47.000Z
-  thumbnail: /content/story-loppisar-gotland.webp
   socialLinks:
     instagram: https://www.instagram.com/reel/DSuzAP-iPaz/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7588184079967866134

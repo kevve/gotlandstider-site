@@ -5,7 +5,7 @@ excerpt: Ljugarn passar dig som vill kombinera strand, restauranger, aktiviteter
   och raukar under några dagar på östra Gotland.
 publishedAt: 2026-03-19
 updatedAt: 2026-03-19
-heroImage: /content/hero-coastline.webp
+coverImage: /content/hero-coastline.webp
 primaryTag: Upplevelser & nöjen
 locationTag: Ljugarn
 qualifierTag: Guide

@@ -87,6 +87,17 @@ test("compatibility feeds and discovery resources remain public", async ({
   expect(
     articlePayload.items.every((item: { draft: boolean }) => !item.draft),
   ).toBe(true);
+  expect(
+    articlePayload.items.every(
+      (item: {
+        coverImage: string;
+        heroImage: string;
+        video?: { thumbnail: string };
+      }) =>
+        item.coverImage === item.heroImage &&
+        (!item.video || item.video.thumbnail === item.coverImage),
+    ),
+  ).toBe(true);
 
   for (const path of [
     "/generated/content/featured.json",

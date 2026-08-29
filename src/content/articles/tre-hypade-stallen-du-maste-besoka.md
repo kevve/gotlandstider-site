@@ -4,7 +4,7 @@ slug: tre-hypade-stallen-du-maste-besoka
 excerpt: "Tre somriga stopp på Gotland som faktiskt lever upp till förväntningarna: Surflogiet, Kallis och Bruna Dörren."
 publishedAt: 2026-03-29
 updatedAt: 2026-03-29
-heroImage: /content/hero-coastline.webp
+coverImage: /content/tre-hypade-stallen-du-maste-besoka-youtube-cover.jpg
 primaryTag: Upplevelser & nöjen
 locationTag: Gotland
 qualifierTag: Sommar
@@ -13,7 +13,6 @@ draft: false
 video:
   youtubeVideoId: 83C-wTU5i1k
   uploadDate: 2026-03-29T20:22:31.000Z
-  thumbnail: /content/tre-hypade-stallen-du-maste-besoka-youtube-cover.jpg
   socialLinks:
     instagram: null
     tiktok: null
