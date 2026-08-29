@@ -74,7 +74,7 @@ for (const testCase of [
   });
 }
 
-test("compatibility feeds and discovery resources remain public", async ({
+test("content feeds and discovery resources remain public", async ({
   request,
 }) => {
   const articles = await request.get("/generated/content/articles.json");
@@ -91,11 +91,12 @@ test("compatibility feeds and discovery resources remain public", async ({
     articlePayload.items.every(
       (item: {
         coverImage: string;
-        heroImage: string;
-        video?: { thumbnail: string };
+        heroImage?: unknown;
+        video?: { thumbnail?: unknown };
       }) =>
-        item.coverImage === item.heroImage &&
-        (!item.video || item.video.thumbnail === item.coverImage),
+        typeof item.coverImage === "string" &&
+        item.heroImage === undefined &&
+        (!item.video || item.video.thumbnail === undefined),
     ),
   ).toBe(true);
 

@@ -83,7 +83,6 @@ export type ArticleVideo = {
   _type: "articleVideo";
   youtubeVideoId: string;
   uploadDate: string;
-  thumbnail?: ArticleImage;
   socialLinks?: SocialLinks;
 };
 
@@ -159,7 +158,6 @@ export type Article = {
   tags?: Array<string>;
   body: ArticleBody;
   coverImage?: ArticleImage;
-  heroImage?: ArticleImage;
   video?: ArticleVideo;
   featured?: boolean;
   homepage?: HomepagePresentation;
@@ -315,7 +313,7 @@ export type AllSanitySchemaTypes =
 
 // Source: ../gotlandstider-site/src/lib/sanity/queries.ts
 // Variable: SANITY_ARTICLES_QUERY
-// Query: *[    _type == "article" &&    !(_id in path("drafts.**")) &&    defined(slug.current)  ] | order(publishedAt desc, slug.current asc) {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    "primaryTag": coalesce(primaryTag, tags[0]),    "locationTag": coalesce(locationTag, tags[1]),    "qualifierTag": coalesce(qualifierTag, tags[2]),    featured,    body,    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),    "heroImage": coalesce(heroImage.asset->url, heroImage.legacyPath),    video {      youtubeVideoId,      uploadDate,      "thumbnail": coalesce(thumbnail.asset->url, thumbnail.legacyPath),      socialLinks {        "instagram": coalesce(instagram, null),        "tiktok": coalesce(tiktok, null)      }    },    homepage {      card { badge, subtitle },      hero {        heading { prefix, accent },        description,        highlights[] { _key, label, title, description }      }    },    "seo": {      "title": seo.title,      "description": seo.description,      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),      "noIndex": seo.noIndex == true    },    "sourceFile": coalesce(      migration.sourceFile,      "content/articles/" + slug.current + ".md"    )  }
+// Query: *[    _type == "article" &&    !(_id in path("drafts.**")) &&    defined(slug.current)  ] | order(publishedAt desc, slug.current asc) {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    "primaryTag": coalesce(primaryTag, tags[0]),    "locationTag": coalesce(locationTag, tags[1]),    "qualifierTag": coalesce(qualifierTag, tags[2]),    featured,    body,    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),    video {      youtubeVideoId,      uploadDate,      socialLinks {        "instagram": coalesce(instagram, null),        "tiktok": coalesce(tiktok, null)      }    },    homepage {      card { badge, subtitle },      hero {        heading { prefix, accent },        description,        highlights[] { _key, label, title, description }      }    },    "seo": {      "title": seo.title,      "description": seo.description,      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),      "noIndex": seo.noIndex == true    },    "sourceFile": coalesce(      migration.sourceFile,      "content/articles/" + slug.current + ".md"    )  }
 export type SANITY_ARTICLES_QUERY_RESULT = Array<{
   _id: string;
   title: string;
@@ -347,11 +345,9 @@ export type SANITY_ARTICLES_QUERY_RESULT = Array<{
   featured: boolean | null;
   body: ArticleBody;
   coverImage: string | null;
-  heroImage: string | null;
   video: {
     youtubeVideoId: string;
     uploadDate: string;
-    thumbnail: string | null;
     socialLinks: {
       instagram: string | null;
       tiktok: string | null;
@@ -389,6 +385,6 @@ export type SANITY_ARTICLES_QUERY_RESULT = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[\n    _type == "article" &&\n    !(_id in path("drafts.**")) &&\n    defined(slug.current)\n  ] | order(publishedAt desc, slug.current asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    "primaryTag": coalesce(primaryTag, tags[0]),\n    "locationTag": coalesce(locationTag, tags[1]),\n    "qualifierTag": coalesce(qualifierTag, tags[2]),\n    featured,\n    body,\n    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),\n    "heroImage": coalesce(heroImage.asset->url, heroImage.legacyPath),\n    video {\n      youtubeVideoId,\n      uploadDate,\n      "thumbnail": coalesce(thumbnail.asset->url, thumbnail.legacyPath),\n      socialLinks {\n        "instagram": coalesce(instagram, null),\n        "tiktok": coalesce(tiktok, null)\n      }\n    },\n    homepage {\n      card { badge, subtitle },\n      hero {\n        heading { prefix, accent },\n        description,\n        highlights[] { _key, label, title, description }\n      }\n    },\n    "seo": {\n      "title": seo.title,\n      "description": seo.description,\n      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),\n      "noIndex": seo.noIndex == true\n    },\n    "sourceFile": coalesce(\n      migration.sourceFile,\n      "content/articles/" + slug.current + ".md"\n    )\n  }\n': SANITY_ARTICLES_QUERY_RESULT;
+    '\n  *[\n    _type == "article" &&\n    !(_id in path("drafts.**")) &&\n    defined(slug.current)\n  ] | order(publishedAt desc, slug.current asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    "primaryTag": coalesce(primaryTag, tags[0]),\n    "locationTag": coalesce(locationTag, tags[1]),\n    "qualifierTag": coalesce(qualifierTag, tags[2]),\n    featured,\n    body,\n    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),\n    video {\n      youtubeVideoId,\n      uploadDate,\n      socialLinks {\n        "instagram": coalesce(instagram, null),\n        "tiktok": coalesce(tiktok, null)\n      }\n    },\n    homepage {\n      card { badge, subtitle },\n      hero {\n        heading { prefix, accent },\n        description,\n        highlights[] { _key, label, title, description }\n      }\n    },\n    "seo": {\n      "title": seo.title,\n      "description": seo.description,\n      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),\n      "noIndex": seo.noIndex == true\n    },\n    "sourceFile": coalesce(\n      migration.sourceFile,\n      "content/articles/" + slug.current + ".md"\n    )\n  }\n': SANITY_ARTICLES_QUERY_RESULT;
   }
 }

@@ -38,9 +38,7 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
   const coverImage = resolveArticleCoverImage({
     slug: document.slug,
     coverImage: document.coverImage,
-    videoThumbnail: videoDocument?.thumbnail,
     youtubeVideoId: video?.youtubeVideoId,
-    heroImage: document.heroImage,
   });
 
   const homepage = document.homepage

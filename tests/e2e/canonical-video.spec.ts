@@ -99,43 +99,24 @@ test("canonical video sitemap uses player_loc and video upload date", () => {
   expect(xml).not.toContain("<video:content_loc>");
 });
 
-test("cover resolution follows the cross-source compatibility precedence", () => {
+test("cover resolution uses an explicit cover before the YouTube fallback", () => {
   expect(
     resolveArticleCoverImage({
       slug: "precedence",
       coverImage: "/content/new-cover.webp",
-      videoThumbnail: "/content/old-thumbnail.webp",
       youtubeVideoId: VIDEO_ID,
-      heroImage: "/content/legacy-hero.webp",
     }),
   ).toBe("/content/new-cover.webp");
 
   expect(
     resolveArticleCoverImage({
-      slug: "legacy-video",
-      videoThumbnail: "/content/old-thumbnail.webp",
-      youtubeVideoId: VIDEO_ID,
-      heroImage: "/content/legacy-hero.webp",
-    }),
-  ).toBe("/content/old-thumbnail.webp");
-
-  expect(
-    resolveArticleCoverImage({
       slug: "youtube-fallback",
       youtubeVideoId: VIDEO_ID,
-      heroImage: "/content/legacy-hero.webp",
     }),
   ).toBe(`https://i.ytimg.com/vi/${VIDEO_ID}/hqdefault.jpg`);
-
-  expect(
-    resolveArticleCoverImage({
-      slug: "legacy-article",
-      heroImage: "/content/legacy-hero.webp",
-    }),
-  ).toBe("/content/legacy-hero.webp");
 });
 
-test("non-video articles fail clearly without a current or legacy cover", () => {
+test("non-video articles fail clearly without a cover", () => {
   expect(() => resolveArticleCoverImage({ slug: "missing-cover" })).toThrow(
     /Non-video article missing-cover is missing a cover image/,
   );
@@ -145,10 +126,6 @@ test("Sanity image projections prefer assets over stale legacy paths", () => {
   expect(SANITY_ARTICLES_QUERY).toContain(
     "coalesce(coverImage.asset->url, coverImage.legacyPath)",
   );
-  expect(SANITY_ARTICLES_QUERY).toContain(
-    "coalesce(thumbnail.asset->url, thumbnail.legacyPath)",
-  );
-  expect(SANITY_ARTICLES_QUERY).toContain(
-    "coalesce(heroImage.asset->url, heroImage.legacyPath)",
-  );
+  expect(SANITY_ARTICLES_QUERY).not.toContain("heroImage");
+  expect(SANITY_ARTICLES_QUERY).not.toContain("video.thumbnail");
 });

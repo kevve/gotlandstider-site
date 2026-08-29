@@ -10,10 +10,7 @@ export interface CardPresentation {
   subtitle: string;
 }
 
-export type SerializedArticle = Omit<ArticleData, "video"> & {
-  /** Deprecated feed alias retained while external consumers migrate. */
-  heroImage: string;
-  video?: ArticleData["video"] & { thumbnail: string };
+export type SerializedArticle = ArticleData & {
   tags: [string, string, string];
   urlPath: string;
   sourceFile: string;
@@ -92,16 +89,13 @@ export function getArchiveCardPresentation(
 
 /** Preserve the established public JSON feed shape without an intermediate build artifact. */
 export function serializeArticle(article: ArticleEntry): SerializedArticle {
-  const { video, homepage, seo: _seo, ...data } = article.data;
+  const { homepage, seo: _seo, ...data } = article.data;
 
   return {
     ...data,
-    // Preserve the established feed fields while coverImage becomes canonical.
-    heroImage: data.coverImage,
     tags: orderedArticleTags(article.data),
     urlPath: articlePath(article.data.slug),
     sourceFile: article.sourceFile,
-    ...(video ? { video: { ...video, thumbnail: data.coverImage } } : {}),
     ...(homepage ? { homepage } : {}),
   };
 }

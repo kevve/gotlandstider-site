@@ -10,10 +10,7 @@ export interface ArticleVideo {
 }
 
 /** Normalized contract consumed by routes regardless of the configured source. */
-export type ArticleData = Omit<
-  MarkdownArticleData,
-  "video" | "coverImage" | "heroImage"
-> & {
+export type ArticleData = Omit<MarkdownArticleData, "video" | "coverImage"> & {
   /** The single effective image used everywhere the article needs artwork. */
   coverImage: string;
   video?: ArticleVideo;
