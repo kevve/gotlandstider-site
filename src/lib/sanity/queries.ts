@@ -18,11 +18,9 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
     featured,
     body,
     "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),
-    "heroImage": coalesce(heroImage.asset->url, heroImage.legacyPath),
     video {
       youtubeVideoId,
       uploadDate,
-      "thumbnail": coalesce(thumbnail.asset->url, thumbnail.legacyPath),
       socialLinks {
         "instagram": coalesce(instagram, null),
         "tiktok": coalesce(tiktok, null)

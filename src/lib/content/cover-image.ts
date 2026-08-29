@@ -3,29 +3,21 @@ import { youtubeThumbnailUrl } from "./video";
 interface ArticleCoverInput {
   slug: string;
   coverImage?: string | null;
-  videoThumbnail?: string | null;
   youtubeVideoId?: string | null;
-  heroImage?: string | null;
 }
 
-/** Normalize legacy and current source fields to one required article cover. */
+/** Resolve the stored cover or derive one for a video article. */
 export function resolveArticleCoverImage({
   slug,
   coverImage,
-  videoThumbnail,
   youtubeVideoId,
-  heroImage,
 }: ArticleCoverInput): string {
   const resolved =
     coverImage ||
-    videoThumbnail ||
-    (youtubeVideoId ? youtubeThumbnailUrl(youtubeVideoId) : undefined) ||
-    heroImage;
+    (youtubeVideoId ? youtubeThumbnailUrl(youtubeVideoId) : undefined);
 
   if (!resolved) {
-    throw new Error(
-      `Non-video article ${slug} is missing a cover image (coverImage or legacy heroImage)`,
-    );
+    throw new Error(`Non-video article ${slug} is missing a cover image`);
   }
 
   return resolved;
