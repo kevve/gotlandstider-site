@@ -7,7 +7,7 @@ excerpt: En natt i Visby under lågsäsong är det bästa sättet att börja en
   och högsäsongen drar i gång.
 publishedAt: 2026-04-22
 updatedAt: 2026-04-22
-heroImage: /content/hero-coastline.webp
+coverImage: /content/en-natt-i-visby-youtube-cover.jpg
 primaryTag: Upplevelser & nöjen
 locationTag: Visby
 qualifierTag: Weekend
@@ -16,7 +16,6 @@ draft: false
 video:
   youtubeVideoId: jZPEhnrZIzo
   uploadDate: 2026-04-22T20:13:59.000Z
-  thumbnail: /content/en-natt-i-visby-youtube-cover.jpg
   socialLinks:
     instagram: https://www.instagram.com/reel/DXMmwY6iMK5/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7629373407309761814

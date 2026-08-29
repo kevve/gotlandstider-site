@@ -5,7 +5,7 @@ excerpt: Katthammarsvik Salteriet är ett fint stopp på östra Gotland om du vi
   kombinera havsutsikt, fisklunch och ett lugnt tempo, även när vädret är grått.
 publishedAt: 2026-03-24
 updatedAt: 2026-03-24
-heroImage: /content/hero-coastline.webp
+coverImage: /content/hero-coastline.webp
 primaryTag: Mat & dryck
 locationTag: Katthammarsvik
 qualifierTag: Restaurang

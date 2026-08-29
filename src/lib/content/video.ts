@@ -27,9 +27,13 @@ export function normalizeArticleVideo(
   return {
     youtubeVideoId: video.youtubeVideoId,
     uploadDate: video.uploadDate,
-    thumbnail: video.thumbnail,
     socialLinks: video.socialLinks,
   };
+}
+
+/** Stable YouTube-hosted fallback used when a video has no stored cover asset. */
+export function youtubeThumbnailUrl(videoId: string): string {
+  return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 }
 
 export function youtubeEmbedUrl(videoId: string): string {
@@ -44,13 +48,18 @@ export function videoPublicationDate(
 
 export function buildVideoObject(
   video: ArticleVideo,
-  article: { title: string; excerpt: string; publishedAt: string },
+  article: {
+    title: string;
+    excerpt: string;
+    publishedAt: string;
+    coverImage: string;
+  },
 ) {
   return {
     "@type": "VideoObject",
     name: article.title,
     description: article.excerpt,
-    thumbnailUrl: canonicalUrl(video.thumbnail),
+    thumbnailUrl: canonicalUrl(article.coverImage),
     uploadDate: videoPublicationDate(video),
     embedUrl: youtubeEmbedUrl(video.youtubeVideoId),
   };

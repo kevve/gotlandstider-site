@@ -35,7 +35,8 @@ const video = z.object({
     .string()
     .regex(/^[A-Za-z0-9_-]{11}$/, "Use an 11-character YouTube video ID"),
   uploadDate: dateTimeString,
-  thumbnail: publicAssetPath,
+  // Kept as a legacy input while Markdown content moves to the article-level cover.
+  thumbnail: publicAssetPath.optional(),
   socialLinks,
 });
 
@@ -86,7 +87,9 @@ const articles = defineCollection({
       excerpt: z.string().min(1),
       publishedAt: dateString,
       updatedAt: dateString,
-      heroImage: publicAssetPath,
+      coverImage: publicAssetPath.optional(),
+      // Backward-compatible input for content created before coverImage.
+      heroImage: publicAssetPath.optional(),
       primaryTag: z.enum(PRIMARY_TAGS),
       locationTag: z.string().trim().min(1).max(60),
       qualifierTag: z.enum(QUALIFIER_TAGS),
@@ -97,6 +100,14 @@ const articles = defineCollection({
       seo: seo.optional(),
     })
     .superRefine((article, context) => {
+      if (!article.video && !article.coverImage && !article.heroImage) {
+        context.addIssue({
+          code: "custom",
+          path: ["coverImage"],
+          message: "Non-video articles require a cover image",
+        });
+      }
+
       if (article.homepage?.hero && (!article.featured || !article.video)) {
         context.addIssue({
           code: "custom",

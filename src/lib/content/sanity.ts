@@ -3,6 +3,7 @@ import type { SANITY_ARTICLES_QUERY_RESULT } from "../../sanity.types";
 import { SANITY_ARTICLES_QUERY } from "../sanity/queries";
 import type { ArticleData, ArticleEntry } from "./types";
 import { normalizeArticleVideo } from "./video";
+import { resolveArticleCoverImage } from "./cover-image";
 
 type SanityArticle = SANITY_ARTICLES_QUERY_RESULT[number];
 
@@ -12,11 +13,6 @@ export async function getSanityArticles(): Promise<ArticleEntry[]> {
 }
 
 function mapSanityArticle(document: SanityArticle): ArticleEntry {
-  const heroImage = requiredString(
-    document.heroImage,
-    document.slug,
-    "heroImage",
-  );
   const videoDocument = document.video;
   const video = videoDocument
     ? normalizeArticleVideo(
@@ -31,11 +27,6 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
             document.slug,
             "video.uploadDate",
           ),
-          thumbnail: requiredString(
-            videoDocument.thumbnail,
-            document.slug,
-            "video.thumbnail",
-          ),
           socialLinks: {
             instagram: videoDocument.socialLinks?.instagram ?? null,
             tiktok: videoDocument.socialLinks?.tiktok ?? null,
@@ -44,6 +35,13 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
         document.slug,
       )
     : undefined;
+  const coverImage = resolveArticleCoverImage({
+    slug: document.slug,
+    coverImage: document.coverImage,
+    videoThumbnail: videoDocument?.thumbnail,
+    youtubeVideoId: video?.youtubeVideoId,
+    heroImage: document.heroImage,
+  });
 
   const homepage = document.homepage
     ? {
@@ -113,7 +111,7 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
     excerpt: document.excerpt,
     publishedAt: document.publishedAt,
     updatedAt: document.updatedAt,
-    heroImage,
+    coverImage,
     primaryTag: document.primaryTag,
     locationTag: document.locationTag,
     qualifierTag: document.qualifierTag,

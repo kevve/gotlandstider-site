@@ -17,11 +17,12 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
     "qualifierTag": coalesce(qualifierTag, tags[2]),
     featured,
     body,
-    "heroImage": coalesce(heroImage.legacyPath, heroImage.asset->url),
+    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),
+    "heroImage": coalesce(heroImage.asset->url, heroImage.legacyPath),
     video {
       youtubeVideoId,
       uploadDate,
-      "thumbnail": coalesce(thumbnail.legacyPath, thumbnail.asset->url),
+      "thumbnail": coalesce(thumbnail.asset->url, thumbnail.legacyPath),
       socialLinks {
         "instagram": coalesce(instagram, null),
         "tiktok": coalesce(tiktok, null)
@@ -38,7 +39,7 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
     "seo": {
       "title": seo.title,
       "description": seo.description,
-      "image": coalesce(seo.image.legacyPath, seo.image.asset->url),
+      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),
       "noIndex": seo.noIndex == true
     },
     "sourceFile": coalesce(

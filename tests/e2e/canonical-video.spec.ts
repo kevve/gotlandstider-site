@@ -6,6 +6,8 @@ import {
   youtubeEmbedUrl,
 } from "../../src/lib/content/video";
 import { renderVideoSitemapXml } from "../../src/lib/video-sitemap";
+import { resolveArticleCoverImage } from "../../src/lib/content/cover-image";
+import { SANITY_ARTICLES_QUERY } from "../../src/lib/sanity/queries";
 
 const VIDEO_ID = "AbCdEf123_-";
 const UPLOAD_DATE = "2026-08-20T13:14:15+02:00";
@@ -15,7 +17,6 @@ function canonicalArticle(): ArticleEntry {
     {
       youtubeVideoId: VIDEO_ID,
       uploadDate: UPLOAD_DATE,
-      thumbnail: "/content/canonical-thumbnail.webp",
       socialLinks: { instagram: null, tiktok: null },
     },
     "canonical-video",
@@ -31,7 +32,7 @@ function canonicalArticle(): ArticleEntry {
       excerpt: "Canonical YouTube metadata test article.",
       publishedAt: "2026-08-22",
       updatedAt: "2026-08-25",
-      heroImage: "/content/canonical-thumbnail.webp",
+      coverImage: "/content/canonical-thumbnail.webp",
       primaryTag: "Upplevelser & nöjen",
       locationTag: "Gotland",
       qualifierTag: "Guide",
@@ -54,7 +55,6 @@ test("canonical YouTube identity and upload date are an inseparable pair", () =>
     normalizeArticleVideo(
       {
         youtubeVideoId: VIDEO_ID,
-        thumbnail: "/content/canonical-thumbnail.webp",
         socialLinks: { instagram: null, tiktok: null },
       },
       "missing-upload-date",
@@ -65,7 +65,6 @@ test("canonical YouTube identity and upload date are an inseparable pair", () =>
     normalizeArticleVideo(
       {
         uploadDate: UPLOAD_DATE,
-        thumbnail: "/content/canonical-thumbnail.webp",
         socialLinks: { instagram: null, tiktok: null },
       },
       "missing-video-id",
@@ -80,6 +79,8 @@ test("canonical VideoObject uses the actual video upload timestamp", () => {
     "@type": "VideoObject",
     uploadDate: UPLOAD_DATE,
     embedUrl: `https://www.youtube-nocookie.com/embed/${VIDEO_ID}`,
+    thumbnailUrl:
+      "https://www.gotlandstider.se/content/canonical-thumbnail.webp",
   });
   expect(jsonLd).not.toHaveProperty("contentUrl");
 });
@@ -92,5 +93,62 @@ test("canonical video sitemap uses player_loc and video upload date", () => {
   expect(xml).toContain(
     `<video:publication_date>${UPLOAD_DATE}</video:publication_date>`,
   );
+  expect(xml).toContain(
+    `<video:thumbnail_loc>https://www.gotlandstider.se/content/canonical-thumbnail.webp</video:thumbnail_loc>`,
+  );
   expect(xml).not.toContain("<video:content_loc>");
+});
+
+test("cover resolution follows the cross-source compatibility precedence", () => {
+  expect(
+    resolveArticleCoverImage({
+      slug: "precedence",
+      coverImage: "/content/new-cover.webp",
+      videoThumbnail: "/content/old-thumbnail.webp",
+      youtubeVideoId: VIDEO_ID,
+      heroImage: "/content/legacy-hero.webp",
+    }),
+  ).toBe("/content/new-cover.webp");
+
+  expect(
+    resolveArticleCoverImage({
+      slug: "legacy-video",
+      videoThumbnail: "/content/old-thumbnail.webp",
+      youtubeVideoId: VIDEO_ID,
+      heroImage: "/content/legacy-hero.webp",
+    }),
+  ).toBe("/content/old-thumbnail.webp");
+
+  expect(
+    resolveArticleCoverImage({
+      slug: "youtube-fallback",
+      youtubeVideoId: VIDEO_ID,
+      heroImage: "/content/legacy-hero.webp",
+    }),
+  ).toBe(`https://i.ytimg.com/vi/${VIDEO_ID}/hqdefault.jpg`);
+
+  expect(
+    resolveArticleCoverImage({
+      slug: "legacy-article",
+      heroImage: "/content/legacy-hero.webp",
+    }),
+  ).toBe("/content/legacy-hero.webp");
+});
+
+test("non-video articles fail clearly without a current or legacy cover", () => {
+  expect(() => resolveArticleCoverImage({ slug: "missing-cover" })).toThrow(
+    /Non-video article missing-cover is missing a cover image/,
+  );
+});
+
+test("Sanity image projections prefer assets over stale legacy paths", () => {
+  expect(SANITY_ARTICLES_QUERY).toContain(
+    "coalesce(coverImage.asset->url, coverImage.legacyPath)",
+  );
+  expect(SANITY_ARTICLES_QUERY).toContain(
+    "coalesce(thumbnail.asset->url, thumbnail.legacyPath)",
+  );
+  expect(SANITY_ARTICLES_QUERY).toContain(
+    "coalesce(heroImage.asset->url, heroImage.legacyPath)",
+  );
 });

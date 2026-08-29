@@ -4,7 +4,7 @@ slug: en-strand-for-stora-och-sma
 excerpt: Ett stenkast från Visby hittar du stranden Snäck, där möjligheterna är oändliga.
 publishedAt: 2026-01-03
 updatedAt: 2026-01-03
-heroImage: /content/story-strand-snack.webp
+coverImage: /content/story-strand-snack.webp
 primaryTag: Utflykter & natur
 locationTag: Snäck
 qualifierTag: Stränder
@@ -13,7 +13,6 @@ draft: false
 video:
   youtubeVideoId: ZWoqOmLiLEQ
   uploadDate: 2026-08-28T11:17:11.000Z
-  thumbnail: /content/story-strand-snack.webp
   socialLinks:
     instagram: https://www.instagram.com/reel/DMQItODIMPC/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7528426362655231254

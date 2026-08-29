@@ -16,7 +16,7 @@ const { data } = article;
 const path = `/articles/${data.slug}/`;
 const title = data.seo?.title || `${data.title} | Gotlandstider`;
 const description = data.seo?.description || data.excerpt;
-const image = data.seo?.image || data.video?.thumbnail || data.heroImage;
+const image = data.seo?.image || data.coverImage;
 const iso = (value: Date | string) =>
   value instanceof Date ? value.toISOString() : String(value);
 const graph: Record<string, unknown>[] = [
@@ -76,11 +76,7 @@ const social = data.video?.socialLinks;
       </div>
       <div class="article-sidebar">
         <aside class="article-media" aria-label="Artikelmedia">
-          <MediaFrame
-            title={data.title}
-            video={data.video}
-            image={data.heroImage}
-          />
+          <MediaFrame title={data.title} video={data.video} image={data.coverImage} />
         </aside>
         {
           related.length > 0 && (

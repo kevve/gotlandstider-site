@@ -28,7 +28,7 @@ export const GET: APIRoute = async () => {
     slug: serialized.slug,
     excerpt: serialized.excerpt,
     publishedAt: serialized.publishedAt,
-    thumbnail: video.thumbnail,
+    thumbnail: serialized.coverImage,
     youtubeVideoId: video.youtubeVideoId,
     uploadDate: video.uploadDate,
     socialLinks: video.socialLinks,

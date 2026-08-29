@@ -57,7 +57,7 @@ export function buildHomepageJsonLd(featured: ArticleEntry) {
 
 export function buildArticleJsonLd(article: ArticleEntry) {
   const pageUrl = canonicalUrl(articlePath(article.data.slug));
-  const image = article.data.video?.thumbnail ?? article.data.heroImage;
+  const image = article.data.coverImage;
 
   return {
     "@context": "https://schema.org",

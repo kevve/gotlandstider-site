@@ -5,7 +5,7 @@ excerpt: En guide till våra favoritplatser på Gotland inför sommarsäsongen 2
   inklusive Biograf Savannen och Stora Karlsö.
 publishedAt: 2026-01-03
 updatedAt: 2026-08-23
-heroImage: /content/story-5platser-gotland.webp
+coverImage: /content/story-5platser-gotland.webp
 primaryTag: Upplevelser & nöjen
 locationTag: Gotland
 qualifierTag: Guide
@@ -14,7 +14,6 @@ draft: false
 video:
   youtubeVideoId: qptCCD4p1pg
   uploadDate: 2026-08-28T11:17:35.000Z
-  thumbnail: /content/story-5platser-gotland.webp
   socialLinks:
     instagram: https://www.instagram.com/reel/DS9-b-_iLC2/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7590372115220647190

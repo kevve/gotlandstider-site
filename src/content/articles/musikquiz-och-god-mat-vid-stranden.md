@@ -4,7 +4,7 @@ slug: musikquiz-och-god-mat-vid-stranden
 excerpt: Du åker hit om du vill umgås med nära och kära i en gotländsk atmosfär.
 publishedAt: 2026-01-03
 updatedAt: 2026-01-03
-heroImage: /content/story-brunan-ljugarn.webp
+coverImage: /content/story-brunan-ljugarn.webp
 primaryTag: Upplevelser & nöjen
 locationTag: Ljugarn
 qualifierTag: Musikquiz
@@ -13,7 +13,6 @@ draft: false
 video:
   youtubeVideoId: 9q1Io_e3pj8
   uploadDate: 2026-08-28T11:17:57.000Z
-  thumbnail: /content/story-brunan-ljugarn.webp
   socialLinks:
     instagram: https://www.instagram.com/reel/DJUQIC3opEw/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7501347863666887958
