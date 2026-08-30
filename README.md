@@ -54,8 +54,22 @@ components, feeds, sitemap generation, and SEO stay source-independent.
 
 Sanity project and dataset identifiers are public configuration with defaults of
 `th4gij3b` and `production`; override them with `PUBLIC_SANITY_PROJECT_ID` and
-`PUBLIC_SANITY_DATASET` if needed. No read token is committed or required for the
-public production dataset.
+`PUBLIC_SANITY_DATASET` if needed. The `production` dataset is private. Sanity-backed
+builds require a Viewer/read token in the server-only `SANITY_API_READ_TOKEN`
+environment variable. Never prefix the token with `PUBLIC_` or commit it to the
+repository.
+
+For local Sanity builds, create an ignored `.env.local` file:
+
+```sh
+SANITY_API_READ_TOKEN=replace-with-a-viewer-token
+```
+
+The production deployment reads the same name from a GitHub Actions repository
+secret. Same-repository pull requests receive the secret and run both content-source
+test paths. Forked pull requests never receive repository secrets, so they run the
+complete Markdown-backed test path and skip only the authenticated Sanity build and
+its second browser-test pass.
 
 Markdown remains in `src/content/articles/` as a repository fallback. Its `slug`
 values are the public URL contract and must not be changed silently. Every video
@@ -67,6 +81,12 @@ Run `npm run check`, `npm run build`, and `npm test` before opening a pull reque
 ## Deployment
 
 Pushes to `main` deploy through the official Astro and GitHub Pages actions with `CONTENT_SOURCE=sanity`. The deployment is configured for the root custom-domain site, so transfer the Pages domain to this repository immediately after its first approved deployment.
+
+Before merging a change that makes Sanity authentication mandatory, create a
+short-lived Viewer token in Sanity and add it to GitHub as the repository secret
+`SANITY_API_READ_TOKEN`. Rotate the token before expiry by adding and testing its
+replacement first, then revoke the previous token. A missing or expired token fails
+the Sanity-backed build before deployment.
 
 Production uses the apex hostname `gotlandstider.se`, declared in `public/CNAME`. Cloudflare redirects `www.gotlandstider.se` to this canonical hostname and supplies the agent-discovery response headers. The legacy `/admin` path is intentionally absent and returns the static 404 page; editorial work happens in the standalone [Gotlandstider Studio](https://gotlandstider-studio.sanity.studio).
 

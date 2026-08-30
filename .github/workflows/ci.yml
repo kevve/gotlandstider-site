@@ -43,12 +43,21 @@ jobs:
         run: npm test
 
       - name: Build from Sanity
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
         run: npm run build:sanity
+        env:
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
 
       - name: Run browser regression tests from Sanity
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
         run: npm test
         env:
           CONTENT_SOURCE: sanity
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+
+      - name: Note private Sanity checks skipped for fork
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+        run: echo "Sanity-backed checks are skipped because GitHub does not expose repository secrets to forked pull requests."
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
