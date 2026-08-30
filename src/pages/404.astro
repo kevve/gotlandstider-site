@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Sidan hittades inte | Gotlandstider"
+  description="Sidan du söker finns inte på Gotlandstider."
+  noIndex={true}
+>
+  <section class="not-found" aria-labelledby="not-found-title">
+    <p>404</p>
+    <h1 id="not-found-title">Sidan hittades inte.</h1>
+    <a href="/">Till startsidan</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    min-height: 55vh;
+    place-content: center;
+    gap: 1rem;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+
+  p {
+    color: var(--color-rust, #a54b2c);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    font-family: var(--font-display, serif);
+    font-size: clamp(2rem, 6vw, 4rem);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

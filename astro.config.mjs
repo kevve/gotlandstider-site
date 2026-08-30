@@ -12,7 +12,7 @@ export default defineConfig({
   output: "static",
   site: isGitHubPreview
     ? "https://kevve.github.io"
-    : "https://www.gotlandstider.se",
+    : "https://gotlandstider.se",
   base: isGitHubPreview ? "/gotlandstider-site" : "/",
   trailingSlash: "always",
   integrations: [

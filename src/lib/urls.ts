@@ -1,4 +1,4 @@
-export const PRODUCTION_ORIGIN = "https://www.gotlandstider.se";
+export const PRODUCTION_ORIGIN = "https://gotlandstider.se";
 
 const EXTERNAL_OR_FRAGMENT = /^(?:[a-z][a-z\d+.-]*:|#)/i;
 
