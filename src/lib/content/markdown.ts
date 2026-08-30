@@ -25,6 +25,7 @@ export async function getMarkdownArticles(): Promise<ArticleEntry[]> {
       id: entry.id,
       source: "markdown",
       sourceFile: `content/articles/${entry.id}.md`,
+      sitemapLastModified: data.updatedAt,
       data,
     };
   });

@@ -26,7 +26,7 @@ export const GET: APIRoute = async () => {
   );
   const latest = articles.reduce(
     (date, article) =>
-      article.data.publishedAt > date ? article.data.publishedAt : date,
+      article.sitemapLastModified > date ? article.sitemapLastModified : date,
     "2026-01-01",
   );
   const entries = [
@@ -46,7 +46,7 @@ export const GET: APIRoute = async () => {
     ...articles.map((article) =>
       renderEntry({
         loc: canonicalUrl(articlePath(article.data.slug)),
-        lastmod: article.data.updatedAt,
+        lastmod: article.sitemapLastModified,
         changefreq: "monthly",
         priority: "0.7",
         article,

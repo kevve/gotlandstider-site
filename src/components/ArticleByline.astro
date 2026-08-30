@@ -1,0 +1,63 @@
+---
+import { withBase } from "../lib/urls";
+import SocialLinks from "./SocialLinks.astro";
+
+interface Props {
+  publishedAt: Date | string;
+  updatedAt: Date | string;
+  instagram?: string | null;
+  tiktok?: string | null;
+}
+
+const { publishedAt, updatedAt, instagram, tiktok } = Astro.props;
+const iso = (value: Date | string) =>
+  value instanceof Date ? value.toISOString() : String(value);
+const formatDate = (value: Date | string) =>
+  new Intl.DateTimeFormat("sv-SE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(iso(value)));
+
+const publishedIso = iso(publishedAt);
+const updatedIso = iso(updatedAt);
+const showUpdated = updatedIso !== publishedIso;
+const authorPath = "/#about";
+---
+
+<div class="article-byline" aria-label="Artikelinformation">
+  <a class="article-author" href={withBase(authorPath)} rel="author">
+    <img
+      src={withBase("/content/about-kevinhenrik.webp")}
+      srcset={`${withBase("/content/about-kevinhenrik-mobile.webp")} 500w, ${withBase("/content/about-kevinhenrik.webp")} 900w`}
+      sizes="52px"
+      width="52"
+      height="52"
+      alt=""
+      loading="eager"
+      decoding="async"
+    />
+    <span>
+      <small>Av</small>
+      <strong>Gotlandstider</strong>
+    </span>
+  </a>
+
+  <div class="article-dates">
+    <p>
+      <span>Publicerad</span>
+      <time datetime={publishedIso}>{formatDate(publishedAt)}</time>
+    </p>
+    {
+      showUpdated && (
+        <p>
+          <span>Senast uppdaterad</span>
+          <time datetime={updatedIso}>{formatDate(updatedAt)}</time>
+        </p>
+      )
+    }
+  </div>
+
+  <SocialLinks instagram={instagram} tiktok={tiktok} compact />
+</div>
