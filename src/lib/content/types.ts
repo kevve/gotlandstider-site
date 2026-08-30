@@ -20,6 +20,10 @@ export interface ArticleEntry {
   id: string;
   source: "markdown" | "sanity";
   sourceFile: string;
+  /** Last significant editorial update used by sitemap consumers. */
+  sitemapLastModified: string;
+  /** Sanity's automatic document timestamp, retained for audit/debugging. */
+  systemUpdatedAt?: string;
   data: ArticleData;
   body?: TypedObject[];
 }
