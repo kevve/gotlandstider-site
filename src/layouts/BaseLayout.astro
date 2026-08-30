@@ -66,8 +66,19 @@ const isPreview =
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={socialImage} />
-    <link rel="icon" type="image/svg+xml" href={withBase("/favicon-v2.svg")} />
-    <link rel="apple-touch-icon" href={withBase("/favicon-v2.svg")} />
+    <link rel="icon" type="image/x-icon" href={withBase("/favicon.ico")} />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      sizes="any"
+      href={withBase("/favicon-v2.svg")}
+    />
+    <link
+      rel="apple-touch-icon"
+      type="image/png"
+      sizes="180x180"
+      href={withBase("/apple-touch-icon.png")}
+    />
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
