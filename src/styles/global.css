@@ -981,9 +981,71 @@ iframe {
   font-size: 1.25rem;
   line-height: 1.6;
 }
+.article-byline {
+  display: flex;
+  margin-top: 1.75rem;
+  padding-block: 1rem;
+  border-block: 1px solid rgba(31, 41, 51, 0.1);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem 1.5rem;
+}
+.article-author {
+  display: inline-flex;
+  min-width: max-content;
+  align-items: center;
+  gap: 0.75rem;
+}
+.article-author img {
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 2px solid rgba(188, 138, 111, 0.45);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 3px 10px rgba(31, 41, 51, 0.12);
+}
+.article-author span,
+.article-dates p {
+  display: grid;
+  gap: 0.15rem;
+}
+.article-author small,
+.article-dates span {
+  color: #7a8b7d;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.article-author strong {
+  font-family: "Playfair Display", serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.article-author:hover strong {
+  color: #bc8a6f;
+}
+.article-dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+}
+.article-dates p {
+  margin: 0;
+}
+.article-dates time {
+  color: rgba(31, 41, 51, 0.82);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.article-byline .social-links {
+  width: 100%;
+  justify-content: flex-start;
+}
 .article-tags {
   display: flex;
-  margin-top: 1.5rem;
+  margin: 0 0 1rem;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 1rem;
@@ -1005,10 +1067,6 @@ iframe {
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-}
-.article-intro .social-links {
-  margin-top: 1.25rem;
-  justify-content: flex-start;
 }
 .article-media {
   grid-area: media;
@@ -1247,6 +1305,20 @@ iframe {
   }
   .article-body {
     padding: 3rem 2.5rem;
+  }
+  .article-byline {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+  }
+  .article-byline .social-links {
+    width: auto;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+  .article-byline .social-links a {
+    min-width: auto;
+    padding-inline: 1rem;
   }
   .footer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
