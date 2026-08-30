@@ -12,7 +12,7 @@ export const ORGANIZATION_JSON_LD = {
   name: SITE_NAME,
   alternateName: "Gotlandstider - Din guide till det gotländska ö-livet",
   url: canonicalUrl("/"),
-  logo: canonicalUrl("/favicon-v2.svg"),
+  logo: canonicalUrl("/gotlandstider-logo-512.png"),
   image: canonicalUrl("/content/hero-coastline.webp"),
   email: "info@gotlandstider.se",
   description: DEFAULT_DESCRIPTION,

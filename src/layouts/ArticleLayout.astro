@@ -37,7 +37,12 @@ const graph: Record<string, unknown>[] = [
     publisher: {
       "@type": "Organization",
       name: "Gotlandstider",
-      logo: { "@type": "ImageObject", url: canonicalUrl("/favicon-v2.svg") },
+      logo: {
+        "@type": "ImageObject",
+        url: canonicalUrl("/gotlandstider-logo-512.png"),
+        width: 512,
+        height: 512,
+      },
     },
   },
 ];
