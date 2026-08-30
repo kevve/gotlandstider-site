@@ -31,4 +31,4 @@ User-agent: FacebookBot
 Allow: /
 
 # Hänvisning till din sitemap (hjälper dem hitta alla sidor)
-Sitemap: https://www.gotlandstider.se/sitemap.xml
+Sitemap: https://gotlandstider.se/sitemap.xml

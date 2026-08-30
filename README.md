@@ -1,6 +1,6 @@
 # Gotlandstider site
 
-The future production frontend for [gotlandstider.se](https://www.gotlandstider.se). It is a clean, static Astro migration of the current site, with its public URLs, content, design, interactions, and SEO contracts kept stable. The existing `kevve/gotlandstider` repository remains the production reference until a separately approved cutover.
+The production frontend for [gotlandstider.se](https://gotlandstider.se). It is a clean, static Astro migration of the previous site, with its public URLs, content, design, interactions, and SEO contracts kept stable.
 
 ## Architecture
 
@@ -64,16 +64,12 @@ or uploaded as Sanity file assets.
 
 Run `npm run check`, `npm run build`, and `npm test` before opening a pull request. The CI workflow additionally enforces formatting and runs the same browser regression coverage.
 
-## Preview deployment and cutover
+## Deployment
 
-Pushes to `main` deploy through the official Astro and GitHub Pages actions. The preview build sets `CONTENT_SOURCE=sanity` and `DEPLOY_TARGET=github-pages-preview`, producing the project site at:
+Pushes to `main` deploy through the official Astro and GitHub Pages actions with `CONTENT_SOURCE=sanity`. The deployment is configured for the root custom-domain site, so transfer the Pages domain to this repository immediately after its first approved deployment.
 
-<https://kevve.github.io/gotlandstider-site/>
+Production uses the apex hostname `gotlandstider.se`, declared in `public/CNAME`. Cloudflare redirects `www.gotlandstider.se` to this canonical hostname and supplies the agent-discovery response headers. The legacy `/admin` path is intentionally absent and returns the static 404 page; editorial work happens in the standalone [Gotlandstider Studio](https://gotlandstider-studio.sanity.studio).
 
-The preview has the `/gotlandstider-site` base path and must not be connected to production DNS. There is intentionally no `CNAME` in this repository during parity review.
-
-Production cutover is a separate, explicit operation. It requires changing the deployment target to the root custom-domain configuration, adding the approved `CNAME`, validating Cloudflare redirects/headers and robots behavior, and comparing the final deployment against the current production site. Do not archive or modify the current production repository as part of normal work here.
-
-The preview now builds from published Sanity content. Markdown remains available as
+The site builds from published Sanity content. Markdown remains available as
 the repository fallback and CI verifies both content sources. Production DNS remains
 a separate approval.

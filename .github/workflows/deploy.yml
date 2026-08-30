@@ -1,4 +1,4 @@
-name: Deploy GitHub Pages preview
+name: Deploy GitHub Pages
 
 on:
   push:
@@ -22,11 +22,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Build Astro preview
+      - name: Build Astro production site
         uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6.1.2
         env:
           CONTENT_SOURCE: sanity
-          DEPLOY_TARGET: github-pages-preview
+          DEPLOY_TARGET: github-pages-production
 
   deploy:
     environment:

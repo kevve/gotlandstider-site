@@ -79,8 +79,7 @@ test("canonical VideoObject uses the actual video upload timestamp", () => {
     "@type": "VideoObject",
     uploadDate: UPLOAD_DATE,
     embedUrl: `https://www.youtube-nocookie.com/embed/${VIDEO_ID}`,
-    thumbnailUrl:
-      "https://www.gotlandstider.se/content/canonical-thumbnail.webp",
+    thumbnailUrl: "https://gotlandstider.se/content/canonical-thumbnail.webp",
   });
   expect(jsonLd).not.toHaveProperty("contentUrl");
 });
@@ -94,7 +93,7 @@ test("canonical video sitemap uses player_loc and video upload date", () => {
     `<video:publication_date>${UPLOAD_DATE}</video:publication_date>`,
   );
   expect(xml).toContain(
-    `<video:thumbnail_loc>https://www.gotlandstider.se/content/canonical-thumbnail.webp</video:thumbnail_loc>`,
+    `<video:thumbnail_loc>https://gotlandstider.se/content/canonical-thumbnail.webp</video:thumbnail_loc>`,
   );
   expect(xml).not.toContain("<video:content_loc>");
 });

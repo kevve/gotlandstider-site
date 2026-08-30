@@ -22,18 +22,18 @@ test("all 16 public article routes build and draft routes stay private", async (
 for (const testCase of [
   {
     path: "/",
-    canonical: "https://www.gotlandstider.se/",
+    canonical: "https://gotlandstider.se/",
     hasStructuredData: true,
   },
   {
     path: "/articles/",
-    canonical: "https://www.gotlandstider.se/articles/",
+    canonical: "https://gotlandstider.se/articles/",
     hasStructuredData: false,
   },
   {
     path: articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"),
     canonical:
-      "https://www.gotlandstider.se/articles/host-pa-gotland-2026-fem-tips-varda-omvagen/",
+      "https://gotlandstider.se/articles/host-pa-gotland-2026-fem-tips-varda-omvagen/",
     hasStructuredData: true,
   },
 ]) {
@@ -124,7 +124,7 @@ test("sitemap and robots expose the production URL inventory", async ({
   const xml = await sitemap.text();
   expect(xml).toContain("<urlset");
   for (const slug of publicArticleSlugs) {
-    expect(xml).toContain(`https://www.gotlandstider.se${articlePath(slug)}`);
+    expect(xml).toContain(`https://gotlandstider.se${articlePath(slug)}`);
   }
   for (const slug of draftArticleSlugs) {
     expect(xml).not.toContain(articlePath(slug));
@@ -133,6 +133,6 @@ test("sitemap and robots expose the production URL inventory", async ({
   const robots = await request.get("/robots.txt");
   expect(robots.status()).toBe(200);
   expect(await robots.text()).toContain(
-    "Sitemap: https://www.gotlandstider.se/sitemap.xml",
+    "Sitemap: https://gotlandstider.se/sitemap.xml",
   );
 });
