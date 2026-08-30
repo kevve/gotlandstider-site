@@ -12,6 +12,8 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
     excerpt,
     publishedAt,
     updatedAt,
+    "systemUpdatedAt": _updatedAt,
+    "sitemapLastModified": coalesce(updatedAt, _updatedAt),
     "primaryTag": coalesce(primaryTag, tags[0]),
     "locationTag": coalesce(locationTag, tags[1]),
     "qualifierTag": coalesce(qualifierTag, tags[2]),

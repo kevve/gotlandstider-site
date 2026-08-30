@@ -123,6 +123,23 @@ test("sitemap and robots expose the production URL inventory", async ({
   expect(sitemap.status()).toBe(200);
   const xml = await sitemap.text();
   expect(xml).toContain("<urlset");
+  const articles = await request.get("/generated/content/articles.json");
+  const articlePayload = (await articles.json()) as {
+    items: Array<{ updatedAt: string }>;
+  };
+  const latestArticleUpdate = articlePayload.items.reduce(
+    (latest, article) =>
+      article.updatedAt > latest ? article.updatedAt : latest,
+    "2026-01-01",
+  );
+  for (const url of [
+    "https://gotlandstider.se/",
+    "https://gotlandstider.se/articles/",
+  ]) {
+    expect(xml).toContain(
+      `<loc>${url}</loc>\n      <lastmod>${latestArticleUpdate}</lastmod>`,
+    );
+  }
   for (const slug of publicArticleSlugs) {
     expect(xml).toContain(`https://gotlandstider.se${articlePath(slug)}`);
   }

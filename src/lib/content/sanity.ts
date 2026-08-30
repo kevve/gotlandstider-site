@@ -124,6 +124,8 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
     id: document._id,
     source: "sanity",
     sourceFile: document.sourceFile,
+    sitemapLastModified: document.sitemapLastModified,
+    systemUpdatedAt: document.systemUpdatedAt,
     data,
     body: document.body,
   };

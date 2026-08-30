@@ -26,6 +26,7 @@ function canonicalArticle(): ArticleEntry {
     id: "canonical-video",
     source: "sanity",
     sourceFile: "content/articles/canonical-video.md",
+    sitemapLastModified: "2026-08-25",
     data: {
       title: "Canonical video",
       slug: "canonical-video",
@@ -127,4 +128,11 @@ test("Sanity image projections prefer assets over stale legacy paths", () => {
   );
   expect(SANITY_ARTICLES_QUERY).not.toContain("heroImage");
   expect(SANITY_ARTICLES_QUERY).not.toContain("video.thumbnail");
+});
+
+test("Sanity query exposes editorial and system sitemap timestamps", () => {
+  expect(SANITY_ARTICLES_QUERY).toContain('"systemUpdatedAt": _updatedAt');
+  expect(SANITY_ARTICLES_QUERY).toContain(
+    '"sitemapLastModified": coalesce(updatedAt, _updatedAt)',
+  );
 });
