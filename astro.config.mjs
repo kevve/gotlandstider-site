@@ -7,6 +7,15 @@ const isGitHubPreview = process.env.DEPLOY_TARGET === "github-pages-preview";
 const env = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
 const projectId = env.PUBLIC_SANITY_PROJECT_ID || "th4gij3b";
 const dataset = env.PUBLIC_SANITY_DATASET || "production";
+const sanityReadToken = env.SANITY_API_READ_TOKEN;
+const contentSource =
+  process.env.CONTENT_SOURCE || env.CONTENT_SOURCE || "markdown";
+
+if (contentSource === "sanity" && !sanityReadToken) {
+  throw new Error(
+    "CONTENT_SOURCE=sanity requires the server-only SANITY_API_READ_TOKEN environment variable.",
+  );
+}
 
 export default defineConfig({
   output: "static",
@@ -21,6 +30,8 @@ export default defineConfig({
       dataset,
       apiVersion: "2026-08-26",
       useCdn: false,
+      perspective: "published",
+      ...(sanityReadToken ? { token: sanityReadToken } : {}),
     }),
   ],
   vite: {

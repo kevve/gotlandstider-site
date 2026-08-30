@@ -27,6 +27,7 @@ jobs:
         env:
           CONTENT_SOURCE: sanity
           DEPLOY_TARGET: github-pages-production
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
 
   deploy:
     environment:
