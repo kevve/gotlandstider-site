@@ -64,13 +64,34 @@ for (const testCase of [
       "content",
       /summary/,
     );
+    await expect(
+      page.locator('link[rel="icon"][type="image/x-icon"]'),
+    ).toHaveAttribute("href", "/favicon.ico");
+    await expect(
+      page.locator('link[rel="icon"][type="image/svg+xml"]'),
+    ).toHaveAttribute("sizes", "any");
+    await expect(
+      page.locator('link[rel="icon"][type="image/svg+xml"]'),
+    ).toHaveAttribute("href", "/favicon-v2.svg");
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
+      "href",
+      "/apple-touch-icon.png",
+    );
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
+      "sizes",
+      "180x180",
+    );
 
     const structuredData = await page
       .locator('script[type="application/ld+json"]')
       .allTextContents();
     expect(structuredData.length).toBe(testCase.hasStructuredData ? 1 : 0);
-    for (const json of structuredData)
+    for (const json of structuredData) {
       expect(() => JSON.parse(json)).not.toThrow();
+      expect(json).toContain(
+        "https://gotlandstider.se/gotlandstider-logo-512.png",
+      );
+    }
   });
 }
 
@@ -114,6 +135,17 @@ test("content feeds and discovery resources remain public", async ({
   }
 
   expect((await request.get("/agent/docs/")).status()).toBe(200);
+
+  for (const path of [
+    "/favicon.ico",
+    "/favicon-v2.svg",
+    "/apple-touch-icon.png",
+    "/gotlandstider-logo-512.png",
+  ]) {
+    const response = await request.get(path);
+    expect(response.status(), path).toBe(200);
+    expect(response.headers()["content-type"], path).toMatch(/^image\//);
+  }
 });
 
 test("sitemap and robots expose the production URL inventory", async ({

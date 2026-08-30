@@ -2,8 +2,8 @@
 import type { ArticleEntry } from "../lib/content";
 import { canonicalUrl, withBase } from "../lib/urls";
 import ArticleGrid from "../components/ArticleGrid.astro";
+import ArticleByline from "../components/ArticleByline.astro";
 import MediaFrame from "../components/MediaFrame.astro";
-import SocialLinks from "../components/SocialLinks.astro";
 import BaseLayout from "./BaseLayout.astro";
 import { buildVideoJsonLd } from "../lib/seo";
 
@@ -29,11 +29,20 @@ const graph: Record<string, unknown>[] = [
     dateModified: iso(data.updatedAt),
     inLanguage: "sv-SE",
     mainEntityOfPage: canonicalUrl(path),
-    author: { "@type": "Organization", name: "Gotlandstider" },
+    author: {
+      "@type": "Organization",
+      name: "Gotlandstider",
+      url: canonicalUrl("/#about"),
+    },
     publisher: {
       "@type": "Organization",
       name: "Gotlandstider",
-      logo: { "@type": "ImageObject", url: canonicalUrl("/favicon-v2.svg") },
+      logo: {
+        "@type": "ImageObject",
+        url: canonicalUrl("/gotlandstider-logo-512.png"),
+        width: 512,
+        height: 512,
+      },
     },
   },
 ];
@@ -59,24 +68,29 @@ const social = data.video?.socialLinks;
     <div class="article-detail-grid">
       <div class="article-main">
         <header class="article-intro">
-          <h1>{data.title}</h1>
-          <p>{data.excerpt}</p>
           <div class="article-tags">
             <span class="primary-tag">{data.primaryTag}</span>
             <span>{data.locationTag}</span>
             <span>{data.qualifierTag}</span>
           </div>
-          <SocialLinks
+          <h1>{data.title}</h1>
+          <p>{data.excerpt}</p>
+          <ArticleByline
+            publishedAt={data.publishedAt}
+            updatedAt={data.updatedAt}
             instagram={social?.instagram}
             tiktok={social?.tiktok}
-            compact
           />
         </header>
         <div class="article-body prose"><slot /></div>
       </div>
       <div class="article-sidebar">
         <aside class="article-media" aria-label="Artikelmedia">
-          <MediaFrame title={data.title} video={data.video} image={data.coverImage} />
+          <MediaFrame
+            title={data.title}
+            video={data.video}
+            image={data.coverImage}
+          />
         </aside>
         {
           related.length > 0 && (
