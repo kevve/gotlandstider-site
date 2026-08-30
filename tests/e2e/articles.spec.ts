@@ -109,6 +109,43 @@ test("YouTube article renders its heading and privacy-friendly embed", async ({
   await expect(page.locator('iframe[src*="youtube"]')).toHaveCount(1);
 });
 
+test("article bylines expose the visible author and machine-readable dates", async ({
+  page,
+}) => {
+  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
+
+  const author = page.locator(".article-author");
+  await expect(page.locator(".article-intro > :first-child")).toHaveClass(
+    "article-tags",
+  );
+  await expect(author).toContainText("Av");
+  await expect(author).toContainText("Gotlandstider");
+  await expect(author).toHaveAttribute("href", "/#about");
+  await expect(author).toHaveAttribute("rel", "author");
+  await expect(author.locator("img")).toHaveAttribute(
+    "src",
+    "/content/about-kevinhenrik.webp",
+  );
+  await expect(page.locator(".article-dates time")).toHaveCount(1);
+  await expect(page.locator(".article-dates time")).toHaveAttribute(
+    "datetime",
+    "2026-08-22",
+  );
+  await expect(page.locator(".article-byline > .social-links")).toHaveCount(1);
+  await expect(page.locator(".article-intro > .social-links")).toHaveCount(0);
+
+  await page.goto(articlePath("gotlands-kanske-basta-bageri"));
+  await expect(page.locator(".article-dates time")).toHaveCount(2);
+  await expect(page.locator(".article-dates time").nth(0)).toHaveAttribute(
+    "datetime",
+    "2026-04-13",
+  );
+  await expect(page.locator(".article-dates time").nth(1)).toHaveAttribute(
+    "datetime",
+    "2026-05-27",
+  );
+});
+
 test("migrated article renders its canonical YouTube video", async ({
   page,
 }) => {
