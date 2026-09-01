@@ -6,8 +6,9 @@ The production frontend for [gotlandstider.se](https://gotlandstider.se). It is 
 
 - Astro static output and TypeScript, with no client framework or runtime server.
 - Tailwind CSS through its Vite plugin, using the existing Gotlandstider visual tokens and local fonts.
-- A dual-source content boundary: typed Markdown remains the migration rollback,
-  while the sibling `studio-gotlandstider` project supplies canonical Sanity articles.
+- A dual-source content boundary: the sibling `studio-gotlandstider` project supplies
+  canonical Sanity articles, while typed Markdown remains an explicit local fallback,
+  transition archive, and test fixture source.
 - Astro layouts and small reusable components in `src/layouts/` and `src/components/`.
 - A small content query boundary in `src/lib/` so a later Sanity source does not require page redesign.
 - Public assets in `public/`, retaining established `/content/`, discovery, font, and favicon paths.
@@ -23,6 +24,9 @@ Use a current Node.js release supported by Astro, then install from the lockfile
 npm ci
 npm run dev
 ```
+
+`npm run dev` requires the private-dataset Viewer token and uses Sanity. Use
+`npm run dev:markdown` only when intentionally exercising the local transition archive.
 
 The main verification commands are:
 
@@ -40,11 +44,11 @@ npm test
 The source is selected at build time:
 
 ```sh
-# Repository content source (default)
+# Published documents from Sanity (default)
 npm run build
 
-# Published documents from Sanity
-npm run build:sanity
+# Explicit local fallback/test-fixture source
+npm run build:markdown
 ```
 
 `CONTENT_SOURCE=sanity` is intentionally strict: a missing document, image, body,
@@ -71,12 +75,14 @@ test paths. Forked pull requests never receive repository secrets, so they run t
 complete Markdown-backed test path and skip only the authenticated Sanity build and
 its second browser-test pass.
 
-Markdown remains in `src/content/articles/` as a repository fallback. Its `slug`
+Markdown remains in `src/content/articles/` as an explicit repository fallback. Its `slug`
 values are the public URL contract and must not be changed silently. Every video
 uses a canonical YouTube ID and upload date; video files are not served by the site
 or uploaded as Sanity file assets.
 
-Run `npm run check`, `npm run build`, and `npm test` before opening a pull request. The CI workflow additionally enforces formatting and runs the same browser regression coverage.
+Run `npm run check`, `npm run build`, and `npm test` with the Viewer token before opening a
+pull request. The explicit fallback checks are `npm run check:markdown`,
+`npm run build:markdown`, and `npm run test:markdown`.
 
 ## Deployment
 

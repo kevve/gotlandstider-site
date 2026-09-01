@@ -24,12 +24,16 @@ export const QUALIFIER_TAGS = [
 
 export interface ArticleTaxonomy {
   primaryTag: (typeof PRIMARY_TAGS)[number];
-  locationTag: string;
+  primaryLocation: { title: string };
   qualifierTag: (typeof QUALIFIER_TAGS)[number];
 }
 
 export function orderedArticleTags(
   taxonomy: ArticleTaxonomy,
 ): [ArticleTaxonomy["primaryTag"], string, ArticleTaxonomy["qualifierTag"]] {
-  return [taxonomy.primaryTag, taxonomy.locationTag, taxonomy.qualifierTag];
+  return [
+    taxonomy.primaryTag,
+    taxonomy.primaryLocation.title,
+    taxonomy.qualifierTag,
+  ];
 }

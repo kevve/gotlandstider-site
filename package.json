@@ -4,16 +4,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "dev": "CONTENT_SOURCE=sanity ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "dev:sanity": "CONTENT_SOURCE=sanity ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "dev:markdown": "CONTENT_SOURCE=markdown ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "build:sanity": "CONTENT_SOURCE=sanity ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build:markdown": "CONTENT_SOURCE=markdown ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
-    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "check": "CONTENT_SOURCE=sanity ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "check:markdown": "CONTENT_SOURCE=markdown ASTRO_TELEMETRY_DISABLED=1 astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "playwright test",
-    "test:e2e": "playwright test"
+    "test": "CONTENT_SOURCE=sanity playwright test",
+    "test:sanity": "CONTENT_SOURCE=sanity playwright test",
+    "test:markdown": "CONTENT_SOURCE=markdown playwright test",
+    "test:e2e": "CONTENT_SOURCE=sanity playwright test"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

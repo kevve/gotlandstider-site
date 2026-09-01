@@ -11,6 +11,8 @@ export interface CardPresentation {
 }
 
 export type SerializedArticle = ArticleData & {
+  /** Preserved only in the public transition feed; UI code uses primaryLocation. */
+  locationTag: string;
   tags: [string, string, string];
   urlPath: string;
   sourceFile: string;
@@ -71,7 +73,7 @@ export function getCardPresentation(article: ArticleEntry): CardPresentation {
     badge: data.homepage?.card?.badge ?? data.primaryTag,
     subtitle:
       data.homepage?.card?.subtitle ??
-      `${data.locationTag} • ${data.qualifierTag}`,
+      `${data.primaryLocation.title} • ${data.qualifierTag}`,
   };
 }
 
@@ -83,7 +85,7 @@ export function getArchiveCardPresentation(
   return {
     cardImage: data.coverImage,
     badge: data.primaryTag,
-    subtitle: `${data.locationTag} • ${data.qualifierTag}`,
+    subtitle: `${data.primaryLocation.title} • ${data.qualifierTag}`,
   };
 }
 
@@ -93,6 +95,7 @@ export function serializeArticle(article: ArticleEntry): SerializedArticle {
 
   return {
     ...data,
+    locationTag: data.primaryLocation.title,
     tags: orderedArticleTags(article.data),
     urlPath: articlePath(article.data.slug),
     sourceFile: article.sourceFile,
@@ -143,7 +146,7 @@ let configuredArticles: Promise<ArticleEntry[]> | undefined;
 function getArticlesFromConfiguredSource(): Promise<ArticleEntry[]> {
   if (configuredArticles) return configuredArticles;
 
-  const source = process.env.CONTENT_SOURCE || "markdown";
+  const source = process.env.CONTENT_SOURCE || "sanity";
   if (source === "markdown") {
     configuredArticles = getMarkdownArticles();
     return configuredArticles;
