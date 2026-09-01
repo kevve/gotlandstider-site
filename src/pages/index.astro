@@ -5,7 +5,11 @@ import FeaturedExperience from "../components/FeaturedExperience.astro";
 import Hero from "../components/Hero.astro";
 import HouseProjectSection from "../components/HouseProjectSection.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getFeaturedArticle, getPublishedArticles } from "../lib/content";
+import {
+  articlesPath,
+  getFeaturedArticle,
+  getPublishedArticles,
+} from "../lib/content";
 import { canonicalUrl, withBase } from "../lib/urls";
 import { buildVideoJsonLd } from "../lib/seo";
 
@@ -79,10 +83,10 @@ const structuredData = {
     <div class="section-shell">
       <div class="archive-heading" data-reveal>
         <div><span>Arkivet</span><h2>Upptäck mer från Gotland</h2></div>
-        <a href={withBase("/articles/")}>Se alla artiklar →</a>
+        <a href={withBase(articlesPath())}>Se alla artiklar →</a>
       </div>
       <ArticleGrid articles={archiveCandidates} randomize />
-      <a class="mobile-archive-link" href={withBase("/articles/")}
+      <a class="mobile-archive-link" href={withBase(articlesPath())}
         >Se alla artiklar →</a
       >
     </div>

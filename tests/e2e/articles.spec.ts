@@ -4,21 +4,21 @@ import { articlePath, draftArticleSlugs, publicArticleSlugs } from "./fixtures";
 test("archive lists every published article once and no drafts", async ({
   page,
 }) => {
-  await page.goto("/articles/");
+  await page.goto("/artiklar/");
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Upptäck mer från Gotland",
   );
 
   const hrefs = await page
-    .locator('main a[href^="/articles/"]')
+    .locator('main a[href^="/artiklar/"]')
     .evaluateAll((links) =>
       links
         .map((link) => (link as HTMLAnchorElement).getAttribute("href"))
         .filter((href): href is string => Boolean(href)),
     );
 
-  const articleLinks = new Set(hrefs.filter((href) => href !== "/articles/"));
+  const articleLinks = new Set(hrefs.filter((href) => href !== "/artiklar/"));
   const publishedArticles = await page.request.get(
     "/generated/content/articles.json",
   );

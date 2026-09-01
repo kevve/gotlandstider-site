@@ -1,5 +1,9 @@
 ---
-import type { ArticleEntry } from "../lib/content";
+import {
+  articlePath,
+  articlesPath,
+  type ArticleEntry,
+} from "../lib/content";
 import { canonicalUrl, withBase } from "../lib/urls";
 import ArticleGrid from "../components/ArticleGrid.astro";
 import ArticleByline from "../components/ArticleByline.astro";
@@ -13,7 +17,7 @@ interface Props {
 }
 const { article, related } = Astro.props;
 const { data } = article;
-const path = `/articles/${data.slug}/`;
+const path = articlePath(data.slug);
 const title = data.seo?.title || `${data.title} | Gotlandstider`;
 const description = data.seo?.description || data.excerpt;
 const image = data.seo?.image || data.coverImage;
@@ -62,7 +66,7 @@ const social = data.video?.socialLinks;
   noIndex={data.seo?.noIndex}
 >
   <article class="article-page">
-    <a class="back-link" href={withBase("/articles/")}
+    <a class="back-link" href={withBase(articlesPath())}
       ><span aria-hidden="true">←</span> Tillbaka till arkivet</a
     >
     <div class="article-detail-grid">

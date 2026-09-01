@@ -19,6 +19,16 @@ test("all 16 public article routes build and draft routes stay private", async (
   }
 });
 
+test("legacy article routes are not emitted by the static site", async ({
+  request,
+}) => {
+  const response = await request.get(
+    "/articles/host-pa-gotland-2026-fem-tips-varda-omvagen/",
+  );
+
+  expect(response.status()).toBe(404);
+});
+
 for (const testCase of [
   {
     path: "/",
@@ -26,14 +36,14 @@ for (const testCase of [
     hasStructuredData: true,
   },
   {
-    path: "/articles/",
-    canonical: "https://gotlandstider.se/articles/",
+    path: "/artiklar/",
+    canonical: "https://gotlandstider.se/artiklar/",
     hasStructuredData: false,
   },
   {
     path: articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"),
     canonical:
-      "https://gotlandstider.se/articles/host-pa-gotland-2026-fem-tips-varda-omvagen/",
+      "https://gotlandstider.se/artiklar/host-pa-gotland-2026-fem-tips-varda-omvagen/",
     hasStructuredData: true,
   },
 ]) {
@@ -120,6 +130,12 @@ test("content feeds and discovery resources remain public", async ({
         (!item.video || item.video.thumbnail === undefined),
     ),
   ).toBe(true);
+  expect(
+    articlePayload.items.every(
+      (item: { slug: string; urlPath: string }) =>
+        item.urlPath === articlePath(item.slug),
+    ),
+  ).toBe(true);
 
   for (const path of [
     "/generated/content/featured.json",
@@ -166,7 +182,7 @@ test("sitemap and robots expose the production URL inventory", async ({
   );
   for (const url of [
     "https://gotlandstider.se/",
-    "https://gotlandstider.se/articles/",
+    "https://gotlandstider.se/artiklar/",
   ]) {
     expect(xml).toContain(
       `<loc>${url}</loc>\n      <lastmod>${latestArticleUpdate}</lastmod>`,

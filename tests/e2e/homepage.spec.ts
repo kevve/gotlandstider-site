@@ -18,7 +18,7 @@ test.describe("homepage", () => {
     for (const hash of ["#stories", "#house", "#contact"]) {
       await expect(page.locator(`a[href$="${hash}"]`).first()).toBeAttached();
     }
-    await expect(page.locator('a[href$="/articles/"]').first()).toBeAttached();
+    await expect(page.locator('a[href$="/artiklar/"]').first()).toBeAttached();
   });
 
   test("shows three unique archive cards without depending on random titles", async ({
@@ -27,7 +27,7 @@ test.describe("homepage", () => {
     await page.goto("/");
 
     const cards = page.locator(
-      '[data-article-grid] [data-random-card]:visible a[href*="/articles/"], #archive-scroll-container article:visible a[href*="/articles/"]',
+      '[data-article-grid] [data-random-card]:visible a[href*="/artiklar/"], #archive-scroll-container article:visible a[href*="/artiklar/"]',
     );
     await expect(cards).toHaveCount(3);
 

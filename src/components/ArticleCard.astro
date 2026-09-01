@@ -1,6 +1,7 @@
 ---
 import type { ArticleEntry } from "../lib/content";
 import {
+  articlePath,
   getArchiveCardPresentation,
   getCardPresentation,
 } from "../lib/content";
@@ -28,7 +29,7 @@ const card = archive
   class:list={["article-card", { compact }]}
   data-random-card={randomCandidate || undefined}
 >
-  <a href={withBase(`/articles/${article.data.slug}/`)}>
+  <a href={withBase(articlePath(article.data.slug))}>
     <div class="card-image">
       <span class:list={["card-badge", { light: card.badge === "Tips" }]}
         >{card.badge}</span
