@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import {
   getPublishedArticles,
   articlePath,
+  articlesPath,
   type ArticleEntry,
 } from "../lib/content";
 import { canonicalUrl } from "../lib/urls";
@@ -38,7 +39,7 @@ export const GET: APIRoute = async () => {
       images: HOMEPAGE_IMAGES,
     }),
     renderEntry({
-      loc: canonicalUrl("/articles/"),
+      loc: canonicalUrl(articlesPath()),
       lastmod: latest,
       changefreq: "weekly",
       priority: "0.8",

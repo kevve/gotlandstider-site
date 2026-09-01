@@ -3,7 +3,7 @@ import { articlePath } from "./fixtures";
 
 const representativePages = [
   "/",
-  "/articles/",
+  "/artiklar/",
   articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"),
   articlePath("arets-loppis-favoriter"),
 ];

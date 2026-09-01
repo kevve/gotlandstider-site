@@ -22,4 +22,4 @@ export const draftArticleSlugs = [
   "projekt-ljugarn-fran-tomt-till-sommarhus",
 ] as const;
 
-export const articlePath = (slug: string) => `/articles/${slug}/`;
+export const articlePath = (slug: string) => `/artiklar/${slug}/`;

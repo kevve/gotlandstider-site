@@ -119,7 +119,12 @@ export function serializeHomepageCandidate(
 }
 
 export function articlePath(slug: string): string {
-  return `/articles/${slug}/`;
+  return `/artiklar/${slug}/`;
+}
+
+/** The canonical archive route shared by navigation, metadata, and sitemaps. */
+export function articlesPath(): string {
+  return "/artiklar/";
 }
 
 function compareArticlesNewestFirst(

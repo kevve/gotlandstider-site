@@ -1,7 +1,11 @@
 ---
 import ArticleGrid from "../../components/ArticleGrid.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCardPresentation, getPublishedArticles } from "../../lib/content";
+import {
+  articlesPath,
+  getCardPresentation,
+  getPublishedArticles,
+} from "../../lib/content";
 const articles = await getPublishedArticles();
 const description =
   "Ett växande arkiv med guider, berättelser, videor och uppdateringar från Gotland, Ljugarn och livet på ön.";
@@ -15,7 +19,7 @@ const image = articles[0]
   description={description}
   ogDescription="Utforska Gotlandstiders arkiv med videor, guider, berättelser och uppdateringar från Gotland och Ljugarn."
   image={image}
-  canonicalPath="/articles/"
+  canonicalPath={articlesPath()}
   activeNav="articles"
 >
   <section class="archive-hero">
