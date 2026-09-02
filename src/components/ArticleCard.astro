@@ -2,7 +2,6 @@
 import type { ArticleEntry } from "../lib/content";
 import {
   articlePath,
-  getArchiveCardPresentation,
   getCardPresentation,
 } from "../lib/content";
 import { withBase } from "../lib/urls";
@@ -11,18 +10,14 @@ interface Props {
   article: ArticleEntry;
   compact?: boolean;
   randomCandidate?: boolean;
-  archive?: boolean;
 }
 
 const {
   article,
   compact = false,
   randomCandidate = false,
-  archive = false,
 } = Astro.props;
-const card = archive
-  ? getArchiveCardPresentation(article)
-  : getCardPresentation(article);
+const card = getCardPresentation(article);
 ---
 
 <article
@@ -31,9 +26,7 @@ const card = archive
 >
   <a href={withBase(articlePath(article.data.slug))}>
     <div class="card-image">
-      <span class:list={["card-badge", { light: card.badge === "Tips" }]}
-        >{card.badge}</span
-      >
+      <span class="card-badge">{card.badge}</span>
       <img
         src={withBase(card.cardImage)}
         alt={article.data.title}

@@ -16,10 +16,6 @@ video:
   socialLinks:
     instagram: https://www.instagram.com/reel/DMQItODIMPC/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7528426362655231254
-homepage:
-  card:
-    badge: Guide
-    subtitle: Visby • Stränder
 ---
 
 Snäck är en av de där platserna som fungerar för nästan alla sorters dagar. Du kan komma hit för ett snabbt dopp, en längre eftermiddag med familjen eller bara för att få lite havsluft utan att behöva åka särskilt långt från Visby.

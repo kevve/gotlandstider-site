@@ -19,10 +19,6 @@ video:
   socialLinks:
     instagram: https://www.instagram.com/reel/DYHjHsDIb5g/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7637872815194098966
-homepage:
-  card:
-    subtitle: Gotland • Musik
-    badge: Tips
 ---
 Gotland är redan en stark sommarö, och konsertutbudet gör resan ännu bättre. När namn som Tomas Stenström, Orup, The Ark, Miss Li, Molly Sandén, Veronica Maggio, Petra Marklund, Medina, Jill Johnson, Dolly Style och Di Leva dyker upp i sommarprogrammet finns det gott om skäl att titta extra noga på datumet innan du bokar resa och boende.
 

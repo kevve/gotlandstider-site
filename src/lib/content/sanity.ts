@@ -43,18 +43,6 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
 
   const homepage = document.homepage
     ? {
-        ...(document.homepage.card
-          ? {
-              card: {
-                ...(document.homepage.card.badge
-                  ? { badge: document.homepage.card.badge }
-                  : {}),
-                ...(document.homepage.card.subtitle
-                  ? { subtitle: document.homepage.card.subtitle }
-                  : {}),
-              },
-            }
-          : {}),
         ...(document.homepage.hero
           ? {
               hero: {

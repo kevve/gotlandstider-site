@@ -45,6 +45,22 @@ test("home archive shows its all-articles link only below the cards on mobile", 
   await expect(page.locator(".mobile-archive-link")).toBeVisible();
 });
 
+test("homepage and related story cards use the primary category", async ({
+  page,
+}) => {
+  const concertPath = articlePath("sommarens-basta-konserter-pa-gotland-2026");
+
+  await page.goto("/");
+  await expect(page.locator(`a[href="${concertPath}"] .card-badge`)).toHaveText(
+    "Upplevelser & nöjen",
+  );
+
+  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
+  await expect(
+    page.locator(`.article-related a[href="${concertPath}"] .card-badge`),
+  ).toHaveText("Upplevelser & nöjen");
+});
+
 test("article bodies begin directly below their intros on desktop", async ({
   page,
 }) => {
