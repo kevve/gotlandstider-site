@@ -54,11 +54,19 @@ test("homepage and related story cards use the primary category", async ({
   await expect(page.locator(`a[href="${concertPath}"] .card-badge`)).toHaveText(
     "Upplevelser & nöjen",
   );
+  const homepageTagColor = await page
+    .locator(`a[href="${concertPath}"] .card-subtitle`)
+    .evaluate((tag) => getComputedStyle(tag).color);
 
   await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
-  await expect(
-    page.locator(`.article-related a[href="${concertPath}"] .card-badge`),
-  ).toHaveText("Upplevelser & nöjen");
+  const relatedCard = page.locator(`.article-related a[href="${concertPath}"]`);
+  const relatedTags = relatedCard.locator(".card-badge:visible");
+  const relatedCopyTag = relatedCard.locator(".card-copy > .card-badge + h3");
+
+  await expect(relatedTags).toHaveCount(1);
+  await expect(relatedTags).toHaveText("Upplevelser & nöjen");
+  await expect(relatedCopyTag).toBeVisible();
+  await expect(relatedTags).toHaveCSS("color", homepageTagColor);
 });
 
 test("article bodies begin directly below their intros on desktop", async ({
