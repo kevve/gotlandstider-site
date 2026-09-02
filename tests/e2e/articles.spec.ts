@@ -51,9 +51,9 @@ test("homepage and related story cards use the primary category", async ({
   const concertPath = articlePath("sommarens-basta-konserter-pa-gotland-2026");
 
   await page.goto("/");
-  await expect(
-    page.locator(`a[href="${concertPath}"] .card-badge`),
-  ).toHaveText("Upplevelser & nöjen");
+  await expect(page.locator(`a[href="${concertPath}"] .card-badge`)).toHaveText(
+    "Upplevelser & nöjen",
+  );
 
   await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
   await expect(
