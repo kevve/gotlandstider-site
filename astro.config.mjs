@@ -9,7 +9,13 @@ const projectId = env.PUBLIC_SANITY_PROJECT_ID || "th4gij3b";
 const dataset = env.PUBLIC_SANITY_DATASET || "production";
 const sanityReadToken = env.SANITY_API_READ_TOKEN;
 const contentSource =
-  process.env.CONTENT_SOURCE || env.CONTENT_SOURCE || "markdown";
+  process.env.CONTENT_SOURCE || env.CONTENT_SOURCE || "sanity";
+
+if (!new Set(["sanity", "markdown"]).has(contentSource)) {
+  throw new Error(
+    `Unsupported CONTENT_SOURCE=${contentSource}. Use "sanity" or "markdown".`,
+  );
+}
 
 if (contentSource === "sanity" && !sanityReadToken) {
   throw new Error(

@@ -7,7 +7,7 @@ export async function getMarkdownArticles(): Promise<ArticleEntry[]> {
   const entries = await getCollection("articles", ({ data }) => !data.draft);
 
   return entries.map((entry) => {
-    const { video, coverImage, ...articleData } = entry.data;
+    const { video, coverImage, locationTag, ...articleData } = entry.data;
     const normalizedVideo = video
       ? normalizeArticleVideo(video, entry.data.slug)
       : undefined;
@@ -18,6 +18,7 @@ export async function getMarkdownArticles(): Promise<ArticleEntry[]> {
         coverImage,
         youtubeVideoId: normalizedVideo?.youtubeVideoId,
       }),
+      primaryLocation: { title: locationTag, slug: null },
       ...(normalizedVideo ? { video: normalizedVideo } : {}),
     };
 

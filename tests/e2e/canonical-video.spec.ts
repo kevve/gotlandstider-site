@@ -35,7 +35,14 @@ function canonicalArticle(): ArticleEntry {
       updatedAt: "2026-08-25",
       coverImage: "/content/canonical-thumbnail.webp",
       primaryTag: "Upplevelser & nöjen",
-      locationTag: "Gotland",
+      primaryLocation: { title: "Gotland", slug: "gotland" },
+      locations: [
+        {
+          _key: "gotland-primary",
+          role: "primary",
+          location: { title: "Gotland", slug: "gotland" },
+        },
+      ],
       qualifierTag: "Guide",
       featured: false,
       draft: false,
@@ -135,4 +142,11 @@ test("Sanity query exposes editorial and system sitemap timestamps", () => {
   expect(SANITY_ARTICLES_QUERY).toContain(
     '"sitemapLastModified": coalesce(updatedAt, _updatedAt)',
   );
+});
+
+test("Sanity query resolves keyed location relations and a primary location", () => {
+  expect(SANITY_ARTICLES_QUERY).toContain("locations[]{");
+  expect(SANITY_ARTICLES_QUERY).toContain("_key,");
+  expect(SANITY_ARTICLES_QUERY).toContain('"primaryLocation"');
+  expect(SANITY_ARTICLES_QUERY).not.toContain('"locationTag"');
 });

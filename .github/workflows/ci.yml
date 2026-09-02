@@ -30,17 +30,23 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
-      - name: Check Astro and TypeScript
-        run: npm run check
+      - name: Check Astro and TypeScript from Markdown
+        run: npm run check:markdown
 
-      - name: Build static site
-        run: npm run build
+      - name: Build from Markdown
+        run: npm run build:markdown
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run browser regression tests
-        run: npm test
+      - name: Run browser regression tests from Markdown
+        run: npm run test:markdown
+
+      - name: Check Astro and TypeScript from Sanity
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        run: npm run check
+        env:
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
 
       - name: Build from Sanity
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
@@ -50,9 +56,8 @@ jobs:
 
       - name: Run browser regression tests from Sanity
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        run: npm test
+        run: npm run test:sanity
         env:
-          CONTENT_SOURCE: sanity
           SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
 
       - name: Note private Sanity checks skipped for fork

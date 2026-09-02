@@ -14,7 +14,7 @@
 
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
-// Source: schema.json
+// Source: ../../../Users/kevin/Repos/Gotlandstider/studio-gotlandstider/private/tmp/gotlandstider-site-pr.qdI2SQ/schema.json
 export type Card = {
   badge?: string;
   subtitle?: string;
@@ -61,6 +61,37 @@ export type PublisherMetadata = {
   youtubeStatus?: string;
   youtubeVideoId?: string;
   youtubeUploadDate?: string;
+};
+
+export type LocationReviewSuggestion = {
+  _type: "locationReviewSuggestion";
+  name: string;
+  role: "primary" | "featured" | "mentioned";
+  evidence: "explicitlyNamed" | "areaOnly" | "ambiguous";
+  note?: string;
+};
+
+export type LocationReview = {
+  _type: "locationReview";
+  status: "notNeeded" | "needsReview" | "resolved";
+  suggestions?: Array<
+    {
+      _key: string;
+    } & LocationReviewSuggestion
+  >;
+};
+
+export type LocationReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "location";
+};
+
+export type LocationRelation = {
+  _type: "locationRelation";
+  location: LocationReference;
+  role: "primary" | "featured" | "mentioned";
 };
 
 export type MigrationMetadata = {
@@ -123,6 +154,46 @@ export type ArticleBody = Array<{
   _key: string;
 }>;
 
+export type AreaBoundary = {
+  _type: "areaBoundary";
+  points: Array<
+    {
+      _key: string;
+    } & Geopoint
+  >;
+};
+
+export type Location = {
+  _id: string;
+  _type: "location";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  kind: "place" | "area";
+  mapStatus: "verified" | "review" | "hidden";
+  mapAnchor?: Geopoint;
+  areaBoundary?: AreaBoundary;
+  parentArea?: LocationReference;
+  aliases?: Array<string>;
+  coordinateSource?: "editorial" | "official" | "openstreetmap" | "unknown";
+  description?: string;
+};
+
+export type Geopoint = {
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current: string;
+  source?: string;
+};
+
 export type Article = {
   _id: string;
   _type: "article";
@@ -140,7 +211,13 @@ export type Article = {
     | "Hem & inredning"
     | "Upplevelser & n\xF6jen"
     | "Utflykter & natur";
-  locationTag: string;
+  locationTag?: string;
+  locations?: Array<
+    {
+      _key: string;
+    } & LocationRelation
+  >;
+  locationReview?: LocationReview;
   qualifierTag:
     | "Bageri"
     | "Restaurang"
@@ -180,12 +257,6 @@ export type SanityImageHotspot = {
   y: number;
   height: number;
   width: number;
-};
-
-export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -278,13 +349,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData;
 };
 
-export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
-};
-
 export type AllSanitySchemaTypes =
   | Card
   | Hero
@@ -292,28 +356,34 @@ export type AllSanitySchemaTypes =
   | SocialLinks
   | Seo
   | PublisherMetadata
+  | LocationReviewSuggestion
+  | LocationReview
+  | LocationReference
+  | LocationRelation
   | MigrationMetadata
   | HomepagePresentation
   | ArticleVideo
   | SanityImageAssetReference
   | ArticleImage
   | ArticleBody
+  | AreaBoundary
+  | Location
+  | Geopoint
+  | Slug
   | Article
   | SanityImageCrop
   | SanityImageHotspot
-  | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
   | SanityFileAsset
   | SanityAssetSourceData
-  | SanityImageAsset
-  | Geopoint;
+  | SanityImageAsset;
 
-// Source: ../gotlandstider-site/src/lib/sanity/queries.ts
+// Source: src/lib/sanity/queries.ts
 // Variable: SANITY_ARTICLES_QUERY
-// Query: *[    _type == "article" &&    !(_id in path("drafts.**")) &&    defined(slug.current)  ] | order(publishedAt desc, slug.current asc) {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    "systemUpdatedAt": _updatedAt,    "sitemapLastModified": coalesce(updatedAt, _updatedAt),    "primaryTag": coalesce(primaryTag, tags[0]),    "locationTag": coalesce(locationTag, tags[1]),    "qualifierTag": coalesce(qualifierTag, tags[2]),    featured,    body,    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),    video {      youtubeVideoId,      uploadDate,      socialLinks {        "instagram": coalesce(instagram, null),        "tiktok": coalesce(tiktok, null)      }    },    homepage {      card { badge, subtitle },      hero {        heading { prefix, accent },        description,        highlights[] { _key, label, title, description }      }    },    "seo": {      "title": seo.title,      "description": seo.description,      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),      "noIndex": seo.noIndex == true    },    "sourceFile": coalesce(      migration.sourceFile,      "content/articles/" + slug.current + ".md"    )  }
+// Query: *[    _type == "article" &&    !(_id in path("drafts.**")) &&    defined(slug.current)  ] | order(publishedAt desc, slug.current asc) {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    "systemUpdatedAt": _updatedAt,    "sitemapLastModified": coalesce(updatedAt, _updatedAt),    "primaryTag": coalesce(primaryTag, tags[0]),    "qualifierTag": coalesce(qualifierTag, tags[2]),    locations[]{      _key,      role,      location->{        _id,        title,        "slug": slug.current      }    },    "primaryLocation": locations[role == "primary"][0].location->{      _id,      title,      "slug": slug.current    },    featured,    body,    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),    video {      youtubeVideoId,      uploadDate,      socialLinks {        "instagram": coalesce(instagram, null),        "tiktok": coalesce(tiktok, null)      }    },    homepage {      card { badge, subtitle },      hero {        heading { prefix, accent },        description,        highlights[] { _key, label, title, description }      }    },    "seo": {      "title": seo.title,      "description": seo.description,      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),      "noIndex": seo.noIndex == true    },    "sourceFile": coalesce(      migration.sourceFile,      "content/articles/" + slug.current + ".md"    )  }
 export type SANITY_ARTICLES_QUERY_RESULT = Array<{
   _id: string;
   title: string;
@@ -329,7 +399,6 @@ export type SANITY_ARTICLES_QUERY_RESULT = Array<{
     | "Mat & dryck"
     | "Upplevelser & n\xF6jen"
     | "Utflykter & natur";
-  locationTag: string;
   qualifierTag:
     | "Bageri"
     | "Guide"
@@ -344,6 +413,20 @@ export type SANITY_ARTICLES_QUERY_RESULT = Array<{
     | "Str\xE4nder"
     | "Utsikt"
     | "Weekend";
+  locations: Array<{
+    _key: string;
+    role: "featured" | "mentioned" | "primary";
+    location: {
+      _id: string;
+      title: string;
+      slug: string;
+    };
+  }> | null;
+  primaryLocation: {
+    _id: string;
+    title: string;
+    slug: string;
+  } | null;
   featured: boolean | null;
   body: ArticleBody;
   coverImage: string | null;
@@ -387,6 +470,6 @@ export type SANITY_ARTICLES_QUERY_RESULT = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[\n    _type == "article" &&\n    !(_id in path("drafts.**")) &&\n    defined(slug.current)\n  ] | order(publishedAt desc, slug.current asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    "systemUpdatedAt": _updatedAt,\n    "sitemapLastModified": coalesce(updatedAt, _updatedAt),\n    "primaryTag": coalesce(primaryTag, tags[0]),\n    "locationTag": coalesce(locationTag, tags[1]),\n    "qualifierTag": coalesce(qualifierTag, tags[2]),\n    featured,\n    body,\n    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),\n    video {\n      youtubeVideoId,\n      uploadDate,\n      socialLinks {\n        "instagram": coalesce(instagram, null),\n        "tiktok": coalesce(tiktok, null)\n      }\n    },\n    homepage {\n      card { badge, subtitle },\n      hero {\n        heading { prefix, accent },\n        description,\n        highlights[] { _key, label, title, description }\n      }\n    },\n    "seo": {\n      "title": seo.title,\n      "description": seo.description,\n      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),\n      "noIndex": seo.noIndex == true\n    },\n    "sourceFile": coalesce(\n      migration.sourceFile,\n      "content/articles/" + slug.current + ".md"\n    )\n  }\n': SANITY_ARTICLES_QUERY_RESULT;
+    '\n  *[\n    _type == "article" &&\n    !(_id in path("drafts.**")) &&\n    defined(slug.current)\n  ] | order(publishedAt desc, slug.current asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    "systemUpdatedAt": _updatedAt,\n    "sitemapLastModified": coalesce(updatedAt, _updatedAt),\n    "primaryTag": coalesce(primaryTag, tags[0]),\n    "qualifierTag": coalesce(qualifierTag, tags[2]),\n    locations[]{\n      _key,\n      role,\n      location->{\n        _id,\n        title,\n        "slug": slug.current\n      }\n    },\n    "primaryLocation": locations[role == "primary"][0].location->{\n      _id,\n      title,\n      "slug": slug.current\n    },\n    featured,\n    body,\n    "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),\n    video {\n      youtubeVideoId,\n      uploadDate,\n      socialLinks {\n        "instagram": coalesce(instagram, null),\n        "tiktok": coalesce(tiktok, null)\n      }\n    },\n    homepage {\n      card { badge, subtitle },\n      hero {\n        heading { prefix, accent },\n        description,\n        highlights[] { _key, label, title, description }\n      }\n    },\n    "seo": {\n      "title": seo.title,\n      "description": seo.description,\n      "image": coalesce(seo.image.asset->url, seo.image.legacyPath),\n      "noIndex": seo.noIndex == true\n    },\n    "sourceFile": coalesce(\n      migration.sourceFile,\n      "content/articles/" + slug.current + ".md"\n    )\n  }\n': SANITY_ARTICLES_QUERY_RESULT;
   }
 }

@@ -103,6 +103,51 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
         }
       : undefined;
 
+  const locations = (document.locations ?? []).map((relation) => ({
+    _key: requiredString(relation._key, document.slug, "locations._key"),
+    role: requiredLocationRole(relation.role, document.slug),
+    location: {
+      title: requiredString(
+        relation.location?.title,
+        document.slug,
+        "locations.location.title",
+      ),
+      slug: requiredString(
+        relation.location?.slug,
+        document.slug,
+        "locations.location.slug",
+      ),
+    },
+  }));
+  const primaryRelations = locations.filter(
+    (relation) => relation.role === "primary",
+  );
+  if (primaryRelations.length !== 1) {
+    throw new Error(
+      `Sanity article ${document.slug} must resolve exactly one primary location; found ${primaryRelations.length}`,
+    );
+  }
+  const primaryLocation = {
+    title: requiredString(
+      document.primaryLocation?.title,
+      document.slug,
+      "primaryLocation.title",
+    ),
+    slug: requiredString(
+      document.primaryLocation?.slug,
+      document.slug,
+      "primaryLocation.slug",
+    ),
+  };
+  if (
+    primaryRelations[0].location.title !== primaryLocation.title ||
+    primaryRelations[0].location.slug !== primaryLocation.slug
+  ) {
+    throw new Error(
+      `Sanity article ${document.slug} has inconsistent primary location projections`,
+    );
+  }
+
   const data: ArticleData = {
     title: document.title,
     slug: document.slug,
@@ -111,7 +156,8 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
     updatedAt: document.updatedAt,
     coverImage,
     primaryTag: document.primaryTag,
-    locationTag: document.locationTag,
+    primaryLocation,
+    locations,
     qualifierTag: document.qualifierTag,
     featured: document.featured ?? false,
     draft: false,
@@ -132,12 +178,22 @@ function mapSanityArticle(document: SanityArticle): ArticleEntry {
 }
 
 function requiredString(
-  value: string | null,
+  value: string | null | undefined,
   slug: string,
   field: string,
 ): string {
   if (!value) throw new Error(`Sanity article ${slug} is missing ${field}`);
   return value;
+}
+
+function requiredLocationRole(
+  value: string | null | undefined,
+  slug: string,
+): "primary" | "featured" | "mentioned" {
+  if (value === "primary" || value === "featured" || value === "mentioned") {
+    return value;
+  }
+  throw new Error(`Sanity article ${slug} has an invalid location role`);
 }
 
 function requiredHeading(

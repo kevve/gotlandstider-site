@@ -15,8 +15,21 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
     "systemUpdatedAt": _updatedAt,
     "sitemapLastModified": coalesce(updatedAt, _updatedAt),
     "primaryTag": coalesce(primaryTag, tags[0]),
-    "locationTag": coalesce(locationTag, tags[1]),
     "qualifierTag": coalesce(qualifierTag, tags[2]),
+    locations[]{
+      _key,
+      role,
+      location->{
+        _id,
+        title,
+        "slug": slug.current
+      }
+    },
+    "primaryLocation": locations[role == "primary"][0].location->{
+      _id,
+      title,
+      "slug": slug.current
+    },
     featured,
     body,
     "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),
