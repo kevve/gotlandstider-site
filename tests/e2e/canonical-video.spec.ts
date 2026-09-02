@@ -149,4 +149,5 @@ test("Sanity query resolves keyed location relations and a primary location", ()
   expect(SANITY_ARTICLES_QUERY).toContain("_key,");
   expect(SANITY_ARTICLES_QUERY).toContain('"primaryLocation"');
   expect(SANITY_ARTICLES_QUERY).not.toContain('"locationTag"');
+  expect(SANITY_ARTICLES_QUERY).not.toContain("card { badge, subtitle }");
 });

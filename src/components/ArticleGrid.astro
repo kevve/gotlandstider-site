@@ -6,14 +6,12 @@ interface Props {
   articles: ArticleEntry[];
   randomize?: boolean;
   compact?: boolean;
-  archive?: boolean;
 }
 
 const {
   articles,
   randomize = false,
   compact = false,
-  archive = false,
 } = Astro.props;
 ---
 
@@ -27,7 +25,6 @@ const {
         article={article}
         compact={compact}
         randomCandidate={randomize}
-        archive={archive}
       />
     ))
   }

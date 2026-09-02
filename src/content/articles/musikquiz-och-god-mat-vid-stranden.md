@@ -16,10 +16,6 @@ video:
   socialLinks:
     instagram: https://www.instagram.com/reel/DJUQIC3opEw/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7501347863666887958
-homepage:
-  card:
-    badge: Tips
-    subtitle: Ljugarn • Mat & Dryck
 ---
 
 Det här är ett av våra favoritexempel på hur en enkel kväll på Gotland kan bli minnesvärd utan att kännas överplanerad. När läget är rätt, maten god och stämningen avslappnad behövs det inte särskilt mycket mer.

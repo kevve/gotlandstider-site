@@ -70,20 +70,6 @@ export function getCardPresentation(article: ArticleEntry): CardPresentation {
 
   return {
     cardImage: data.coverImage,
-    badge: data.homepage?.card?.badge ?? data.primaryTag,
-    subtitle:
-      data.homepage?.card?.subtitle ??
-      `${data.primaryLocation.title} • ${data.qualifierTag}`,
-  };
-}
-
-export function getArchiveCardPresentation(
-  article: ArticleEntry,
-): CardPresentation {
-  const { data } = article;
-
-  return {
-    cardImage: data.coverImage,
     badge: data.primaryTag,
     subtitle: `${data.primaryLocation.title} • ${data.qualifierTag}`,
   };

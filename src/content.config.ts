@@ -39,12 +39,6 @@ const video = z.object({
 });
 
 const homepage = z.object({
-  card: z
-    .object({
-      badge: z.string().min(1).optional(),
-      subtitle: z.string().min(1).optional(),
-    })
-    .optional(),
   hero: z
     .object({
       heading: z.object({

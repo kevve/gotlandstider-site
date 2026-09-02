@@ -17,10 +17,6 @@ video:
   socialLinks:
     instagram: https://www.instagram.com/reel/DSuzAP-iPaz/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7588184079967866134
-homepage:
-  card:
-    badge: Loppis
-    subtitle: Gotland • Inredning
 ---
 
 Vi har kört kors och tvärs över ön för att hitta loppisar som är värda en omväg. De bästa stoppen handlar inte bara om fynden utan också om miljön, människorna och möjligheten att hitta något oväntat.

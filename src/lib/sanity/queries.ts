@@ -42,7 +42,6 @@ export const SANITY_ARTICLES_QUERY = defineQuery(/* groq */ `
       }
     },
     homepage {
-      card { badge, subtitle },
       hero {
         heading { prefix, accent },
         description,

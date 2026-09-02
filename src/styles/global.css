@@ -596,10 +596,6 @@ iframe {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.card-badge.light {
-  color: #1f2933;
-  background: rgba(242, 235, 229, 0.9);
-}
 .card-copy {
   display: grid;
   gap: 0.45rem;

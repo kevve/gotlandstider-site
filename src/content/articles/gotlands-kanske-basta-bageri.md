@@ -18,10 +18,6 @@ video:
   socialLinks:
     instagram: https://www.instagram.com/reel/DW3_J3riKah/
     tiktok: https://www.tiktok.com/@gotlandstider/video/7626401803298426134
-homepage:
-  card:
-    badge: Mat & Dryck
-    subtitle: Visby • Bageri
 ---
 Själsö Bageri är ett stopp värt att planera in som en självklar del av vistelsen på Gotland. Det är inte långt från Visby, men det gäller ändå att passa på oavsett om du ska söder, öster, eller norrut.
 
