@@ -26,7 +26,7 @@ const card = getCardPresentation(article);
 >
   <a href={withBase(articlePath(article.data.slug))}>
     <div class="card-image">
-      <span class="card-badge">{card.badge}</span>
+      {!compact && <span class="card-badge">{card.badge}</span>}
       <img
         src={withBase(card.cardImage)}
         alt={article.data.title}
@@ -35,6 +35,7 @@ const card = getCardPresentation(article);
       />
     </div>
     <div class="card-copy">
+      {compact && <span class="card-badge">{card.badge}</span>}
       {!compact && <span class="card-subtitle">{card.subtitle}</span>}
       <h3>{article.data.title}</h3>
       {!compact && <p>{article.data.excerpt}</p>}

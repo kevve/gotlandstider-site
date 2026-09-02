@@ -607,6 +607,17 @@ iframe {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+.article-card.compact .card-copy .card-badge {
+  position: static;
+  padding: 0;
+  border-radius: 0;
+  color: #7a8b7d;
+  background: none;
+  backdrop-filter: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
 .card-copy h3 {
   margin: 0;
   font-family: "Playfair Display", serif;
