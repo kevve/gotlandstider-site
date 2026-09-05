@@ -6,6 +6,8 @@ export const PRIMARY_TAGS = [
   "Utflykter & natur",
 ] as const;
 
+export type PrimaryTag = (typeof PRIMARY_TAGS)[number];
+
 export const QUALIFIER_TAGS = [
   "Bageri",
   "Restaurang",
@@ -23,7 +25,7 @@ export const QUALIFIER_TAGS = [
 ] as const;
 
 export interface ArticleTaxonomy {
-  primaryTag: (typeof PRIMARY_TAGS)[number];
+  primaryTag: PrimaryTag;
   primaryLocation: { title: string };
   qualifierTag: (typeof QUALIFIER_TAGS)[number];
 }
