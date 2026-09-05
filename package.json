@@ -25,7 +25,7 @@
     "@playwright/test": "^1.62.1",
     "@sanity/astro": "^3.5.1",
     "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^24.13.3",
+    "@types/node": "^26.4.1",
     "astro": "^7.2.10",
     "astro-portabletext": "^1.0.0",
     "github-slugger": "^2.0.0",
