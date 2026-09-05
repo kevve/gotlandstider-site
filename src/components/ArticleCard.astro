@@ -4,6 +4,7 @@ import {
   articlePath,
   getCardPresentation,
 } from "../lib/content";
+import { getPrimaryTagColor } from "../lib/primary-tag";
 
 interface Props {
   article: ArticleEntry;
@@ -21,7 +22,9 @@ const card = getCardPresentation(article);
 
 <article
   class:list={["article-card", { compact }]}
+  data-primary-tag={article.data.primaryTag}
   data-random-card={randomCandidate || undefined}
+  style={`--primary-tag-color: ${getPrimaryTagColor(article.data.primaryTag)}`}
 >
   <a href={articlePath(article.data.slug)}>
     <div class="card-image">
