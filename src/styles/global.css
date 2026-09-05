@@ -589,7 +589,11 @@ iframe {
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   color: white;
-  background: rgba(188, 138, 111, 0.9);
+  background: color-mix(
+    in srgb,
+    var(--primary-tag-color, var(--color-gotland-bark)) 92%,
+    transparent
+  );
   backdrop-filter: blur(8px);
   font-size: 0.625rem;
   font-weight: 700;
@@ -611,7 +615,7 @@ iframe {
   position: static;
   padding: 0;
   border-radius: 0;
-  color: #7a8b7d;
+  color: var(--primary-tag-color, var(--color-gotland-bark));
   background: none;
   backdrop-filter: none;
   font-size: 0.75rem;
@@ -1070,7 +1074,7 @@ iframe {
   padding: 0.3rem 0.8rem;
   border-radius: 999px;
   color: white;
-  background: #bc8a6f;
+  background: var(--primary-tag-color, var(--color-gotland-bark));
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.08em;

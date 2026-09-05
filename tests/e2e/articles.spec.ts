@@ -1,5 +1,17 @@
 import { expect, test } from "@playwright/test";
+import { PRIMARY_TAGS } from "../../src/lib/content/taxonomy";
+import {
+  getPrimaryTagColor,
+  PRIMARY_TAG_COLORS,
+  PRIMARY_TAG_FALLBACK_COLOR,
+} from "../../src/lib/primary-tag";
 import { articlePath, draftArticleSlugs, publicArticleSlugs } from "./fixtures";
+
+function primaryTagColor(element: Element): string {
+  return getComputedStyle(element)
+    .getPropertyValue("--primary-tag-color")
+    .trim();
+}
 
 test("archive lists every published article once and no drafts", async ({
   page,
@@ -45,7 +57,43 @@ test("home archive shows its all-articles link only below the cards on mobile", 
   await expect(page.locator(".mobile-archive-link")).toBeVisible();
 });
 
-test("homepage and related story cards use the primary category", async ({
+test("primary categories have complete, distinct colors", async ({ page }) => {
+  expect(Object.keys(PRIMARY_TAG_COLORS).sort()).toEqual(
+    [...PRIMARY_TAGS].sort(),
+  );
+  expect(new Set(Object.values(PRIMARY_TAG_COLORS)).size).toBe(
+    PRIMARY_TAGS.length,
+  );
+  expect(getPrimaryTagColor("Future category")).toBe(
+    PRIMARY_TAG_FALLBACK_COLOR,
+  );
+
+  const response = await page.request.get("/generated/content/articles.json");
+  const { items } = (await response.json()) as {
+    items: Array<{ slug: string; primaryTag: string }>;
+  };
+
+  await page.goto("/artiklar/");
+  const renderedColors = new Set<string>();
+
+  for (const tag of PRIMARY_TAGS) {
+    const article = items.find((item) => item.primaryTag === tag);
+    expect(article, `missing article fixture for ${tag}`).toBeDefined();
+
+    const card = page
+      .locator(`.article-card[data-primary-tag="${tag}"]`)
+      .filter({ has: page.locator(`a[href="${articlePath(article!.slug)}"]`) });
+    await expect(card).toHaveCount(1);
+    const badge = card.locator(".card-badge");
+    await expect(badge).toHaveText(tag);
+    await expect(badge).toHaveCSS("color", "rgb(255, 255, 255)");
+    renderedColors.add(await badge.evaluate(primaryTagColor));
+  }
+
+  expect(renderedColors.size).toBe(PRIMARY_TAGS.length);
+});
+
+test("primary category colors remain consistent across placements", async ({
   page,
 }) => {
   const response = await page.request.get("/generated/content/articles.json");
@@ -67,20 +115,38 @@ test("homepage and related story cards use the primary category", async ({
   await expect(
     relatedCard.locator(".card-copy > .card-badge + h3"),
   ).toBeVisible();
-  const relatedTagColor = await relatedTags.evaluate(
-    (tag) => getComputedStyle(tag).color,
+  const relatedTagColor = await relatedTags.evaluate(primaryTagColor);
+  await expect(relatedTags).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(relatedTags).toHaveCSS(
+    "color",
+    hexToRgb(getPrimaryTagColor(article!.primaryTag)),
   );
+
+  await page.goto(articlePath(article!.slug));
+  const detailTag = page.locator(".article-tags .primary-tag");
+  await expect(detailTag).toHaveText(article!.primaryTag);
+  expect(await detailTag.evaluate(primaryTagColor)).toBe(relatedTagColor);
 
   await page.goto("/");
   const homepageCard = page.locator(`a[href="${relatedPath}"]`);
   await expect(homepageCard.locator(".card-badge")).toHaveText(
     article!.primaryTag,
   );
-  await expect(homepageCard.locator(".card-subtitle")).toHaveCSS(
-    "color",
-    relatedTagColor,
-  );
+  expect(
+    await homepageCard.locator(".card-badge").evaluate(primaryTagColor),
+  ).toBe(relatedTagColor);
 });
+
+function hexToRgb(hex: string): string {
+  const channels = hex
+    .slice(1)
+    .match(/.{2}/g)
+    ?.map((channel) => Number.parseInt(channel, 16));
+  if (!channels || channels.length !== 3) {
+    throw new Error(`Invalid hex color: ${hex}`);
+  }
+  return `rgb(${channels.join(", ")})`;
+}
 
 test("article bodies begin directly below their intros on desktop", async ({
   page,

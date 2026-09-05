@@ -10,6 +10,7 @@ import ArticleByline from "../components/ArticleByline.astro";
 import MediaFrame from "../components/MediaFrame.astro";
 import BaseLayout from "./BaseLayout.astro";
 import { buildVideoJsonLd } from "../lib/seo";
+import { getPrimaryTagColor } from "../lib/primary-tag";
 
 interface Props {
   article: ArticleEntry;
@@ -65,7 +66,11 @@ const social = data.video?.socialLinks;
   activeNav="articles"
   noIndex={data.seo?.noIndex}
 >
-  <article class="article-page">
+  <article
+    class="article-page"
+    data-primary-tag={data.primaryTag}
+    style={`--primary-tag-color: ${getPrimaryTagColor(data.primaryTag)}`}
+  >
     <a class="back-link" href={articlesPath()}
       ><span aria-hidden="true">←</span> Tillbaka till arkivet</a
     >
