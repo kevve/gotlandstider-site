@@ -1,5 +1,17 @@
 import { expect, test } from "@playwright/test";
+import { PRIMARY_TAGS } from "../../src/lib/content/taxonomy";
+import {
+  getPrimaryTagColor,
+  PRIMARY_TAG_COLORS,
+  PRIMARY_TAG_FALLBACK_COLOR,
+} from "../../src/lib/primary-tag";
 import { articlePath, draftArticleSlugs, publicArticleSlugs } from "./fixtures";
+
+function primaryTagColor(element: Element): string {
+  return getComputedStyle(element)
+    .getPropertyValue("--primary-tag-color")
+    .trim();
+}
 
 test("archive lists every published article once and no drafts", async ({
   page,
@@ -45,7 +57,43 @@ test("home archive shows its all-articles link only below the cards on mobile", 
   await expect(page.locator(".mobile-archive-link")).toBeVisible();
 });
 
-test("homepage and related story cards use the primary category", async ({
+test("primary categories have complete, distinct colors", async ({ page }) => {
+  expect(Object.keys(PRIMARY_TAG_COLORS).sort()).toEqual(
+    [...PRIMARY_TAGS].sort(),
+  );
+  expect(new Set(Object.values(PRIMARY_TAG_COLORS)).size).toBe(
+    PRIMARY_TAGS.length,
+  );
+  expect(getPrimaryTagColor("Future category")).toBe(
+    PRIMARY_TAG_FALLBACK_COLOR,
+  );
+
+  const response = await page.request.get("/generated/content/articles.json");
+  const { items } = (await response.json()) as {
+    items: Array<{ slug: string; primaryTag: string }>;
+  };
+
+  await page.goto("/artiklar/");
+  const renderedColors = new Set<string>();
+
+  for (const tag of PRIMARY_TAGS) {
+    const article = items.find((item) => item.primaryTag === tag);
+    expect(article, `missing article fixture for ${tag}`).toBeDefined();
+
+    const card = page
+      .locator(`.article-card[data-primary-tag="${tag}"]`)
+      .filter({ has: page.locator(`a[href="${articlePath(article!.slug)}"]`) });
+    await expect(card).toHaveCount(1);
+    const badge = card.locator(".card-badge");
+    await expect(badge).toHaveText(tag);
+    await expect(badge).toHaveCSS("color", "rgb(255, 255, 255)");
+    renderedColors.add(await badge.evaluate(primaryTagColor));
+  }
+
+  expect(renderedColors.size).toBe(PRIMARY_TAGS.length);
+});
+
+test("primary category colors remain consistent across placements", async ({
   page,
 }) => {
   const response = await page.request.get("/generated/content/articles.json");
@@ -67,20 +115,38 @@ test("homepage and related story cards use the primary category", async ({
   await expect(
     relatedCard.locator(".card-copy > .card-badge + h3"),
   ).toBeVisible();
-  const relatedTagColor = await relatedTags.evaluate(
-    (tag) => getComputedStyle(tag).color,
+  const relatedTagColor = await relatedTags.evaluate(primaryTagColor);
+  await expect(relatedTags).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(relatedTags).toHaveCSS(
+    "color",
+    hexToRgb(getPrimaryTagColor(article!.primaryTag)),
   );
+
+  await page.goto(articlePath(article!.slug));
+  const detailTag = page.locator(".article-tags .primary-tag");
+  await expect(detailTag).toHaveText(article!.primaryTag);
+  expect(await detailTag.evaluate(primaryTagColor)).toBe(relatedTagColor);
 
   await page.goto("/");
   const homepageCard = page.locator(`a[href="${relatedPath}"]`);
   await expect(homepageCard.locator(".card-badge")).toHaveText(
     article!.primaryTag,
   );
-  await expect(homepageCard.locator(".card-subtitle")).toHaveCSS(
-    "color",
-    relatedTagColor,
-  );
+  expect(
+    await homepageCard.locator(".card-badge").evaluate(primaryTagColor),
+  ).toBe(relatedTagColor);
 });
+
+function hexToRgb(hex: string): string {
+  const channels = hex
+    .slice(1)
+    .match(/.{2}/g)
+    ?.map((channel) => Number.parseInt(channel, 16));
+  if (!channels || channels.length !== 3) {
+    throw new Error(`Invalid hex color: ${hex}`);
+  }
+  return `rgb(${channels.join(", ")})`;
+}
 
 test("article bodies begin directly below their intros on desktop", async ({
   page,
@@ -151,15 +217,14 @@ test("article bylines expose the visible author and machine-readable dates", asy
 }) => {
   await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
 
-  const author = page.locator(".article-author");
+  const author = page.locator(".article-author-name");
   await expect(page.locator(".article-intro > :first-child")).toHaveClass(
     "article-tags",
   );
-  await expect(author).toContainText("Av");
-  await expect(author).toContainText("Gotlandstider");
+  await expect(author).toHaveText("Gotlandstider");
   await expect(author).toHaveAttribute("href", "/#about");
   await expect(author).toHaveAttribute("rel", "author");
-  await expect(author.locator("img")).toHaveAttribute(
+  await expect(page.locator(".article-author img")).toHaveAttribute(
     "src",
     "/content/about-kevinhenrik.webp",
   );
@@ -168,19 +233,116 @@ test("article bylines expose the visible author and machine-readable dates", asy
     "datetime",
     "2026-08-22",
   );
+  await expect(page.locator(".article-published")).toHaveText(
+    "Publicerad 22 aug 2026",
+  );
   await expect(page.locator(".article-byline > .social-links")).toHaveCount(1);
   await expect(page.locator(".article-intro > .social-links")).toHaveCount(0);
+
+  const twoLineIdentityBox = await page
+    .locator(".article-identity")
+    .boundingBox();
+  const twoLineAvatarBox = await page
+    .locator(".article-author img")
+    .boundingBox();
+  expect(twoLineIdentityBox).not.toBeNull();
+  expect(twoLineAvatarBox).not.toBeNull();
+  expect(
+    Math.abs(twoLineIdentityBox!.height - twoLineAvatarBox!.height),
+  ).toBeLessThan(1);
 
   await page.goto(articlePath("gotlands-kanske-basta-bageri"));
   await expect(page.locator(".article-dates time")).toHaveCount(2);
   await expect(page.locator(".article-dates time").nth(0)).toHaveAttribute(
     "datetime",
-    "2026-04-13",
+    "2026-05-27",
   );
   await expect(page.locator(".article-dates time").nth(1)).toHaveAttribute(
     "datetime",
-    "2026-05-27",
+    "2026-04-13",
   );
+  await expect(page.locator(".article-updated")).toHaveText(
+    "Uppdaterad 27 maj 2026",
+  );
+  await expect(page.locator(".article-published")).toHaveText(
+    "Publicerad 13 apr 2026",
+  );
+
+  const identity = page.locator(".article-identity");
+  const avatar = page.locator(".article-author img");
+  const identityBox = await identity.boundingBox();
+  const avatarBox = await avatar.boundingBox();
+  expect(identityBox).not.toBeNull();
+  expect(avatarBox).not.toBeNull();
+  expect(Math.abs(identityBox!.height - avatarBox!.height)).toBeLessThan(1);
+
+  await page.setViewportSize({ width: 544, height: 900 });
+  const rowIdentityBox = await identity.boundingBox();
+  const rowSocialsBox = await page
+    .locator(".article-byline > .social-links")
+    .boundingBox();
+  expect(rowIdentityBox).not.toBeNull();
+  expect(rowSocialsBox).not.toBeNull();
+  expect(
+    Math.abs(
+      rowIdentityBox!.y +
+        rowIdentityBox!.height / 2 -
+        (rowSocialsBox!.y + rowSocialsBox!.height / 2),
+    ),
+  ).toBeLessThan(1);
+
+  await page.setViewportSize({ width: 543, height: 900 });
+  const stackedIdentityBox = await identity.boundingBox();
+  const stackedSocialsBox = await page
+    .locator(".article-byline > .social-links")
+    .boundingBox();
+  const socialButtons = page.locator(".article-byline > .social-links a");
+  const instagramBox = await socialButtons.nth(0).boundingBox();
+  const tiktokBox = await socialButtons.nth(1).boundingBox();
+  expect(stackedIdentityBox).not.toBeNull();
+  expect(stackedSocialsBox).not.toBeNull();
+  expect(stackedSocialsBox!.y).toBeGreaterThan(
+    stackedIdentityBox!.y + stackedIdentityBox!.height,
+  );
+  expect(instagramBox).not.toBeNull();
+  expect(tiktokBox).not.toBeNull();
+  expect(Math.abs(instagramBox!.y - tiktokBox!.y)).toBeLessThan(1);
+});
+
+test("article location and qualifier tags wrap together after the primary tag", async ({
+  page,
+}) => {
+  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
+
+  const primaryTag = page.locator(".article-tags > .primary-tag");
+  const tagPair = page.locator(".article-tags > .article-tag-pair");
+  await expect(tagPair.locator("span")).toHaveCount(2);
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const widePrimary = await primaryTag.boundingBox();
+  const widePair = await tagPair.boundingBox();
+  expect(widePrimary).not.toBeNull();
+  expect(widePair).not.toBeNull();
+  expect(
+    Math.abs(
+      widePair!.y +
+        widePair!.height / 2 -
+        (widePrimary!.y + widePrimary!.height / 2),
+    ),
+  ).toBeLessThan(1);
+
+  await page.setViewportSize({ width: 320, height: 700 });
+  const narrowPrimary = await primaryTag.boundingBox();
+  const narrowPair = await tagPair.boundingBox();
+  const pairedTagRows = await tagPair
+    .locator("span")
+    .evaluateAll((tags) => tags.map((tag) => tag.getBoundingClientRect().y));
+  expect(narrowPrimary).not.toBeNull();
+  expect(narrowPair).not.toBeNull();
+  expect(narrowPair!.y).toBeGreaterThan(
+    narrowPrimary!.y + narrowPrimary!.height,
+  );
+  expect(new Set(pairedTagRows).size).toBe(1);
 });
 
 test("migrated article renders its canonical YouTube video", async ({
