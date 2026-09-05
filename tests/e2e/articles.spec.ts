@@ -249,6 +249,42 @@ test("article bylines expose the visible author and machine-readable dates", asy
   );
 });
 
+test("article location and qualifier tags wrap together after the primary tag", async ({
+  page,
+}) => {
+  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
+
+  const primaryTag = page.locator(".article-tags > .primary-tag");
+  const tagPair = page.locator(".article-tags > .article-tag-pair");
+  await expect(tagPair.locator("span")).toHaveCount(2);
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const widePrimary = await primaryTag.boundingBox();
+  const widePair = await tagPair.boundingBox();
+  expect(widePrimary).not.toBeNull();
+  expect(widePair).not.toBeNull();
+  expect(
+    Math.abs(
+      widePair!.y +
+        widePair!.height / 2 -
+        (widePrimary!.y + widePrimary!.height / 2),
+    ),
+  ).toBeLessThan(1);
+
+  await page.setViewportSize({ width: 320, height: 700 });
+  const narrowPrimary = await primaryTag.boundingBox();
+  const narrowPair = await tagPair.boundingBox();
+  const pairedTagRows = await tagPair
+    .locator("span")
+    .evaluateAll((tags) => tags.map((tag) => tag.getBoundingClientRect().y));
+  expect(narrowPrimary).not.toBeNull();
+  expect(narrowPair).not.toBeNull();
+  expect(narrowPair!.y).toBeGreaterThan(
+    narrowPrimary!.y + narrowPrimary!.height,
+  );
+  expect(new Set(pairedTagRows).size).toBe(1);
+});
+
 test("migrated article renders its canonical YouTube video", async ({
   page,
 }) => {

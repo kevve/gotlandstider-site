@@ -1066,7 +1066,14 @@ iframe {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.article-tags span:not(.primary-tag) + span:not(.primary-tag)::before {
+.article-tag-pair {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+}
+.article-tag-pair span + span::before {
   content: "•";
   margin-right: 1rem;
 }

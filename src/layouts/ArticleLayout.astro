@@ -79,8 +79,10 @@ const social = data.video?.socialLinks;
         <header class="article-intro">
           <div class="article-tags">
             <span class="primary-tag">{data.primaryTag}</span>
-            <span>{data.primaryLocation.title}</span>
-            <span>{data.qualifierTag}</span>
+            <span class="article-tag-pair">
+              <span>{data.primaryLocation.title}</span>
+              <span>{data.qualifierTag}</span>
+            </span>
           </div>
           <h1>{data.title}</h1>
           <p>{data.excerpt}</p>
