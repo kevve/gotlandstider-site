@@ -11,13 +11,14 @@ interface Props {
 const { publishedAt, updatedAt, instagram, tiktok } = Astro.props;
 const iso = (value: Date | string) =>
   value instanceof Date ? value.toISOString() : String(value);
+const dateFormatter = new Intl.DateTimeFormat("sv-SE", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
 const formatDate = (value: Date | string) =>
-  new Intl.DateTimeFormat("sv-SE", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(iso(value)));
+  dateFormatter.format(new Date(iso(value))).replaceAll(".", "");
 
 const publishedIso = iso(publishedAt);
 const updatedIso = iso(updatedAt);
@@ -26,36 +27,39 @@ const authorPath = "/#about";
 ---
 
 <div class="article-byline" aria-label="Artikelinformation">
-  <a class="article-author" href={authorPath} rel="author">
-    <img
-      src="/content/about-kevinhenrik.webp"
-      srcset="/content/about-kevinhenrik-mobile.webp 500w, /content/about-kevinhenrik.webp 900w"
-      sizes="52px"
-      width="52"
-      height="52"
-      alt=""
-      loading="eager"
-      decoding="async"
-    />
-    <span>
-      <small>Av</small>
-      <strong>Gotlandstider</strong>
-    </span>
-  </a>
+  <div class:list={["article-identity", { "has-update": showUpdated }]}>
+    <a class="article-author" href={authorPath} rel="author" aria-label="Gotlandstider">
+      <img
+        src="/content/about-kevinhenrik.webp"
+        srcset="/content/about-kevinhenrik-mobile.webp 500w, /content/about-kevinhenrik.webp 900w"
+        sizes="52px"
+        width="52"
+        height="52"
+        alt=""
+        loading="eager"
+        decoding="async"
+      />
+    </a>
 
-  <div class="article-dates">
-    <p>
-      <span>Publicerad</span>
-      <time datetime={publishedIso}>{formatDate(publishedAt)}</time>
-    </p>
-    {
-      showUpdated && (
-        <p>
-          <span>Senast uppdaterad</span>
-          <time datetime={updatedIso}>{formatDate(updatedAt)}</time>
+    <div class="article-byline-copy">
+      <a class="article-author-name" href={authorPath} rel="author">
+        Gotlandstider
+      </a>
+      <div class="article-dates">
+        {
+          showUpdated && (
+            <p class="article-updated">
+              <span>Uppdaterad</span>{" "}
+              <time datetime={updatedIso}>{formatDate(updatedAt)}</time>
+            </p>
+          )
+        }
+        <p class="article-published">
+          <span>Publicerad</span>{" "}
+          <time datetime={publishedIso}>{formatDate(publishedAt)}</time>
         </p>
-      )
-    }
+      </div>
+    </div>
   </div>
 
   <SocialLinks instagram={instagram} tiktok={tiktok} compact />
