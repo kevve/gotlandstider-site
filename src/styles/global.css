@@ -589,7 +589,11 @@ iframe {
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   color: white;
-  background: rgba(188, 138, 111, 0.9);
+  background: color-mix(
+    in srgb,
+    var(--primary-tag-color, var(--color-gotland-bark)) 92%,
+    transparent
+  );
   backdrop-filter: blur(8px);
   font-size: 0.625rem;
   font-weight: 700;
@@ -611,7 +615,7 @@ iframe {
   position: static;
   padding: 0;
   border-radius: 0;
-  color: #7a8b7d;
+  color: var(--primary-tag-color, var(--color-gotland-bark));
   background: none;
   backdrop-filter: none;
   font-size: 0.75rem;
@@ -989,66 +993,97 @@ iframe {
   line-height: 1.6;
 }
 .article-byline {
-  display: flex;
-  margin-top: 1.75rem;
-  padding-block: 1rem;
-  border-block: 1px solid rgba(31, 41, 51, 0.1);
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem 1.5rem;
-}
-.article-author {
-  display: inline-flex;
-  min-width: max-content;
-  align-items: center;
-  gap: 0.75rem;
-}
-.article-author img {
-  width: 3.25rem;
-  height: 3.25rem;
-  border: 2px solid rgba(188, 138, 111, 0.45);
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 3px 10px rgba(31, 41, 51, 0.12);
-}
-.article-author span,
-.article-dates p {
   display: grid;
-  gap: 0.15rem;
-}
-.article-author small,
-.article-dates span {
-  color: #7a8b7d;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.article-author strong {
-  font-family: "Playfair Display", serif;
-  font-size: 1rem;
-  font-weight: 600;
-}
-.article-author:hover strong {
-  color: #bc8a6f;
-}
-.article-dates {
-  display: flex;
-  flex-wrap: wrap;
+  margin-top: 1.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(31, 41, 51, 0.1);
   align-items: center;
   gap: 0.75rem 1.5rem;
 }
+.article-identity {
+  --article-byline-image-size: 2.1625rem;
+  display: grid;
+  min-width: max-content;
+  grid-template-columns: var(--article-byline-image-size) max-content;
+  align-items: center;
+  gap: 0.625rem;
+}
+.article-identity.has-update {
+  --article-byline-image-size: 3.153125rem;
+}
+.article-author {
+  position: relative;
+  display: block;
+  width: var(--article-byline-image-size);
+  height: var(--article-byline-image-size);
+  min-width: 0;
+}
+.article-author img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(188, 138, 111, 0.45);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(31, 41, 51, 0.1);
+}
+.article-byline-copy,
+.article-dates {
+  display: grid;
+  align-content: center;
+  gap: 0.0625rem;
+}
+.article-author-name {
+  width: max-content;
+  font-family: "Playfair Display", serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.article-author-name:hover {
+  color: #bc8a6f;
+}
 .article-dates p {
   margin: 0;
+  color: rgba(31, 41, 51, 0.68);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.article-updated {
+  color: #4a5d53 !important;
+  font-weight: 700;
+}
+.article-published {
+  font-weight: 500;
 }
 .article-dates time {
-  color: rgba(31, 41, 51, 0.82);
-  font-size: 0.875rem;
-  font-weight: 500;
+  color: inherit;
 }
 .article-byline .social-links {
   width: 100%;
+  flex-wrap: nowrap;
   justify-content: flex-start;
+  gap: 0.5rem;
+}
+.article-byline .social-links a {
+  min-width: 0;
+  padding-inline: 0.8rem;
+  flex: 1 1 0;
+}
+@media (min-width: 34rem) {
+  .article-byline {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .article-byline .social-links {
+    width: auto;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+  .article-byline .social-links a {
+    flex: 0 0 auto;
+  }
 }
 .article-tags {
   display: flex;
@@ -1062,7 +1097,14 @@ iframe {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.article-tags span:not(.primary-tag) + span:not(.primary-tag)::before {
+.article-tag-pair {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+}
+.article-tag-pair span + span::before {
   content: "•";
   margin-right: 1rem;
 }
@@ -1070,7 +1112,7 @@ iframe {
   padding: 0.3rem 0.8rem;
   border-radius: 999px;
   color: white;
-  background: #bc8a6f;
+  background: var(--primary-tag-color, var(--color-gotland-bark));
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1312,16 +1354,6 @@ iframe {
   }
   .article-body {
     padding: 3rem 2.5rem;
-  }
-  .article-byline {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-  }
-  .article-byline .social-links {
-    width: auto;
-    margin-left: auto;
-    justify-content: flex-end;
   }
   .article-byline .social-links a {
     min-width: auto;
