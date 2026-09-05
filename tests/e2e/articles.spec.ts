@@ -151,15 +151,14 @@ test("article bylines expose the visible author and machine-readable dates", asy
 }) => {
   await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
 
-  const author = page.locator(".article-author");
+  const author = page.locator(".article-author-name");
   await expect(page.locator(".article-intro > :first-child")).toHaveClass(
     "article-tags",
   );
-  await expect(author).toContainText("Av");
-  await expect(author).toContainText("Gotlandstider");
+  await expect(author).toHaveText("Gotlandstider");
   await expect(author).toHaveAttribute("href", "/#about");
   await expect(author).toHaveAttribute("rel", "author");
-  await expect(author.locator("img")).toHaveAttribute(
+  await expect(page.locator(".article-author img")).toHaveAttribute(
     "src",
     "/content/about-kevinhenrik.webp",
   );
@@ -168,19 +167,80 @@ test("article bylines expose the visible author and machine-readable dates", asy
     "datetime",
     "2026-08-22",
   );
+  await expect(page.locator(".article-published")).toHaveText(
+    "Publicerad 22 aug 2026",
+  );
   await expect(page.locator(".article-byline > .social-links")).toHaveCount(1);
   await expect(page.locator(".article-intro > .social-links")).toHaveCount(0);
+
+  const twoLineIdentityBox = await page
+    .locator(".article-identity")
+    .boundingBox();
+  const twoLineAvatarBox = await page
+    .locator(".article-author img")
+    .boundingBox();
+  expect(twoLineIdentityBox).not.toBeNull();
+  expect(twoLineAvatarBox).not.toBeNull();
+  expect(
+    Math.abs(twoLineIdentityBox!.height - twoLineAvatarBox!.height),
+  ).toBeLessThan(1);
 
   await page.goto(articlePath("gotlands-kanske-basta-bageri"));
   await expect(page.locator(".article-dates time")).toHaveCount(2);
   await expect(page.locator(".article-dates time").nth(0)).toHaveAttribute(
     "datetime",
-    "2026-04-13",
+    "2026-05-27",
   );
   await expect(page.locator(".article-dates time").nth(1)).toHaveAttribute(
     "datetime",
-    "2026-05-27",
+    "2026-04-13",
   );
+  await expect(page.locator(".article-updated")).toHaveText(
+    "Uppdaterad 27 maj 2026",
+  );
+  await expect(page.locator(".article-published")).toHaveText(
+    "Publicerad 13 apr 2026",
+  );
+
+  const identity = page.locator(".article-identity");
+  const avatar = page.locator(".article-author img");
+  const identityBox = await identity.boundingBox();
+  const avatarBox = await avatar.boundingBox();
+  expect(identityBox).not.toBeNull();
+  expect(avatarBox).not.toBeNull();
+  expect(Math.abs(identityBox!.height - avatarBox!.height)).toBeLessThan(1);
+
+  await page.setViewportSize({ width: 544, height: 900 });
+  const rowIdentityBox = await identity.boundingBox();
+  const rowSocialsBox = await page
+    .locator(".article-byline > .social-links")
+    .boundingBox();
+  expect(rowIdentityBox).not.toBeNull();
+  expect(rowSocialsBox).not.toBeNull();
+  expect(
+    Math.abs(
+      rowIdentityBox!.y +
+        rowIdentityBox!.height / 2 -
+        (rowSocialsBox!.y + rowSocialsBox!.height / 2),
+    ),
+  ).toBeLessThan(1);
+
+  await page.setViewportSize({ width: 543, height: 900 });
+  const stackedIdentityBox = await identity.boundingBox();
+  const stackedSocialsBox = await page
+    .locator(".article-byline > .social-links")
+    .boundingBox();
+  const socialButtons = page.locator(".article-byline > .social-links a");
+  const instagramBox = await socialButtons.nth(0).boundingBox();
+  const tiktokBox = await socialButtons.nth(1).boundingBox();
+  expect(stackedIdentityBox).not.toBeNull();
+  expect(stackedSocialsBox).not.toBeNull();
+  expect(stackedSocialsBox!.y).toBeGreaterThan(
+    stackedIdentityBox!.y + stackedIdentityBox!.height,
+  );
+  expect(instagramBox).not.toBeNull();
+  expect(tiktokBox).not.toBeNull();
+  expect(Math.abs(instagramBox!.y - tiktokBox!.y)).toBeLessThan(1);
 });
 
 test("article location and qualifier tags wrap together after the primary tag", async ({
