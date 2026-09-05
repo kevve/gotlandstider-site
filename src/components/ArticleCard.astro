@@ -4,7 +4,6 @@ import {
   articlePath,
   getCardPresentation,
 } from "../lib/content";
-import { withBase } from "../lib/urls";
 
 interface Props {
   article: ArticleEntry;
@@ -24,11 +23,11 @@ const card = getCardPresentation(article);
   class:list={["article-card", { compact }]}
   data-random-card={randomCandidate || undefined}
 >
-  <a href={withBase(articlePath(article.data.slug))}>
+  <a href={articlePath(article.data.slug)}>
     <div class="card-image">
       {!compact && <span class="card-badge">{card.badge}</span>}
       <img
-        src={withBase(card.cardImage)}
+        src={card.cardImage}
         alt={article.data.title}
         loading="lazy"
         decoding="async"

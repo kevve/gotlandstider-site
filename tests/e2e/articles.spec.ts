@@ -48,25 +48,38 @@ test("home archive shows its all-articles link only below the cards on mobile", 
 test("homepage and related story cards use the primary category", async ({
   page,
 }) => {
-  const concertPath = articlePath("sommarens-basta-konserter-pa-gotland-2026");
+  const response = await page.request.get("/generated/content/articles.json");
+  const { items } = (await response.json()) as {
+    items: Array<{ slug: string; primaryTag: string; featured: boolean }>;
+  };
+
+  const featured = items.find((item) => item.featured);
+  expect(featured).toBeDefined();
+  await page.goto(articlePath(featured!.slug));
+  const relatedCard = page.locator(".article-related .article-card a").first();
+  const relatedPath = await relatedCard.getAttribute("href");
+  const article = items.find((item) => articlePath(item.slug) === relatedPath);
+  expect(article).toBeDefined();
+
+  const relatedTags = relatedCard.locator(".card-badge:visible");
+  await expect(relatedTags).toHaveCount(1);
+  await expect(relatedTags).toHaveText(article!.primaryTag);
+  await expect(
+    relatedCard.locator(".card-copy > .card-badge + h3"),
+  ).toBeVisible();
+  const relatedTagColor = await relatedTags.evaluate(
+    (tag) => getComputedStyle(tag).color,
+  );
 
   await page.goto("/");
-  await expect(page.locator(`a[href="${concertPath}"] .card-badge`)).toHaveText(
-    "Upplevelser & nöjen",
+  const homepageCard = page.locator(`a[href="${relatedPath}"]`);
+  await expect(homepageCard.locator(".card-badge")).toHaveText(
+    article!.primaryTag,
   );
-  const homepageTagColor = await page
-    .locator(`a[href="${concertPath}"] .card-subtitle`)
-    .evaluate((tag) => getComputedStyle(tag).color);
-
-  await page.goto(articlePath("host-pa-gotland-2026-fem-tips-varda-omvagen"));
-  const relatedCard = page.locator(`.article-related a[href="${concertPath}"]`);
-  const relatedTags = relatedCard.locator(".card-badge:visible");
-  const relatedCopyTag = relatedCard.locator(".card-copy > .card-badge + h3");
-
-  await expect(relatedTags).toHaveCount(1);
-  await expect(relatedTags).toHaveText("Upplevelser & nöjen");
-  await expect(relatedCopyTag).toBeVisible();
-  await expect(relatedTags).toHaveCSS("color", homepageTagColor);
+  await expect(homepageCard.locator(".card-subtitle")).toHaveCSS(
+    "color",
+    relatedTagColor,
+  );
 });
 
 test("article bodies begin directly below their intros on desktop", async ({
