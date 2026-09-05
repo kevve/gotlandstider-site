@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const port = Number(process.env.PLAYWRIGHT_PORT || 4321);
+// 4321 is Astro's dev-server default; an off-default port prevents stale
+// astro dev processes from being mistaken for the Playwright preview server.
+const port = Number(process.env.PLAYWRIGHT_PORT || 4322);
 const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
