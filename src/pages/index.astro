@@ -10,7 +10,7 @@ import {
   getFeaturedArticle,
   getPublishedArticles,
 } from "../lib/content";
-import { canonicalUrl, withBase } from "../lib/urls";
+import { canonicalUrl } from "../lib/urls";
 import { buildVideoJsonLd } from "../lib/seo";
 
 const featured = await getFeaturedArticle();
@@ -83,10 +83,10 @@ const structuredData = {
     <div class="section-shell">
       <div class="archive-heading" data-reveal>
         <div><span>Arkivet</span><h2>Upptäck mer från Gotland</h2></div>
-        <a href={withBase(articlesPath())}>Se alla artiklar →</a>
+        <a href={articlesPath()}>Se alla artiklar →</a>
       </div>
       <ArticleGrid articles={archiveCandidates} randomize />
-      <a class="mobile-archive-link" href={withBase(articlesPath())}
+      <a class="mobile-archive-link" href={articlesPath()}
         >Se alla artiklar →</a
       >
     </div>

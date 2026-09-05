@@ -1,6 +1,5 @@
 ---
 import SocialLinks from "./SocialLinks.astro";
-import { withBase } from "../lib/urls";
 
 const cards = [
   {
@@ -47,7 +46,7 @@ const cards = [
             class="house-card"
             type="button"
             data-house-trigger
-            data-image={withBase(card.image)}
+            data-image={card.image}
             data-alt={card.alt}
             data-reveal
             style={`--reveal-delay: ${index * 100}ms`}
@@ -55,8 +54,8 @@ const cards = [
           >
             <span class="house-image">
               <img
-                src={withBase(card.image)}
-                srcset={`${withBase(card.mobile)} 500w, ${withBase(card.image)} 1200w`}
+                src={card.image}
+                srcset={`${card.mobile} 500w, ${card.image} 1200w`}
                 sizes="(max-width: 768px) 100vw, 33vw"
                 alt={card.alt}
                 loading="lazy"

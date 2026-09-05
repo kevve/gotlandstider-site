@@ -10,7 +10,7 @@ The production frontend for [gotlandstider.se](https://gotlandstider.se). It is 
   canonical Sanity articles, while typed Markdown remains an explicit local fallback,
   transition archive, and test fixture source.
 - Astro layouts and small reusable components in `src/layouts/` and `src/components/`.
-- A small content query boundary in `src/lib/` so a later Sanity source does not require page redesign.
+- Content queries and normalization in `src/lib/` keep routes independent of the source.
 - Public assets in `public/`, retaining established `/content/`, discovery, font, and favicon paths.
 - Astro routes generate article pages, SEO files, and the three compatibility JSON feeds directly; generated HTML and JSON are not committed.
 
@@ -86,7 +86,7 @@ pull request. The explicit fallback checks are `npm run check:markdown`,
 
 ## Deployment
 
-Pushes to `main` deploy through the official Astro and GitHub Pages actions with `CONTENT_SOURCE=sanity`. The deployment is configured for the root custom-domain site, so transfer the Pages domain to this repository immediately after its first approved deployment.
+Pushes to `main` deploy through the official Astro and GitHub Pages actions with `CONTENT_SOURCE=sanity`. All builds use root-relative routes and assets for `gotlandstider.se`; the former GitHub project-subpath preview target has been retired.
 
 Before merging a change that makes Sanity authentication mandatory, create a
 short-lived Viewer token in Sanity and add it to GitHub as the repository secret

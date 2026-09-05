@@ -33,24 +33,16 @@ jobs:
       - name: Check Astro and TypeScript from Markdown
         run: npm run check:markdown
 
-      - name: Build from Markdown
-        run: npm run build:markdown
-
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      # Playwright builds the selected content source before starting its server.
       - name: Run browser regression tests from Markdown
         run: npm run test:markdown
 
       - name: Check Astro and TypeScript from Sanity
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
         run: npm run check
-        env:
-          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
-
-      - name: Build from Sanity
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        run: npm run build:sanity
         env:
           SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
 

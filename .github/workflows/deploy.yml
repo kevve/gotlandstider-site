@@ -26,7 +26,6 @@ jobs:
         uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6.1.2
         env:
           CONTENT_SOURCE: sanity
-          DEPLOY_TARGET: github-pages-production
           SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
 
   deploy:

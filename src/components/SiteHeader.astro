@@ -1,14 +1,13 @@
 ---
 import { articlesPath } from "../lib/content";
-import { withBase } from "../lib/urls";
 
 interface Props {
   active?: "home" | "articles";
 }
 
 const { active } = Astro.props;
-const home = withBase("/");
-const archive = withBase(articlesPath());
+const home = "/";
+const archive = articlesPath();
 ---
 
 <nav class="site-nav" aria-label="Huvudnavigation">

@@ -1,17 +1,13 @@
----
-import { withBase } from "../lib/urls";
----
-
 <section id="about" class="about-section section-anchor">
   <div class="about-grid">
     <div class="about-image" data-reveal>
       <picture>
         <source
           media="(max-width: 768px)"
-          srcset={withBase("/content/about-kevinhenrik-mobile.webp")}
+          srcset="/content/about-kevinhenrik-mobile.webp"
         />
         <img
-          src={withBase("/content/about-kevinhenrik.webp")}
+          src="/content/about-kevinhenrik.webp"
           alt="Kevin och Henrik i grönskande natur"
           loading="lazy"
         />
