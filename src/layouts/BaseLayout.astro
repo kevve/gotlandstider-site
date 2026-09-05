@@ -2,7 +2,7 @@
 import SiteFooter from "../components/SiteFooter.astro";
 import { serializeJsonLd } from "../lib/json";
 import SiteHeader from "../components/SiteHeader.astro";
-import { canonicalUrl, withBase } from "../lib/urls";
+import { canonicalUrl } from "../lib/urls";
 import "../styles/global.css";
 
 interface Props {
@@ -35,9 +35,6 @@ const {
 
 const canonical = canonicalUrl(canonicalPath);
 const socialImage = canonicalUrl(image);
-const isPreview =
-  import.meta.env.BASE_URL !== "/" ||
-  Astro.site?.hostname !== "gotlandstider.se";
 ---
 
 <!doctype html>
@@ -49,11 +46,7 @@ const isPreview =
     <title>{title}</title>
     <meta name="description" content={description} />
     {keywords && <meta name="keywords" content={keywords} />}
-    {
-      (isPreview || noIndex) && (
-        <meta name="robots" content="noindex, nofollow" />
-      )
-    }
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={ogTitle} />
@@ -66,18 +59,18 @@ const isPreview =
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={socialImage} />
-    <link rel="icon" type="image/x-icon" href={withBase("/favicon.ico")} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link
       rel="icon"
       type="image/svg+xml"
       sizes="any"
-      href={withBase("/favicon-v2.svg")}
+      href="/favicon-v2.svg"
     />
     <link
       rel="apple-touch-icon"
       type="image/png"
       sizes="180x180"
-      href={withBase("/apple-touch-icon.png")}
+      href="/apple-touch-icon.png"
     />
     <script is:inline>
       document.documentElement.classList.add("js");

@@ -4,7 +4,7 @@ import {
   articlesPath,
   type ArticleEntry,
 } from "../lib/content";
-import { canonicalUrl, withBase } from "../lib/urls";
+import { canonicalUrl } from "../lib/urls";
 import ArticleGrid from "../components/ArticleGrid.astro";
 import ArticleByline from "../components/ArticleByline.astro";
 import MediaFrame from "../components/MediaFrame.astro";
@@ -66,7 +66,7 @@ const social = data.video?.socialLinks;
   noIndex={data.seo?.noIndex}
 >
   <article class="article-page">
-    <a class="back-link" href={withBase(articlesPath())}
+    <a class="back-link" href={articlesPath()}
       ><span aria-hidden="true">←</span> Tillbaka till arkivet</a
     >
     <div class="article-detail-grid">

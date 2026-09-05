@@ -1,5 +1,4 @@
 ---
-import { withBase } from "../lib/urls";
 import SocialLinks from "./SocialLinks.astro";
 
 interface Props {
@@ -27,10 +26,10 @@ const authorPath = "/#about";
 ---
 
 <div class="article-byline" aria-label="Artikelinformation">
-  <a class="article-author" href={withBase(authorPath)} rel="author">
+  <a class="article-author" href={authorPath} rel="author">
     <img
-      src={withBase("/content/about-kevinhenrik.webp")}
-      srcset={`${withBase("/content/about-kevinhenrik-mobile.webp")} 500w, ${withBase("/content/about-kevinhenrik.webp")} 900w`}
+      src="/content/about-kevinhenrik.webp"
+      srcset="/content/about-kevinhenrik-mobile.webp 500w, /content/about-kevinhenrik.webp 900w"
       sizes="52px"
       width="52"
       height="52"

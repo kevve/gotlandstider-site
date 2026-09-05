@@ -3,7 +3,6 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
 
-const isGitHubPreview = process.env.DEPLOY_TARGET === "github-pages-preview";
 const env = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
 const projectId = env.PUBLIC_SANITY_PROJECT_ID || "th4gij3b";
 const dataset = env.PUBLIC_SANITY_DATASET || "production";
@@ -25,10 +24,7 @@ if (contentSource === "sanity" && !sanityReadToken) {
 
 export default defineConfig({
   output: "static",
-  site: isGitHubPreview
-    ? "https://kevve.github.io"
-    : "https://gotlandstider.se",
-  base: isGitHubPreview ? "/gotlandstider-site" : "/",
+  site: "https://gotlandstider.se",
   trailingSlash: "always",
   integrations: [
     sanity({
