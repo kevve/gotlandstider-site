@@ -11,11 +11,11 @@ test.describe("homepage", () => {
     await expect(page.locator("main")).toBeVisible();
     await expect(page.locator("footer")).toBeVisible();
 
-    for (const id of ["stories", "house", "about", "contact"]) {
+    for (const id of ["aktuellt", "sommarhuset", "about", "kontakt"]) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
 
-    for (const hash of ["#stories", "#house", "#contact"]) {
+    for (const hash of ["#aktuellt", "#sommarhuset", "#kontakt"]) {
       await expect(page.locator(`a[href$="${hash}"]`).first()).toBeAttached();
     }
     await expect(page.locator('a[href$="/artiklar/"]').first()).toBeAttached();
@@ -52,7 +52,7 @@ test.describe("homepage", () => {
     await expect(
       page
         .getByRole("navigation")
-        .getByRole("link", { name: /arkivet/i })
+        .getByRole("link", { name: /upplevelser/i })
         .last(),
     ).toBeVisible();
   });
@@ -103,7 +103,7 @@ test.describe("homepage", () => {
 
     const trigger = page
       .locator(
-        "#house [data-house-modal-trigger], #house [data-house-dialog-trigger], #house button",
+        "#sommarhuset [data-house-modal-trigger], #sommarhuset [data-house-dialog-trigger], #sommarhuset button",
       )
       .first();
     await expect(trigger).toBeVisible();

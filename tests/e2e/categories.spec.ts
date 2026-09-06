@@ -147,7 +147,7 @@ test("archive and category heroes place category navigation directly below their
 
   await page.goto(categoryPath(categories[0].slug));
   await expect(page.locator(".archive-hero > div > span")).toHaveText(
-    "Arkivet",
+    "Upplevelser",
   );
 });
 
