@@ -6,31 +6,31 @@ const categories = [
     label: "Mat & dryck",
     slug: "mat-och-dryck",
     description:
-      "Bagerier, restauranger och smakupplevelser värda en omväg på Gotland.",
+      "Restauranger, bagerier och smakupplevelser värda en omväg på Gotland.",
   },
   {
     label: "Loppis & second hand",
     slug: "loppis-och-second-hand",
     description:
-      "Loppisar, second hand och personliga fyndplatser runt hela ön.",
+      "Loppisar, second hand och platser att fynda runt hela ön.",
   },
   {
     label: "Hem & inredning",
     slug: "hem-och-inredning",
     description:
-      "Gotländska hem, form, material och resan med sommarhuset i Ljugarn.",
+      "Hem och inredning, samt resan mot ett sommarhus i Ljugarn.",
   },
   {
     label: "Upplevelser & nöjen",
     slug: "upplevelser-och-nojen",
     description:
-      "Konserter, hantverk, evenemang och upplevelser under hela året.",
+      "Hantverk, evenemang och upplevelser under hela året.",
   },
   {
     label: "Utflykter & natur",
     slug: "utflykter-och-natur",
     description:
-      "Stränder, utsikter och utflyktsmål i det gotländska landskapet.",
+      "Stränder och utflyktsmål i det gotländska landskapet.",
   },
 ] as const;
 
