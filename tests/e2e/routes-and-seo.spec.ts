@@ -201,3 +201,36 @@ test("sitemap and robots expose the production URL inventory", async ({
     "Sitemap: https://gotlandstider.se/sitemap.xml",
   );
 });
+
+test("llms.txt exposes the public content inventory and discovery resources", async ({
+  request,
+}) => {
+  const response = await request.get("/llms.txt");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toMatch(/^text\/plain(?:;|$)/);
+
+  const markdown = await response.text();
+  expect(markdown).toMatch(/^# Gotlandstider\n\n> /);
+  expect(markdown).toContain("\n## Börja här\n\n-");
+  expect(markdown).toContain("\n## Artiklar\n\n-");
+  expect(markdown).toContain("\n## Maskinläsbara resurser\n\n-");
+  expect(markdown).toContain("\n## Optional\n\n-");
+
+  for (const slug of publicArticleSlugs) {
+    expect(markdown).toContain(`https://gotlandstider.se${articlePath(slug)}`);
+  }
+  for (const slug of draftArticleSlugs) {
+    expect(markdown).not.toContain(articlePath(slug));
+  }
+
+  for (const path of [
+    "/generated/content/articles.json",
+    "/.well-known/api-catalog",
+    "/agent/openapi.json",
+    "/agent/site.jsonld",
+    "/agent/docs/",
+    "/sitemap.xml",
+  ]) {
+    expect(markdown).toContain(`https://gotlandstider.se${path}`);
+  }
+});
