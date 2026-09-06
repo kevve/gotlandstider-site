@@ -1,5 +1,6 @@
 ---
 import type { ArticleEntry } from "../lib/content";
+import { articlePath } from "../lib/content";
 import HighlightList from "./HighlightList.astro";
 import MediaFrame from "./MediaFrame.astro";
 import SocialLinks from "./SocialLinks.astro";
@@ -53,7 +54,7 @@ const social = data.video?.socialLinks;
       </div>
 
       <div class="featured-highlights" data-reveal>
-        <HighlightList items={hero?.highlights} />
+        <HighlightList href={articlePath(data.slug)} items={hero?.highlights} />
       </div>
     </div>
   </div>

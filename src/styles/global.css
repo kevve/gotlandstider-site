@@ -133,6 +133,10 @@ iframe {
 #contact {
   scroll-margin-top: 5rem;
 }
+.article-body h2[id],
+.article-body h3[id] {
+  scroll-margin-top: 5rem;
+}
 .section-shell {
   width: min(100% - 3rem, 80rem);
   margin-inline: auto;
@@ -479,6 +483,16 @@ iframe {
 .highlight-list {
   display: grid;
   gap: 1.5rem;
+}
+a.highlight-item {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+a.highlight-item:focus-visible {
+  outline: 2px solid #bc8a6f;
+  outline-offset: 0.25rem;
+  border-radius: 0.25rem;
 }
 .highlight-item {
   padding-left: 1rem;
