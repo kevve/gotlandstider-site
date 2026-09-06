@@ -21,57 +21,57 @@ export const CATEGORY_BY_TAG = {
     slug: "mat-och-dryck",
     title: "Mat & dryck på Gotland",
     intro:
-      "Smaka dig fram bland gotländska bagerier, restauranger och andra platser där råvaror, människor och miljö gör besöket minnesvärt.",
+      "Smaka dig fram bland gotländska restauranger, bagerier och andra platser där råvaror, människor och miljö gör besöket minnesvärt.",
     description:
       "Bagerier, restauranger och smakupplevelser värda en omväg på Gotland.",
     seoTitle: "Mat & dryck på Gotland | Gotlandstider",
     seoDescription:
-      "Upptäck Gotlandstiders guider till bagerier, restauranger och smakupplevelser på Gotland.",
+      "Upptäck Gotlandstiders guider till restauranger, bagerier och smakupplevelser på Gotland.",
   },
   "Loppis & second hand": {
     tag: "Loppis & second hand",
     slug: "loppis-och-second-hand",
     title: "Loppis & second hand på Gotland",
     intro:
-      "Följ med till loppisar, gårdsbutiker och second hand-fynd runt ön – platser med personlighet, historia och oväntade skatter.",
+      "Följ med till loppisar, gårdsbutiker och second hand-fynd runt ön.",
     description:
-      "Loppisar, second hand och personliga fyndplatser runt hela ön.",
+      "Loppisar, second hand och platser att fynda runt hela ön.",
     seoTitle: "Loppis & second hand på Gotland | Gotlandstider",
     seoDescription:
-      "Hitta Gotlandstiders tips om loppisar, second hand och unika fyndplatser på Gotland.",
+      "Hitta Gotlandstiders tips om loppisar, second hand och unika platser att fynda på Gotland.",
   },
   "Hem & inredning": {
     tag: "Hem & inredning",
     slug: "hem-och-inredning",
     title: "Hem & inredning på Gotland",
     intro:
-      "Inspireras av gotländska hem, form och material – och följ vårt eget sommarhusprojekt i Ljugarn från idé till färdig plats.",
+      "Vi lyfter hem och inredning värd att inspireras av. Här får du också följa bygget av vårt eget sommarhus i Ljugarn.",
     description:
-      "Gotländska hem, form, material och resan med sommarhuset i Ljugarn.",
+      "Hem och inredning, samt vår resa mot ett sommarhus i Ljugarn.",
     seoTitle: "Hem & inredning på Gotland | Gotlandstider",
     seoDescription:
-      "Läs om gotländska hem, inredning, arkitektur och Gotlandstiders sommarhusprojekt i Ljugarn.",
+      "Inspireras av hem, inredning, arkitektur och Gotlandstiders sommarhusprojekt i Ljugarn.",
   },
   "Upplevelser & nöjen": {
     tag: "Upplevelser & nöjen",
     slug: "upplevelser-och-nojen",
     title: "Upplevelser & nöjen på Gotland",
     intro:
-      "Upptäck konserter, hantverk, evenemang och andra upplevelser som ger Gotland sin särskilda puls under hela året.",
+      "Upptäck hantverk, evenemang och andra upplevelser som ger Gotland sin särskilda puls under hela året.",
     description:
-      "Konserter, hantverk, evenemang och upplevelser under hela året.",
+      "Hantverk, evenemang och upplevelser under hela året.",
     seoTitle: "Upplevelser & nöjen på Gotland | Gotlandstider",
     seoDescription:
-      "Upptäck konserter, evenemang, hantverk och andra upplevelser på Gotland med Gotlandstider.",
+      "Upptäck hantverk, evenemang och andra upplevelser på Gotland.",
   },
   "Utflykter & natur": {
     tag: "Utflykter & natur",
     slug: "utflykter-och-natur",
     title: "Utflykter & natur på Gotland",
     intro:
-      "Hitta stränder, utsikter och utflyktsmål för både stilla dagar och små äventyr i det gotländska landskapet.",
+      "Hitta stränder och utflyktsmål på Gotland som är värda omvägen.",
     description:
-      "Stränder, utsikter och utflyktsmål i det gotländska landskapet.",
+      "Stränder och utflyktsmål i det gotländska landskapet.",
     seoTitle: "Utflykter & natur på Gotland | Gotlandstider",
     seoDescription:
       "Hitta Gotlandstiders guider till stränder, naturupplevelser och utflyktsmål på Gotland.",
