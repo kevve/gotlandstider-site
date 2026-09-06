@@ -1,9 +1,5 @@
 ---
-import {
-  articlePath,
-  articlesPath,
-  type ArticleEntry,
-} from "../lib/content";
+import { articlePath, articlesPath, type ArticleEntry } from "../lib/content";
 import { canonicalUrl } from "../lib/urls";
 import ArticleGrid from "../components/ArticleGrid.astro";
 import ArticleByline from "../components/ArticleByline.astro";
@@ -11,6 +7,7 @@ import MediaFrame from "../components/MediaFrame.astro";
 import BaseLayout from "./BaseLayout.astro";
 import { buildVideoJsonLd } from "../lib/seo";
 import { getPrimaryTagColor } from "../lib/primary-tag";
+import { CATEGORY_BY_TAG, categoryPath } from "../lib/categories";
 
 interface Props {
   article: ArticleEntry;
@@ -54,6 +51,7 @@ const graph: Record<string, unknown>[] = [
 if (data.video) graph.push(buildVideoJsonLd(article));
 const structuredData = { "@context": "https://schema.org", "@graph": graph };
 const social = data.video?.socialLinks;
+const category = CATEGORY_BY_TAG[data.primaryTag];
 ---
 
 <BaseLayout
@@ -78,7 +76,9 @@ const social = data.video?.socialLinks;
       <div class="article-main">
         <header class="article-intro">
           <div class="article-tags">
-            <span class="primary-tag">{data.primaryTag}</span>
+            <a class="primary-tag" href={categoryPath(category.slug)}
+              >{data.primaryTag}</a
+            >
             <span class="article-tag-pair">
               <span>{data.primaryLocation.title}</span>
               <span>{data.qualifierTag}</span>

@@ -7,6 +7,11 @@ import {
 } from "../lib/content";
 import { canonicalUrl } from "../lib/urls";
 import { escapeXml, renderVideoSitemapXml } from "../lib/video-sitemap";
+import {
+  categoriesPath,
+  categoryPath,
+  groupArticlesByCategory,
+} from "../lib/categories";
 
 export const prerender = true;
 
@@ -22,7 +27,8 @@ const HOMEPAGE_IMAGES = [
 ];
 
 export const GET: APIRoute = async () => {
-  const articles = (await getPublishedArticles()).filter(
+  const publishedArticles = await getPublishedArticles();
+  const articles = publishedArticles.filter(
     (article) => !article.data.seo?.noIndex,
   );
   const latest = articles.reduce(
@@ -44,6 +50,20 @@ export const GET: APIRoute = async () => {
       changefreq: "weekly",
       priority: "0.8",
     }),
+    renderEntry({
+      loc: canonicalUrl(categoriesPath()),
+      changefreq: "weekly",
+      priority: "0.7",
+    }),
+    ...groupArticlesByCategory(publishedArticles)
+      .filter(({ articles: categoryArticles }) => categoryArticles.length > 0)
+      .map(({ category }) =>
+        renderEntry({
+          loc: canonicalUrl(categoryPath(category.slug)),
+          changefreq: "weekly",
+          priority: "0.7",
+        }),
+      ),
     ...articles.map((article) =>
       renderEntry({
         loc: canonicalUrl(articlePath(article.data.slug)),
@@ -73,7 +93,7 @@ export const GET: APIRoute = async () => {
 
 interface SitemapEntry {
   loc: string;
-  lastmod: string;
+  lastmod?: string;
   changefreq: "weekly" | "monthly";
   priority: string;
   images?: Array<{ loc: string; title: string }>;
@@ -88,13 +108,11 @@ function renderEntry({
   images = [],
   article,
 }: SitemapEntry) {
-  const lines = [
-    "   <url>",
-    `      <loc>${escapeXml(loc)}</loc>`,
-    `      <lastmod>${escapeXml(lastmod)}</lastmod>`,
-    `      <changefreq>${changefreq}</changefreq>`,
-    `      <priority>${priority}</priority>`,
-  ];
+  const lines = ["   <url>", `      <loc>${escapeXml(loc)}</loc>`];
+
+  if (lastmod) lines.push(`      <lastmod>${escapeXml(lastmod)}</lastmod>`);
+  lines.push(`      <changefreq>${changefreq}</changefreq>`);
+  lines.push(`      <priority>${priority}</priority>`);
 
   for (const image of images) {
     lines.push("      <image:image>");
