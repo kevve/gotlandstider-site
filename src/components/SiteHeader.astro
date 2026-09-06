@@ -19,14 +19,14 @@ const archiveCurrent = Astro.url.pathname === archive;
     >
 
     <div class="desktop-nav">
-      <a href={`${home}#stories`}>Upplevelser</a>
-      <a href={`${home}#house`}>Sommarhuset</a>
       <a
         href={archive}
         aria-current={archiveCurrent ? "page" : undefined}
-        class:list={{ active: archiveHighlighted }}>Arkivet</a
+        class:list={{ active: archiveHighlighted }}>Upplevelser</a
       >
-      <a href="#contact" class="contact-link">Kontakt</a>
+      <a href={`${home}#aktuellt`}>Aktuellt</a>
+      <a href={`${home}#sommarhuset`}>Sommarhuset</a>
+      <a href="#kontakt" class="contact-link">Kontakt</a>
     </div>
 
     <button
@@ -42,14 +42,14 @@ const archiveCurrent = Astro.url.pathname === archive;
   </div>
 
   <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
-    <a href={`${home}#stories`}>Upplevelser</a>
-    <a href={`${home}#house`}>Sommarhuset</a>
     <a
       href={archive}
       aria-current={archiveCurrent ? "page" : undefined}
-      class:list={{ active: archiveHighlighted }}>Arkivet</a
+      class:list={{ active: archiveHighlighted }}>Upplevelser</a
     >
-    <a href="#contact">Kontakt</a>
+    <a href={`${home}#aktuellt`}>Aktuellt</a>
+    <a href={`${home}#sommarhuset`}>Sommarhuset</a>
+    <a href="#kontakt">Kontakt</a>
   </div>
 </nav>
 
