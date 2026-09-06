@@ -23,7 +23,7 @@ export const CATEGORY_BY_TAG = {
     intro:
       "Smaka dig fram bland gotländska restauranger, bagerier och andra platser där råvaror, människor och miljö gör besöket minnesvärt.",
     description:
-      "Bagerier, restauranger och smakupplevelser värda en omväg på Gotland.",
+      "Restauranger, bagerier och smakupplevelser värda en omväg på Gotland.",
     seoTitle: "Mat & dryck på Gotland | Gotlandstider",
     seoDescription:
       "Upptäck Gotlandstiders guider till restauranger, bagerier och smakupplevelser på Gotland.",
@@ -47,7 +47,7 @@ export const CATEGORY_BY_TAG = {
     intro:
       "Vi lyfter hem och inredning värd att inspireras av. Här får du också följa bygget av vårt eget sommarhus i Ljugarn.",
     description:
-      "Hem och inredning, samt vår resa mot ett sommarhus i Ljugarn.",
+      "Hem och inredning, samt resan mot ett sommarhus i Ljugarn.",
     seoTitle: "Hem & inredning på Gotland | Gotlandstider",
     seoDescription:
       "Inspireras av hem, inredning, arkitektur och Gotlandstiders sommarhusprojekt i Ljugarn.",
