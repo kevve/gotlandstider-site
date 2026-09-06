@@ -7,19 +7,28 @@ interface Highlight {
 
 interface Props {
   items?: Highlight[];
+  href?: string;
 }
 
-const { items = [] } = Astro.props;
+const { items = [], href } = Astro.props;
 ---
 
 <div class="highlight-list">
   {
-    items.map((item) => (
-      <div class="highlight-item">
-        <span>{item.label}</span>
-        <h4>{item.title}</h4>
-        <p>{item.description}</p>
-      </div>
-    ))
+    items.map((item) =>
+      href ? (
+        <a class="highlight-item" href={href}>
+          <span>{item.label}</span>
+          <h4>{item.title}</h4>
+          <p>{item.description}</p>
+        </a>
+      ) : (
+        <div class="highlight-item">
+          <span>{item.label}</span>
+          <h4>{item.title}</h4>
+          <p>{item.description}</p>
+        </div>
+      ),
+    )
   }
 </div>
