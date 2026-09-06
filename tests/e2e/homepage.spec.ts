@@ -57,6 +57,45 @@ test.describe("homepage", () => {
     ).toBeVisible();
   });
 
+  test("highlights link to the featured article whose headings provide anchors", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const highlights = page.locator("a.highlight-item");
+    const count = await highlights.count();
+    expect(count).toBeGreaterThan(0);
+
+    const hrefs = await highlights.evaluateAll((links) =>
+      links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
+    );
+    const articleHrefs = new Set(
+      hrefs.map((href) => (href ?? "").split("#")[0]),
+    );
+    expect(articleHrefs.size).toBe(1);
+    const articleHref = [...articleHrefs][0];
+    expect(articleHref).toMatch(/^\/artiklar\/.+\/$/);
+
+    const response = await page.goto(articleHref!);
+    expect(response?.status()).toBe(200);
+
+    const fragmentTargets = new Set(
+      hrefs
+        .map((href) => href?.split("#")[1])
+        .filter((fragment): fragment is string => Boolean(fragment)),
+    );
+    for (const fragment of fragmentTargets) {
+      await expect(page.locator(`[id="${fragment}"]`)).toHaveCount(1);
+    }
+
+    if (fragmentTargets.size === 0) {
+      const anchorableHeadings = page.locator(
+        ".article-body h2[id], .article-body h3[id]",
+      );
+      expect(await anchorableHeadings.count()).toBeGreaterThan(0);
+    }
+  });
+
   test("house image dialog opens, closes with Escape, and restores focus", async ({
     page,
   }) => {
