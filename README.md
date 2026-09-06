@@ -12,7 +12,7 @@ The production frontend for [gotlandstider.se](https://gotlandstider.se). It is 
 - Astro layouts and small reusable components in `src/layouts/` and `src/components/`.
 - Content queries and normalization in `src/lib/` keep routes independent of the source.
 - Public assets in `public/`, retaining established `/content/`, discovery, font, and favicon paths.
-- Astro routes generate article pages, SEO files, and the three compatibility JSON feeds directly; generated HTML and JSON are not committed.
+- Astro routes generate article pages, SEO and agent-discovery files, and the three compatibility JSON feeds directly; generated HTML, text, and JSON are not committed.
 
 This migration deliberately omits Decap CMS, its OAuth worker and editorial PR machinery, the old page-generation scripts, generated content indexes as an internal rendering layer, and publisher/worktree orchestration. The Sanity Studio remains a standalone sibling project and is never embedded at `/admin`.
 
@@ -55,6 +55,11 @@ so both Sanity and Markdown builds support browsing without client-side filters.
 A known category with no articles still has a page with an empty state, but is
 excluded from indexing and the sitemap. Unknown category slugs return 404.
 Content changes require a rebuild to update the static listings.
+
+The build also generates `/llms.txt` from the same published article inventory.
+It provides a concise, Swedish Markdown overview for agents, links to every
+indexable article, and points to the site's existing machine-readable resources.
+Draft and `noIndex` articles are excluded.
 
 Future location pages can use `/platser/[slug]/` without changing category or
 article routes. Add other namespaces only when those features are introduced.
