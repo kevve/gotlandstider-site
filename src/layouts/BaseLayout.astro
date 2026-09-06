@@ -17,6 +17,7 @@ interface Props {
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
   activeNav?: "home" | "articles";
   noIndex?: boolean;
+  noFollow?: boolean;
 }
 
 const {
@@ -31,6 +32,7 @@ const {
   structuredData,
   activeNav,
   noIndex = false,
+  noFollow = true,
 } = Astro.props;
 
 const canonical = canonicalUrl(canonicalPath);
@@ -46,7 +48,14 @@ const socialImage = canonicalUrl(image);
     <title>{title}</title>
     <meta name="description" content={description} />
     {keywords && <meta name="keywords" content={keywords} />}
-    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    {
+      noIndex && (
+        <meta
+          name="robots"
+          content={`noindex, ${noFollow ? "nofollow" : "follow"}`}
+        />
+      )
+    }
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={ogTitle} />
@@ -60,12 +69,7 @@ const socialImage = canonicalUrl(image);
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={socialImage} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      sizes="any"
-      href="/favicon-v2.svg"
-    />
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon-v2.svg" />
     <link
       rel="apple-touch-icon"
       type="image/png"

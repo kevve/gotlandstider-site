@@ -39,6 +39,26 @@ npm test
 
 `npm test` builds the static site, serves the output locally, and runs the Chromium Playwright suite. Install its browser once on a new machine with `npx playwright install chromium`.
 
+## Category browsing
+
+`/artiklar/` lists all published articles. `/kategorier/` introduces the five
+primary categories, and `/kategorier/[tag]/` lists articles in one category.
+Article detail URLs remain `/artiklar/[slug]/`, even when a category changes.
+
+Category labels, permanent URL slugs, and page copy live in `src/lib/categories.ts`.
+Keep published category slugs stable when editing labels or descriptions. The
+category registry is checked against the existing `PrimaryTag` type; category
+colors remain in `src/lib/primary-tag.ts`.
+
+Category pages use the same published-content boundary as the article archive,
+so both Sanity and Markdown builds support browsing without client-side filters.
+A known category with no articles still has a page with an empty state, but is
+excluded from indexing and the sitemap. Unknown category slugs return 404.
+Content changes require a rebuild to update the static listings.
+
+Future location pages can use `/platser/[slug]/` without changing category or
+article routes. Add other namespaces only when those features are introduced.
+
 ## Content sources
 
 The source is selected at build time:

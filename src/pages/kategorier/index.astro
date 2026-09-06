@@ -1,0 +1,46 @@
+---
+import CategoryNav from "../../components/CategoryNav.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CATEGORIES, categoriesPath, categoryPath } from "../../lib/categories";
+
+const description =
+  "Utforska Gotlandstiders tips om mat, loppis, hem, nöjen, utflykter och natur på Gotland.";
+---
+
+<BaseLayout
+  title="Kategorier | Gotlandstider"
+  description={description}
+  ogDescription={description}
+  canonicalPath={categoriesPath()}
+  activeNav="articles"
+>
+  <section class="archive-hero category-hero">
+    <div>
+      <span>Arkivet</span>
+      <h1>Hitta ditt Gotland</h1>
+      <p>
+        Välj det du är nyfiken på och inspireras av våra samlade guider, berättelser
+        och favoriter från ön.
+      </p>
+      <CategoryNav />
+    </div>
+  </section>
+  <section
+    class="archive-list category-directory"
+    aria-label="Alla kategorier"
+    data-category-directory
+  >
+    <div class="category-directory-grid">
+      {
+        CATEGORIES.map((category) => (
+          <article class="category-directory-card" data-category-card>
+            <a href={categoryPath(category.slug)}>
+              <h2>{category.tag}</h2>
+              <p>{category.description}</p>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

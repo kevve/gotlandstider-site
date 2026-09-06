@@ -1,5 +1,6 @@
 ---
 import ArticleGrid from "../../components/ArticleGrid.astro";
+import CategoryNav from "../../components/CategoryNav.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   articlesPath,
@@ -28,6 +29,7 @@ const image = articles[0]
         Ett växande arkiv med tips, guider och upplevelser från Gotland, Ljugarn
         och alla våra andra favoritplatser på ön.
       </p>
+      <CategoryNav archiveCurrent />
     </div>
   </section>
   <section class="archive-list" aria-label="Alla artiklar">

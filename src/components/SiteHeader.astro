@@ -8,6 +8,8 @@ interface Props {
 const { active } = Astro.props;
 const home = "/";
 const archive = articlesPath();
+const archiveHighlighted = active === "articles";
+const archiveCurrent = Astro.url.pathname === archive;
 ---
 
 <nav class="site-nav" aria-label="Huvudnavigation">
@@ -21,8 +23,8 @@ const archive = articlesPath();
       <a href={`${home}#house`}>Sommarhuset</a>
       <a
         href={archive}
-        aria-current={active === "articles" ? "page" : undefined}
-        class:list={{ active: active === "articles" }}>Arkivet</a
+        aria-current={archiveCurrent ? "page" : undefined}
+        class:list={{ active: archiveHighlighted }}>Arkivet</a
       >
       <a href="#contact" class="contact-link">Kontakt</a>
     </div>
@@ -42,8 +44,10 @@ const archive = articlesPath();
   <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
     <a href={`${home}#stories`}>Upplevelser</a>
     <a href={`${home}#house`}>Sommarhuset</a>
-    <a href={archive} aria-current={active === "articles" ? "page" : undefined}
-      >Arkivet</a
+    <a
+      href={archive}
+      aria-current={archiveCurrent ? "page" : undefined}
+      class:list={{ active: archiveHighlighted }}>Arkivet</a
     >
     <a href="#contact">Kontakt</a>
   </div>

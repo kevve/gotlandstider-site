@@ -1,0 +1,78 @@
+---
+import ArticleGrid from "../../components/ArticleGrid.astro";
+import CategoryNav from "../../components/CategoryNav.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  CATEGORIES,
+  categoryPath,
+  filterArticlesByPrimaryTag,
+  type CategoryDefinition,
+} from "../../lib/categories";
+import {
+  articlesPath,
+  getCardPresentation,
+  getPublishedArticles,
+  type ArticleEntry,
+} from "../../lib/content";
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+
+  return CATEGORIES.map((category) => ({
+    params: { tag: category.slug },
+    props: {
+      category,
+      articles: filterArticlesByPrimaryTag(articles, category.tag),
+    },
+  }));
+}
+
+interface Props {
+  category: CategoryDefinition;
+  articles: ArticleEntry[];
+}
+
+const { category, articles } = Astro.props;
+const image = articles[0]
+  ? getCardPresentation(articles[0]).cardImage
+  : "/content/hero-coastline.webp";
+---
+
+<BaseLayout
+  title={category.seoTitle}
+  description={category.seoDescription}
+  ogTitle={category.title}
+  ogDescription={category.seoDescription}
+  image={image}
+  canonicalPath={categoryPath(category.slug)}
+  activeNav="articles"
+  noIndex={articles.length === 0}
+  noFollow={false}
+>
+  <div data-category-page={category.slug}>
+    <section class="archive-hero category-hero">
+      <div>
+        <span>Arkivet</span>
+        <h1>{category.title}</h1>
+        <p>{category.intro}</p>
+        <CategoryNav activeCategory={category} />
+      </div>
+    </section>
+    <section class="archive-list" aria-label={`Artiklar om ${category.tag}`}>
+      {
+        articles.length > 0 ? (
+          <ArticleGrid articles={articles} />
+        ) : (
+          <div class="category-empty" data-category-empty>
+            <h2>Här är det tomt just nu</h2>
+            <p>
+              Vi har inga publicerade artiklar i den här kategorin ännu, men nya
+              berättelser är på väg.
+            </p>
+            <a href={articlesPath()}>Alla artiklar</a>
+          </div>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

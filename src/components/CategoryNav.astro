@@ -1,0 +1,36 @@
+---
+import {
+  CATEGORIES,
+  categoryPath,
+  type CategoryDefinition,
+} from "../lib/categories";
+import { articlesPath } from "../lib/content";
+import { getPrimaryTagColor } from "../lib/primary-tag";
+
+interface Props {
+  activeCategory?: CategoryDefinition;
+  archiveCurrent?: boolean;
+}
+
+const { activeCategory, archiveCurrent = false } = Astro.props;
+---
+
+<nav class="category-nav" aria-label="Artikelkategorier" data-category-nav>
+  <a
+    href={articlesPath()}
+    aria-current={archiveCurrent ? "page" : undefined}
+    class:list={["all-articles", { active: archiveCurrent }]}>Alla artiklar</a
+  >
+  {
+    CATEGORIES.map((category) => (
+      <a
+        href={categoryPath(category.slug)}
+        aria-current={activeCategory?.tag === category.tag ? "page" : undefined}
+        class:list={{ active: activeCategory?.tag === category.tag }}
+        style={`--category-color: ${getPrimaryTagColor(category.tag)}`}
+      >
+        {category.tag}
+      </a>
+    ))
+  }
+</nav>
