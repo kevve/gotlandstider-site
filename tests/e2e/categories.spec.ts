@@ -11,26 +11,22 @@ const categories = [
   {
     label: "Loppis & second hand",
     slug: "loppis-och-second-hand",
-    description:
-      "Loppisar, second hand och platser att fynda runt hela ön.",
+    description: "Loppisar, second hand och platser att fynda runt hela ön.",
   },
   {
     label: "Hem & inredning",
     slug: "hem-och-inredning",
-    description:
-      "Hem och inredning, samt resan mot ett sommarhus i Ljugarn.",
+    description: "Hem och inredning, samt resan mot ett sommarhus i Ljugarn.",
   },
   {
     label: "Upplevelser & nöjen",
     slug: "upplevelser-och-nojen",
-    description:
-      "Hantverk, evenemang och upplevelser under hela året.",
+    description: "Hantverk, evenemang och upplevelser under hela året.",
   },
   {
     label: "Utflykter & natur",
     slug: "utflykter-och-natur",
-    description:
-      "Stränder och utflyktsmål i det gotländska landskapet.",
+    description: "Stränder och utflyktsmål i det gotländska landskapet.",
   },
 ] as const;
 

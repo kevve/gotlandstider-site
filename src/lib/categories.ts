@@ -32,10 +32,8 @@ export const CATEGORY_BY_TAG = {
     tag: "Loppis & second hand",
     slug: "loppis-och-second-hand",
     title: "Loppis & second hand på Gotland",
-    intro:
-      "Följ med till loppisar, gårdsbutiker och second hand-fynd runt ön.",
-    description:
-      "Loppisar, second hand och platser att fynda runt hela ön.",
+    intro: "Följ med till loppisar, gårdsbutiker och second hand-fynd runt ön.",
+    description: "Loppisar, second hand och platser att fynda runt hela ön.",
     seoTitle: "Loppis & second hand på Gotland | Gotlandstider",
     seoDescription:
       "Hitta Gotlandstiders tips om loppisar, second hand och unika platser att fynda på Gotland.",
@@ -46,8 +44,7 @@ export const CATEGORY_BY_TAG = {
     title: "Hem & inredning på Gotland",
     intro:
       "Vi lyfter hem och inredning värd att inspireras av. Här får du också följa bygget av vårt eget sommarhus i Ljugarn.",
-    description:
-      "Hem och inredning, samt resan mot ett sommarhus i Ljugarn.",
+    description: "Hem och inredning, samt resan mot ett sommarhus i Ljugarn.",
     seoTitle: "Hem & inredning på Gotland | Gotlandstider",
     seoDescription:
       "Inspireras av hem, inredning, arkitektur och Gotlandstiders sommarhusprojekt i Ljugarn.",
@@ -58,8 +55,7 @@ export const CATEGORY_BY_TAG = {
     title: "Upplevelser & nöjen på Gotland",
     intro:
       "Upptäck hantverk, evenemang och andra upplevelser som ger Gotland sin särskilda puls under hela året.",
-    description:
-      "Hantverk, evenemang och upplevelser under hela året.",
+    description: "Hantverk, evenemang och upplevelser under hela året.",
     seoTitle: "Upplevelser & nöjen på Gotland | Gotlandstider",
     seoDescription:
       "Upptäck hantverk, evenemang och andra upplevelser på Gotland.",
@@ -68,10 +64,8 @@ export const CATEGORY_BY_TAG = {
     tag: "Utflykter & natur",
     slug: "utflykter-och-natur",
     title: "Utflykter & natur på Gotland",
-    intro:
-      "Hitta stränder och utflyktsmål på Gotland som är värda omvägen.",
-    description:
-      "Stränder och utflyktsmål i det gotländska landskapet.",
+    intro: "Hitta stränder och utflyktsmål på Gotland som är värda omvägen.",
+    description: "Stränder och utflyktsmål i det gotländska landskapet.",
     seoTitle: "Utflykter & natur på Gotland | Gotlandstider",
     seoDescription:
       "Hitta Gotlandstiders guider till stränder, naturupplevelser och utflyktsmål på Gotland.",
