@@ -111,13 +111,21 @@ pull request. The explicit fallback checks are `npm run check:markdown`,
 
 ## Deployment
 
-Pushes to `main` deploy through the official Astro and GitHub Pages actions with `CONTENT_SOURCE=sanity`. All builds use root-relative routes and assets for `gotlandstider.se`; the former GitHub project-subpath preview target has been retired.
+Pushes to `main` and published article changes delivered by the existing Sanity webhook
+deploy through the official Astro and GitHub Pages actions with `CONTENT_SOURCE=sanity`.
+All builds use root-relative routes and assets for `gotlandstider.se`; the former GitHub
+project-subpath preview target has been retired.
 
 Before merging a change that makes Sanity authentication mandatory, create a
 short-lived Viewer token in Sanity and add it to GitHub as the repository secret
 `SANITY_API_READ_TOKEN`. Rotate the token before expiry by adding and testing its
 replacement first, then revoke the previous token. A missing or expired token fails
 the Sanity-backed build before deployment.
+
+After a successful GitHub Pages deployment, the workflow purges the Cloudflare cache so
+the new static output is served immediately. It reads `CLOUDFLARE_API_TOKEN` and
+`CLOUDFLARE_ZONE_ID` from GitHub Actions repository secrets. Keep the API token scoped
+to Cache Purge permission for only the `gotlandstider.se` zone.
 
 Production uses the apex hostname `gotlandstider.se`, declared in `public/CNAME`. Cloudflare redirects `www.gotlandstider.se` to this canonical hostname and supplies the agent-discovery response headers. The legacy `/admin` path is intentionally absent and returns the static 404 page; editorial work happens in the standalone [Gotlandstider Studio](https://gotlandstider-studio.sanity.studio).
 
