@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./browser-fixture";
 import { articlePath, draftArticleSlugs, publicArticleSlugs } from "./fixtures";
 
 test("all 16 public article routes build and draft routes stay private", async ({

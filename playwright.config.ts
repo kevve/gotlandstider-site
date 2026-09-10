@@ -4,6 +4,17 @@ import { defineConfig, devices } from "@playwright/test";
 // astro dev processes from being mistaken for the Playwright preview server.
 const port = Number(process.env.PLAYWRIGHT_PORT || 4322);
 const baseURL = `http://127.0.0.1:${port}`;
+const contentSource = process.env.CONTENT_SOURCE || "sanity";
+
+if (contentSource !== "markdown" && contentSource !== "sanity") {
+  throw new Error(
+    `Unsupported CONTENT_SOURCE=${contentSource}. Use "sanity" or "markdown".`,
+  );
+}
+
+const reportDirectory = `playwright-report/${contentSource}`;
+const resultDirectory = `test-results/${contentSource}`;
+const jsonReportPath = `playwright-report/${contentSource}.json`;
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -11,7 +22,13 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : undefined,
-  reporter: process.env.CI ? "html" : "list",
+  reporter: process.env.CI
+    ? [
+        ["html", { outputFolder: reportDirectory, open: "never" }],
+        ["json", { outputFile: jsonReportPath }],
+      ]
+    : "list",
+  outputDir: resultDirectory,
   use: {
     baseURL,
     trace: "on-first-retry",

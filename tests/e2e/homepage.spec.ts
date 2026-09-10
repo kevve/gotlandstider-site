@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./browser-fixture";
 
 test.describe("homepage", () => {
   test("renders the established sections and anchor navigation", async ({
