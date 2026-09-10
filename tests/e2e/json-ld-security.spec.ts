@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./browser-fixture";
 import { serializeJsonLd } from "../../src/lib/json";
 
 test("JSON-LD cannot be broken out of by hostile article metadata", async ({

@@ -1,4 +1,5 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
+import { expect, test } from "./browser-fixture";
 import { articlePath, draftArticleSlugs } from "./fixtures";
 
 const categories = [

@@ -1,5 +1,7 @@
 dist/
 node_modules/
+playwright-report/
+test-results/
 public/content/
 public/fonts/
 public/.well-known/
