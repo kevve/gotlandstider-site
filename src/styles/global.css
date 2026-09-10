@@ -398,14 +398,17 @@ iframe {
 
 /* Shared headings and featured content */
 .section-heading > span,
+.section-heading > .section-kicker,
 .archive-heading span,
 .archive-hero span,
 .about-copy > span {
   display: block;
   margin-bottom: 0.75rem;
   color: #bc8a6f;
+  font-family: inherit;
   font-size: 0.75rem;
   font-weight: 700;
+  line-height: normal;
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
