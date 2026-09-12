@@ -32,12 +32,34 @@ The main verification commands are:
 
 ```sh
 npm run format:check
-npm run check
-npm run build
+npm run check:markdown
 npm test
 ```
 
-`npm test` builds the static site, serves the output locally, and runs the Chromium Playwright suite. Install its browser once on a new machine with `npx playwright install chromium`.
+`npm test` runs the source-independent contracts once, the complete deterministic
+Markdown browser regression suite, and the focused live Sanity integration suite.
+Each browser source command builds and serves its selected source. Install the
+headless browser once with `npx playwright install --only-shell chromium` (install
+full Chromium instead when using headed local debugging).
+
+```sh
+# Secret-free checks, including controlled Sanity query/renderer cases
+npm run test:contracts
+npm run test:markdown
+
+# Requires SANITY_API_READ_TOKEN
+npm run test:sanity
+npm run test:sanity:full
+```
+
+The full Sanity command adds an exhaustive, dynamic live-content browser walk
+and shared homepage interactions. It is also available through CI's **Run
+workflow → full_sanity** option after the workflow is on the default branch.
+There is no scheduled run. `test:e2e` is an alias for the Markdown regression
+suite. CI writes separate HTML reports, JSON timings and test results for
+`contracts`, `markdown`, `sanity` and the optional `sanity-full` run.
+See [the coverage mapping](docs/test-coverage.md) for retained contracts,
+manual-mode limits and the single typecheck decision.
 
 ## Category browsing
 
@@ -97,17 +119,19 @@ SANITY_API_READ_TOKEN=replace-with-a-viewer-token
 The production deployment reads the same name from a GitHub Actions repository
 secret. Same-repository pull requests receive the secret and run both content-source
 test paths. Forked pull requests never receive repository secrets, so they run the
-complete Markdown-backed test path and skip only the authenticated Sanity build and
-its second browser-test pass.
+complete Markdown browser suite and all controlled contracts; only authenticated
+live Sanity integration is skipped. Missing credentials on a trusted run fail
+verification instead of silently skipping tests.
 
 Markdown remains in `src/content/articles/` as an explicit repository fallback. Its `slug`
 values are the public URL contract and must not be changed silently. Every video
 uses a canonical YouTube ID and upload date; video files are not served by the site
 or uploaded as Sanity file assets.
 
-Run `npm run check`, `npm run build`, and `npm test` with the Viewer token before opening a
-pull request. The explicit fallback checks are `npm run check:markdown`,
-`npm run build:markdown`, and `npm run test:markdown`.
+Run `npm run format:check`, `npm run check:markdown`, and `npm test` with the
+Viewer token before opening a pull request. `npm test` includes both source builds.
+`npm run check` remains available for source-configuration troubleshooting; CI
+checks the complete source tree once with the secret-free Markdown configuration.
 
 ## Deployment
 
