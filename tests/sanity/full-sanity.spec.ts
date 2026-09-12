@@ -83,7 +83,7 @@ test("full live Sanity archive is unique and category pages retain raw membershi
 }) => {
   await page.goto("/artiklar/");
   const archiveHrefs = await page
-    .locator("[data-article-grid] .article-card > a")
+    .locator("main .article-card > a")
     .evaluateAll((links) =>
       links
         .map((link) => (link as HTMLAnchorElement).getAttribute("href"))
@@ -244,3 +244,18 @@ function primaryTagColor(element: Element): string {
     .getPropertyValue("--primary-tag-color")
     .trim();
 }
+
+test.describe("full live Sanity navigation without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+  test("keeps category links available and navigable", async ({ page }) => {
+    await page.goto("/kategorier/");
+    const category = CATEGORIES[0];
+    const link = page
+      .locator('[data-category-nav][aria-label="Artikelkategorier"]')
+      .getByRole("link", { name: category.tag });
+    await expect(link).toHaveAttribute("href", categoryPath(category.slug));
+    await link.click();
+    await expect(page).toHaveURL(categoryPath(category.slug));
+    await expect(page.locator("[data-category-page]")).toBeVisible();
+  });
+});

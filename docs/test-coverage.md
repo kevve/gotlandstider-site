@@ -1,64 +1,112 @@
 # Content-source test coverage
 
-The site has two content sources with different risks. The tests intentionally
-run the shared visual and interaction regression suite against deterministic
-Markdown once, and reserve Sanity runs for source-bound contracts.
+This mapping was written before changing source selection. The final split retains
+all 47 original contracts: ten once-only tests and 37 Markdown browser/request
+tests. Eight controlled Sanity cases add deterministic query/adapter/rendering
+coverage. Trusted CI then runs five live Sanity integration tests (four request
+checks and one representative browser). Forks run the same controlled contracts
+and full Markdown regression without secrets.
 
-| Contract                                                                                                                                                                | Layer                            | Source   | Expectation source                                            |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | -------- | ------------------------------------------------------------- |
-| YouTube normalization, cover fallback, video sitemap, Sanity query shape and redirect-map coherence                                                                     | Server-free unit contracts       | Once     | Controlled values and source modules                          |
-| Layout, responsive states, keyboard navigation, no-JavaScript navigation, JSON-LD injection safety, redirect targets and public resources                               | Full browser regression          | Markdown | Checked-in Markdown fixtures                                  |
-| Published inventory, draft exclusion, article/category routes and membership, Portable Text, covers, videos, canonical URLs, feeds, sitemaps and `llms.txt`             | Trusted Sanity integration       | Sanity   | Independent raw Sanity GROQ queries plus controlled documents |
-| Every discovered live article route, category, homepage/category interactions, responsive and no-JavaScript behavior, resource checks, video privacy and article layout | Manual full Sanity browser suite | Sanity   | Raw published inventory queried at run time                   |
+| Existing spec / contract                                                                                    | Retained test and layer                                                                                           | Source                       |
+| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `canonical-video.spec.ts`: nine video normalization, cover fallback, sitemap and query contracts            | Same file, selected by `playwright.contracts.config.ts`                                                           | Once, server-free            |
+| `redirects.spec.ts`: coherent map                                                                           | `contracts/redirect-map.spec.ts`, unchanged assertions                                                            | Once, server-free            |
+| `redirects.spec.ts`: target existence and mapped legacy absence                                             | Existing request tests; live route integration also checks the union of raw published routes and redirect targets | Markdown; Sanity requests    |
+| `articles.spec.ts`: inventory, colors, layouts, bylines, media and privacy                                  | All 11 existing browser tests; archive now checks raw uniqueness before comparing inventory                       | Markdown                     |
+| `categories.spec.ts`: all nine inventory/SEO, keyboard, mobile and no-JavaScript tests                      | All original browser tests; live category inventory/SEO uses parsed HTML with independent raw expectations        | Markdown; Sanity requests    |
+| `homepage.spec.ts`: five navigation, random-card, highlight, menu and focus-restoration tests               | Same file                                                                                                         | Markdown; manual full Sanity |
+| `internal-links.spec.ts`: first-party links/assets                                                          | Original browser/request test; dynamic equivalent in `sanity/full-sanity.spec.ts`                                 | Markdown; manual full Sanity |
+| `json-ld-security.spec.ts`: hostile metadata remains data in a browser                                      | Same browser test, never replaced by a string-only check                                                          | Markdown; manual full Sanity |
+| `routes-and-seo.spec.ts`: eight public/draft/legacy routes, Swedish SEO, feeds, discovery and sitemap tests | All original tests; five `sanity/live-integration.spec.ts` cases independently cover the live source              | Markdown; Sanity integration |
 
-## Server-free contracts
+## Controlled Sanity coverage without credentials
 
-The ten existing inexpensive contracts run once with no Astro build or web
-server: nine canonical-video/query/cover tests and redirect-map coherence.
-They must not be included in either browser source run.
+The 18 once-only tests use no site build or listening preview server. Four
+renderer cases use Astro's container and Vite in middleware mode to load the
+real components. No new test framework was introduced. `groq-js` and `parse5`
+were already transitive dependencies and are now explicit test dependencies.
 
-The controlled Sanity query fixture contains a published article, a
-`drafts.*` article and an article without a slug. It executes the production
-`SANITY_ARTICLES_QUERY` through `groq-js`. The expected inventory contains
-only the published document. A deliberately weakened draft predicate is also
-evaluated and must make the assertion fail, so the draft check cannot pass
-vacuously. These fixtures are local and no test writes to the production
-dataset.
+The actual `SANITY_ARTICLES_QUERY` is evaluated against controlled published,
+draft and missing-slug documents. Removing its draft predicate demonstrably
+breaks the expected inventory. Another case resolves actual asset/location
+references and video fields through that query, then the production mapper.
+The mapper was moved unchanged into a module without the `sanity:client` virtual
+import, allowing direct tests of projection handling and an inconsistent primary
+location failure.
+
+The real `ArticleBody.astro` renderer receives duplicate headings and a marked
+link; tests verify distinct anchors, the link and rejection of an empty body.
+The actual category page receives both an empty and populated article list;
+its empty state and `noindex, follow` metadata must change accordingly. These
+negative cases remain meaningful even if production has no drafts, no empty
+categories or no articles using a particular Portable Text feature.
 
 ## Trusted Sanity integration
 
-This suite requires `SANITY_API_READ_TOKEN` and fails before a build if the
-token is absent. It never skips live assertions. Its raw GROQ inventory query
-is separate from the app feed query and returns published articles, draft
-identifiers and the fields needed to form expectations. The resulting values
-are compared with generated feed and route output; the generated feed alone
-is never the oracle.
+`npm run test:sanity` requires a token before starting its production-source
+build. The five tests then compare all three feeds, every published route,
+article JSON-LD/media/canonical metadata, category/archive inventory and covers,
+sitemap/video metadata, robots, `llms.txt` and discovery resources with a separate
+raw Sanity query. Four cases use HTTP requests and parsed HTML; only representative
+Portable Text rendering uses a browser. The production-source build remains real.
 
-Live tests do not name production titles, dates or Markdown slugs. They choose
-published documents dynamically, then compare page headings, Portable Text
-headings/links, cover/video output, canonical metadata, feeds and sitemap
-entries to the raw record. Draft identifiers are queried independently and
-must stay absent from generated pages and discovery output.
+The oracle uses the explicit `raw` HTTP perspective, includes actual draft slugs,
+and excludes release versions from its published inventory. Draft-only slugs must 404. An unpublished revision sharing a published slug must not make that public
+route disappear; feed/page fields are compared with the published record instead.
+Exact inventories also reject extra leaked entries and duplicate cards. No feed
+is the sole oracle for another generated resource.
 
-Portable Text edge cases are also rendered through the real Astro component in
-an Astro container using controlled content: duplicated headings receive stable
-distinct anchors, link marks render as links, and an empty Sanity body throws.
-Category empty-state and `noindex` behavior use controlled source data through
-the page rendering seam rather than relying on the changing production
-inventory.
+No live expectation names a production title, date or Markdown slug. A separate
+read-only snapshot is cached per test worker. Publishing during a build/test run
+can produce a real snapshot mismatch; tests fail rather than accepting inconsistent
+outputs. No test writes production content. The token is loaded from the same
+production environment configuration as the build and is not included in reports.
 
-## Manual full Sanity browser mode
+## Manual full Sanity mode and coverage tradeoff
 
-The explicit manual option is deliberately exhaustive and dynamic. It walks
-every raw published article route and category, then applies the existing
-article layout/privacy, homepage/category interaction, responsive,
-no-JavaScript and resource contracts with raw-inventory expectations where
-content membership matters. This catches compatibility changes in editor data
-that a representative smoke cannot. It costs more and is unsuitable for every
-trusted change; it has no fixed production-content assertions, so ordinary
-editorial changes do not require updating test fixtures.
+`npm run test:sanity:full`, or CI's manual `full_sanity` boolean, selects the five
+integration tests plus five dynamic browser cases and the six unchanged homepage/
+JSON-LD security tests. It builds Sanity once. Each discovered article retains the
+exhaustive desktop layout bounds, canonical/video privacy, raw byline dates and
+primary-tag checks. The additional cases cover archive uniqueness, category
+membership/keyboard state, mobile layouts, same-origin resources and navigation
+with JavaScript disabled. There is no recurring schedule.
 
-The full mode cannot guarantee visual review of every possible text wrap or
-third-party video availability. It retains every discovered route and the
-source-specific layout/privacy checks, while the deterministic Markdown suite
-is the stable visual baseline.
+The deliberate tradeoff is removing repeated execution of the shared visual suite
+against live Sanity on every trusted change. Exact Markdown fixture geometry
+(two-date identity/avatar sizing, 543/544px byline alignment, a specified narrow
+copy-wrap state and cross-placement color fixtures) remains in the full deterministic
+regression suite. Manual Sanity is an exhaustive live-content compatibility suite,
+not a promise that mutable editorial data contains each of those fixed fixture
+states. It requires enough published articles for related-story behavior, as did
+the former live suite. Neither mode checks third-party playback availability.
+
+## Why CI runs one Astro/TypeScript check
+
+This decision was checked against PR 1, not inferred from two successful logs:
+
+- `astro.config.mjs` enables the same Sanity integration and plugins in either
+  source. Its only source-specific configuration branch validates the value and
+  requires the token. The Sanity build still exercises that guard.
+- `src/content.config.ts` always loads the same Markdown collection/schema;
+  source selection happens at runtime in `src/lib/content.ts`.
+- `@sanity/astro` 3.5.1's configuration hook injects the same client/Studio plugins
+  for either source and does not generate source-specific declaration files.
+- Astro 7.2.10's check command performs sync, then checks the complete tsconfig
+  graph. The checked-in `src/sanity.types.ts` is not regenerated by either command.
+- All four generated/static declaration hashes were identical after the two
+  source checks. Deliberate type errors in the Sanity adapter and `ArticleBody`
+  were detected by **both** configurations. Both final configurations also pass
+  with the expanded test tree and zero diagnostics.
+
+CI keeps `check:markdown`, both production builds, the required `verify` job name,
+and the existing trusted/fork condition. Configuration or generation changes
+should revisit this decision. `npm run check` remains available manually.
+
+## Rollback
+
+This PR stacks on the browser-fixture/report PR. Merge that PR first, retarget this
+PR to `main`, and rerun its required check on the final base before merging. Revert
+this PR first to restore duplicate full-source execution and both typechecks;
+then revert the fixture/report PR if desired. Deployment remains independent and
+unchanged. Measurements and validation are recorded in `test-suite-performance.md`.

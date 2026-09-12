@@ -79,3 +79,52 @@ and retry traces, and the Sanity invocation preserved the Markdown artifacts.
 Those temporary tests were removed, preserving the 47-test inventory. Generated
 Playwright reports/results are excluded from formatting and typechecking so
 retained report bundles are not mistaken for project source files.
+
+## PR 2: content-source division
+
+Measured 12 September against PR 1 (`bb67e47`) in the same macOS arm64,
+Node 26.8.1/npm 11.19.0/Playwright 1.62.1 environment. Remote `main` remained
+`92109e9`. Four sequences alternated parent → PR 2 → parent → PR 2, with no
+concurrent builds or browser suites. `CI=1`, two workers, two configured retries,
+port 4327 and native HTML/JSON reporters were identical. No successful test retried
+or skipped.
+
+Parent sequence: `check:markdown`, `test:markdown`, `check`, `test:sanity`.
+PR 2 sequence: `check:markdown`, `test:contracts`, `test:markdown`, `test:sanity`.
+Each step was invoked through `npm run`; wall time includes checks, builds,
+preview/test startup and reports. Dependency/browser installation and artifact
+upload are excluded. Caches and read-only live source latency can still vary.
+
+| Step                           |     Parent 1 |   PR 2 run 1 |     Parent 2 |   PR 2 run 2 |
+| ------------------------------ | -----------: | -----------: | -----------: | -----------: |
+| First Astro/TypeScript check   |      5.299 s |      5.269 s |      5.008 s |      5.315 s |
+| Once-only controlled contracts |            — |      3.363 s |            — |      3.340 s |
+| Markdown build/tests           |      8.088 s |      7.827 s |      7.706 s |      8.030 s |
+| Second Astro/TypeScript check  |      4.662 s |            — |      4.586 s |            — |
+| Sanity build/tests             |      8.151 s |      3.360 s |      7.493 s |      3.537 s |
+| Entire measured sequence       | **26.201 s** | **19.821 s** | **24.794 s** | **20.223 s** |
+
+The parent passed 47 Markdown + 47 Sanity tests per sequence. PR 2 passed
+18 controlled + 37 Markdown + five Sanity tests per sequence. All original
+contracts remain, with shared regression execution removed from the second
+source and eight deterministic Sanity cases added. See `test-coverage.md` for
+the exact mapping and manual-mode limits. Routine trusted browser execution
+falls from 58 cases to 30; this is reduced runner work, separate from elapsed
+time. The optional full Sanity mode passed 16/16 locally without retries/skips.
+
+Validation also included both final Astro/TypeScript configurations (74 files,
+zero diagnostics), formatting, and focused negative probes. An empty local feed
+and a duplicated local archive card each failed the new raw-inventory checks;
+restoring the original outputs passed. A missing trusted token failed before
+suite execution, while all 18 controlled tests passed with an empty token and
+an invalid browser directory. Temporary mutations/configs were removed.
+
+## Observed GitHub evidence
+
+[PR 1 CI](https://github.com/kevve/gotlandstider-site/actions/runs/34500037294)
+passed `verify` and dependency review. Both uploaded JSON reports confirmed
+47 expected, zero skipped, zero unexpected and zero flaky. Its verification
+job took 119 s versus the parent's 94 s: dependency installation rose from
+10 to 41 s, browser installation fell from 29 to 19 s, and the two test steps
+took 17 s each. This one run does **not** demonstrate a net CI speedup. The
+local percentage is not extrapolated to GitHub or deployment latency.

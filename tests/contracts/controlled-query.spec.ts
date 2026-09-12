@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { evaluate, parse } from "groq-js";
 import { SANITY_ARTICLES_QUERY } from "../../src/lib/sanity/queries";
+import {
+  mapSanityArticle,
+  type SanityArticle,
+} from "../../src/lib/content/sanity-mapper";
 
 const controlledDocuments = [
   {
@@ -30,6 +34,71 @@ test("Sanity query includes only published articles with slugs", async () => {
   expect(() => expect(weakened).toEqual(expected)).toThrow();
   expect(weakened).toContain("drafts.controlled-draft");
   expect(weakened).not.toContain("controlled-missing-slug");
+});
+
+test("Sanity query resolves real asset, location and video projections", async () => {
+  const document = {
+    ...article("controlled-projections"),
+    coverImage: {
+      asset: { _type: "reference", _ref: "controlled-image" },
+      legacyPath: "/content/stale-cover.webp",
+    },
+    seo: {
+      image: {
+        asset: { _type: "reference", _ref: "controlled-image" },
+        legacyPath: "/content/stale-seo.webp",
+      },
+    },
+    video: {
+      youtubeVideoId: "AbCdEf123_-",
+      uploadDate: "2026-09-10T12:00:00+02:00",
+    },
+  };
+  const value = await evaluate(parse(SANITY_ARTICLES_QUERY), {
+    dataset: [
+      controlledDocuments[0],
+      {
+        _id: "controlled-image",
+        _type: "sanity.imageAsset",
+        url: "https://cdn.sanity.io/controlled-cover.webp",
+      },
+      document,
+    ],
+  });
+  const projected = (await value.get()) as SanityArticle[];
+  expect(projected).toHaveLength(1);
+  expect(projected[0]).toMatchObject({
+    coverImage: "https://cdn.sanity.io/controlled-cover.webp",
+    seo: { image: "https://cdn.sanity.io/controlled-cover.webp" },
+    primaryLocation: {
+      title: "Kontrollerad plats",
+      slug: "kontrollerad-plats",
+    },
+    locations: [
+      {
+        _key: "primary-location",
+        role: "primary",
+        location: { slug: "kontrollerad-plats" },
+      },
+    ],
+    video: {
+      youtubeVideoId: "AbCdEf123_-",
+      uploadDate: "2026-09-10T12:00:00+02:00",
+    },
+    sitemapLastModified: "2026-09-10",
+  });
+  expect(mapSanityArticle(projected[0]).data).toMatchObject({
+    draft: false,
+    coverImage: "https://cdn.sanity.io/controlled-cover.webp",
+    primaryLocation: {
+      title: "Kontrollerad plats",
+      slug: "kontrollerad-plats",
+    },
+    video: {
+      youtubeVideoId: "AbCdEf123_-",
+      uploadDate: "2026-09-10T12:00:00+02:00",
+    },
+  });
 });
 
 async function queryIds(query: string): Promise<string[]> {

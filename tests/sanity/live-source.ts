@@ -2,43 +2,97 @@ export interface RawSanityArticle {
   _id: string;
   slug: string;
   title: string;
+  excerpt: string;
+  qualifierTag: string;
   primaryTag: string;
   publishedAt: string;
   updatedAt: string;
   sitemapLastModified: string;
   noIndex: boolean;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: string | null;
+  };
   coverImage: string | null;
-  video: { youtubeVideoId: string; uploadDate: string } | null;
+  locations: Array<{
+    _key: string;
+    role: string;
+    location: { title: string; slug: string } | null;
+  }>;
+  featured: boolean;
+  video: {
+    youtubeVideoId: string;
+    uploadDate: string;
+    socialLinks: { instagram: string | null; tiktok: string | null };
+  } | null;
   body: unknown[];
+}
+
+export interface RawSanityDraft {
+  _id: string;
+  slug: string | null;
 }
 
 export interface RawSanityInventory {
   published: RawSanityArticle[];
-  draftIds: string[];
+  drafts: RawSanityDraft[];
 }
 
 const RAW_INVENTORY_QUERY = /* groq */ `{
   "published": *[
     _type == "article" &&
     !(_id in path("drafts.**")) &&
+    !(_id in path("versions.**")) &&
     defined(slug.current)
   ] | order(publishedAt desc, slug.current asc) {
     _id,
     "slug": slug.current,
     title,
+    excerpt,
+    "qualifierTag": coalesce(qualifierTag, tags[2]),
     "primaryTag": coalesce(primaryTag, tags[0]),
     publishedAt,
     updatedAt,
     "sitemapLastModified": coalesce(updatedAt, _updatedAt),
     "noIndex": seo.noIndex == true,
+    "seo": {
+      "title": seo.title,
+      "description": seo.description,
+      "image": coalesce(seo.image.asset->url, seo.image.legacyPath)
+    },
     "coverImage": coalesce(coverImage.asset->url, coverImage.legacyPath),
-    "video": video { youtubeVideoId, uploadDate },
+    locations[]{
+      _key,
+      role,
+      location->{ title, "slug": slug.current }
+    },
+    featured,
+    "video": video {
+      youtubeVideoId,
+      uploadDate,
+      "socialLinks": {
+        "instagram": coalesce(socialLinks.instagram, null),
+        "tiktok": coalesce(socialLinks.tiktok, null)
+      }
+    },
     body
   },
-  "draftIds": *[_type == "article" && _id in path("drafts.**")]._id
+  "drafts": *[_type == "article" && _id in path("drafts.**")] {
+    _id,
+    "slug": slug.current
+  }
 }`;
 
-export async function getRawSanityInventory(): Promise<RawSanityInventory> {
+let inventory: Promise<RawSanityInventory> | undefined;
+
+// One read-only snapshot per worker, reused across tests. Never use a generated
+// feed as the source oracle. A new retry worker gets a fresh snapshot.
+export function getRawSanityInventory(): Promise<RawSanityInventory> {
+  return (inventory ??= fetchRawSanityInventory());
+}
+
+async function fetchRawSanityInventory(): Promise<RawSanityInventory> {
   const token = process.env.SANITY_API_READ_TOKEN;
   if (!token) {
     throw new Error(
@@ -49,7 +103,7 @@ export async function getRawSanityInventory(): Promise<RawSanityInventory> {
   const projectId = process.env.PUBLIC_SANITY_PROJECT_ID || "th4gij3b";
   const dataset = process.env.PUBLIC_SANITY_DATASET || "production";
   const response = await fetch(
-    `https://${projectId}.api.sanity.io/v2026-08-26/data/query/${dataset}`,
+    `https://${projectId}.api.sanity.io/v2026-08-26/data/query/${dataset}?perspective=raw`,
     {
       method: "POST",
       headers: {
@@ -57,6 +111,7 @@ export async function getRawSanityInventory(): Promise<RawSanityInventory> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ query: RAW_INVENTORY_QUERY }),
+      signal: AbortSignal.timeout(20_000),
     },
   );
   if (!response.ok) {

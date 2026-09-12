@@ -2,6 +2,12 @@ name: CI
 
 on:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      full_sanity:
+        description: Run exhaustive live Sanity browser compatibility tests
+        type: boolean
+        default: false
   push:
     branches:
       - main
@@ -34,8 +40,25 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
-      - name: Check Astro and TypeScript from Markdown
+      # Both sources share the same source graph and generated declarations.
+      # Each source still builds below; see docs/test-coverage.md.
+      - name: Check Astro and TypeScript
         run: npm run check:markdown
+
+      - name: Run source-independent contracts
+        run: npm run test:contracts
+
+      - name: Upload contract Playwright artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-report-contracts
+          path: |
+            playwright-report/contracts/
+            playwright-report/contracts.json
+            test-results/contracts/
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Install Chromium
         run: npx playwright install --with-deps --only-shell chromium
@@ -56,17 +79,17 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-      - name: Check Astro and TypeScript from Sanity
+      - name: Run Sanity integration tests
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        run: npm run check
+        run: |
+          if [ "$FULL_SANITY" = "true" ]; then
+            npm run test:sanity:full
+          else
+            npm run test:sanity
+          fi
         env:
           SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
-
-      - name: Run browser regression tests from Sanity
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        run: npm run test:sanity
-        env:
-          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+          FULL_SANITY: ${{ github.event_name == 'workflow_dispatch' && inputs.full_sanity }}
 
       - name: Note private Sanity checks skipped for fork
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
@@ -81,6 +104,9 @@ jobs:
             playwright-report/sanity/
             playwright-report/sanity.json
             test-results/sanity/
+            playwright-report/sanity-full/
+            playwright-report/sanity-full.json
+            test-results/sanity-full/
           retention-days: 7
           if-no-files-found: ignore
 

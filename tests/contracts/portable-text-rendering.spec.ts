@@ -28,6 +28,30 @@ test("controlled Sanity Portable Text rejects an empty body", async () => {
 });
 
 function controlledArticle(): ArticleEntry {
+  const body = [
+    block("h2", "Samma rubrik"),
+    {
+      _key: "linked-block",
+      _type: "block",
+      style: "normal",
+      markDefs: [
+        {
+          _key: "guide-link",
+          _type: "link",
+          href: "https://example.test/guide",
+        },
+      ],
+      children: [
+        {
+          _key: "linked-span",
+          _type: "span",
+          marks: ["guide-link"],
+          text: "Läs guiden",
+        },
+      ],
+    },
+    block("h3", "Samma rubrik"),
+  ];
   return {
     id: "controlled-portable-text",
     source: "sanity",
@@ -53,30 +77,7 @@ function controlledArticle(): ArticleEntry {
       featured: false,
       draft: false,
     },
-    body: [
-      block("h2", "Samma rubrik"),
-      {
-        _key: "linked-block",
-        _type: "block",
-        style: "normal",
-        markDefs: [
-          {
-            _key: "guide-link",
-            _type: "link",
-            href: "https://example.test/guide",
-          },
-        ],
-        children: [
-          {
-            _key: "linked-span",
-            _type: "span",
-            marks: ["guide-link"],
-            text: "Läs guiden",
-          },
-        ],
-      },
-      block("h3", "Samma rubrik"),
-    ],
+    body,
   };
 }
 

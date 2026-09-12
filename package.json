@@ -15,10 +15,12 @@
     "check:markdown": "CONTENT_SOURCE=markdown ASTRO_TELEMETRY_DISABLED=1 astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "CONTENT_SOURCE=sanity playwright test",
-    "test:sanity": "CONTENT_SOURCE=sanity playwright test",
+    "test": "npm run test:contracts && npm run test:markdown && npm run test:sanity",
+    "test:sanity": "CONTENT_SOURCE=sanity playwright test --config=playwright.sanity.config.ts",
     "test:markdown": "CONTENT_SOURCE=markdown playwright test",
-    "test:e2e": "CONTENT_SOURCE=sanity playwright test"
+    "test:e2e": "npm run test:markdown",
+    "test:contracts": "CONTENT_SOURCE=markdown playwright test --config=playwright.contracts.config.ts",
+    "test:sanity:full": "CONTENT_SOURCE=sanity SANITY_FULL_SUITE=1 playwright test --config=playwright.sanity.config.ts"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -30,6 +32,8 @@
     "astro-portabletext": "^1.0.0",
     "github-slugger": "^2.0.0",
     "groq": "^6.12.0",
+    "groq-js": "2.0.0",
+    "parse5": "8.0.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.3.3",
