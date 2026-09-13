@@ -30,7 +30,8 @@ test("archive lists every published article once and no drafts", async ({
         .filter((href): href is string => Boolean(href)),
     );
 
-  const articleLinks = new Set(hrefs.filter((href) => href !== "/artiklar/"));
+  const rawArticleLinks = hrefs.filter((href) => href !== "/artiklar/");
+  const articleLinks = new Set(rawArticleLinks);
   const publishedArticles = await page.request.get(
     "/generated/content/articles.json",
   );
@@ -38,6 +39,7 @@ test("archive lists every published article once and no drafts", async ({
     items: Array<{ slug: string }>;
   };
 
+  expect(rawArticleLinks).toHaveLength(articleLinks.size);
   expect([...articleLinks].sort()).toEqual(
     articlePayload.items.map((article) => articlePath(article.slug)).sort(),
   );

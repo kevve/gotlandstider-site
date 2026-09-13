@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { reportSettings } from "./playwright.reports";
 
 // 4321 is Astro's dev-server default; an off-default port prevents stale
 // astro dev processes from being mistaken for the Playwright preview server.
@@ -12,23 +13,14 @@ if (contentSource !== "markdown" && contentSource !== "sanity") {
   );
 }
 
-const reportDirectory = `playwright-report/${contentSource}`;
-const resultDirectory = `test-results/${contentSource}`;
-const jsonReportPath = `playwright-report/${contentSource}.json`;
-
 export default defineConfig({
   testDir: "./tests/e2e",
+  testIgnore: "**/canonical-video.spec.ts",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : undefined,
-  reporter: process.env.CI
-    ? [
-        ["html", { outputFolder: reportDirectory, open: "never" }],
-        ["json", { outputFile: jsonReportPath }],
-      ]
-    : "list",
-  outputDir: resultDirectory,
+  ...reportSettings(contentSource),
   use: {
     baseURL,
     trace: "on-first-retry",
