@@ -1,13 +1,13 @@
 # Cloudflare Workers hosting migration
 
-Status: repository and non-production Workers preparation complete. Manual
-Cloudflare build variables and the Sanity-to-Cloudflare deploy hook are
-configured. Production still uses GitHub Pages until the separate
-production-cutover approval gate is completed.
+Status: production cutover to Cloudflare Workers Static Assets completed on
+2026-09-13. GitHub Pages, its deployment workflow, `public/CNAME`, and its
+secrets remain available as the rollback path during stabilization. Disabling
+or removing that path requires separate Human Gate F approval.
 
 ## Architecture
 
-Current production:
+Previous production (retained temporarily for rollback):
 
 ```text
 GitHub push or Sanity webhook
@@ -18,7 +18,7 @@ GitHub push or Sanity webhook
   -> gotlandstider.se
 ```
 
-Target production:
+Current production:
 
 ```text
 GitHub push or pull request
@@ -255,7 +255,7 @@ Production-cutover checklist:
 - [x] TLS/custom domain plan verified
 - [x] Rollback procedure documented
 - [x] Existing GitHub Pages deployment still operational
-- [ ] Human approval received
+- [x] Human approval received
 
 Before requesting cutover approval, record the exact existing apex and www DNS
 records, proxy state, TTL, redirect rules, and Pages configuration. Do not store
@@ -263,6 +263,14 @@ unrelated DNS records or account data in the repository. Preserve the current
 www-to-apex and legacy URL redirects.
 
 ## Manual production cutover (Human Gate E)
+
+Human Gate E was approved and completed on 2026-09-13. Cloudflare would not add
+the apex Custom Domain while the four externally managed GitHub Pages A records
+were present. After separate confirmation for that deletion, only those four
+records were removed and `gotlandstider.se` was immediately attached to the
+existing `gotlandstider-site` Worker. Cloudflare created the managed apex Worker
+DNS mapping. The proxied `www` CNAME, redirect rules, GitHub Pages configuration,
+and all unrelated DNS records were left unchanged.
 
 Cloudflare Workers Static Assets is the origin, so use a Worker Custom Domain,
 not a Worker Route. A Custom Domain is an exact-hostname binding; the apex binding
@@ -289,6 +297,55 @@ Only after explicit Human Gate E approval:
    cache headers, and current Sanity content.
 7. Keep GitHub Pages, its deployment workflow, `public/CNAME`, and its secrets
    unchanged throughout the stabilization period.
+
+## Post-cutover validation
+
+Validation completed immediately after cutover on 2026-09-13 at approximately
+21:34 CEST:
+
+- The Worker Custom Domain `gotlandstider.se` is attached, and its Cloudflare-
+  managed apex DNS mapping is present. HTTPS serves a trusted certificate.
+- Workers deployment `37ba8a02` is active at 100% traffic from successful
+  `main` build `20948b8`.
+- `http://gotlandstider.se/` redirects once to the HTTPS apex; HTTP and HTTPS
+  `www` requests redirect once to the same HTTPS apex URL.
+- The homepage, article archive, representative articles, category archive,
+  representative category, `sitemap.xml`, and `robots.txt` return `200`.
+- A missing route and `/videos/` return `404`. There is no standalone video
+  archive by design; embedded YouTube privacy-mode media renders within article
+  and homepage content.
+- Slashless canonical routes and all three legacy article redirect cases return
+  `301` to the expected `/artiklar/` URL.
+- The sitemap remains byte-for-byte identical to the pre-cutover version
+  (`SHA-256 1c40c876b18e19b4740e3ab61256bd81500d5feeec2ed84f9ff48d2bd57840f1`),
+  contains 28 page entries and 19 video entries, and every page entry returns
+  `200`.
+- Homepage and article canonical URLs, Open Graph URLs, descriptions, Article
+  and VideoObject structured data, Sanity-derived content, and
+  `youtube-nocookie.com` embeds are correct on the production hostname.
+- The current fingerprinted CSS asset returns `200` with the intended immutable
+  one-year cache policy. HTML retains revalidation caching.
+- The production apex does not receive the staging-only `X-Robots-Tag: noindex`.
+  The expected Cloudflare-managed content signals are present in `robots.txt`.
+- A warm production request returned a verified TLS result, approximately 51 ms
+  time to first byte, and approximately 52 ms total from the validation host.
+- Desktop Brave rendered the homepage, primary navigation, current Sanity
+  content, responsive images, an embedded video, and a representative article
+  without an observed structural regression. The broader desktop/mobile checks
+  completed before cutover remain applicable to the same static build.
+- The retained GitHub Pages workflow completed successfully for `20948b8` after
+  cutover, preserving a current rollback artifact.
+
+The Sanity deploy-hook URL was not inspected during cutover. End-to-end webhook
+delivery remains intentionally deferred until the next approved real editorial
+publish, unpublish, or delete; validate it using timestamps only, without viewing
+or exposing the hook URL.
+
+Keep the rollback path intact for at least seven days and through one successful
+Sanity-triggered production rebuild. After both conditions are met and production
+remains healthy, present the exact Pages workflow, secrets, `public/CNAME`, and
+other obsolete items proposed for disablement or removal at Human Gate F. Prefer
+disabling deployment first and deleting only after an additional review.
 
 ## Rollback during stabilization
 
