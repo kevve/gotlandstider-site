@@ -46,6 +46,12 @@ directory slash. `public/_redirects` makes the existing article and category
 canonicalization permanent `301` redirects, matching current production. It is
 not an SPA fallback and does not replace the external www or legacy URL rules.
 
+`public/_headers` keeps the public `workers.dev` staging and preview hostnames
+out of search results without applying `noindex` to the production custom
+domain. It also gives Astro's fingerprinted `/_astro/` assets a long immutable
+browser lifetime; HTML and non-fingerprinted content retain Workers Static
+Assets' safe revalidation default.
+
 Node 24 is pinned in `.node-version`. Install and build from a clean checkout:
 
 ```sh
@@ -216,5 +222,6 @@ separate approval gate.
 - [Cloudflare: Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)
 - [Cloudflare: GitHub integration and repository scoping](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/github-integration/)
 - [Cloudflare: Static Assets redirects](https://developers.cloudflare.com/workers/static-assets/redirects/)
+- [Cloudflare: Static Assets headers](https://developers.cloudflare.com/workers/static-assets/headers/)
 - [Cloudflare: SSG and custom 404 handling](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/)
 - [Cloudflare: Deploy Hooks](https://developers.cloudflare.com/workers/ci-cd/builds/deploy-hooks/)
