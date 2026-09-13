@@ -18,7 +18,7 @@ This migration deliberately omits Decap CMS, its OAuth worker and editorial PR m
 
 ## Local development
 
-Use a current Node.js release supported by Astro, then install from the lockfile:
+Use Node.js 24 as pinned in `.node-version`, then install from the lockfile:
 
 ```sh
 npm ci
@@ -116,12 +116,12 @@ For local Sanity builds, create an ignored `.env.local` file:
 SANITY_API_READ_TOKEN=replace-with-a-viewer-token
 ```
 
-The production deployment reads the same name from a GitHub Actions repository
-secret. Same-repository pull requests receive the secret and run both content-source
-test paths. Forked pull requests never receive repository secrets, so they run the
-complete Markdown browser suite and all controlled contracts; only authenticated
-live Sanity integration is skipped. Missing credentials on a trusted run fail
-verification instead of silently skipping tests.
+The current production deployment reads the same name from a GitHub Actions
+repository secret. Pull requests never receive this secret; they run the complete
+Markdown browser suite and all controlled contracts. Authenticated live Sanity
+integration runs on trusted `main` pushes and manual workflow dispatches. Missing
+credentials on those trusted runs fail verification instead of silently skipping
+tests.
 
 Markdown remains in `src/content/articles/` as an explicit repository fallback. Its `slug`
 values are the public URL contract and must not be changed silently. Every video
@@ -135,10 +135,21 @@ checks the complete source tree once with the secret-free Markdown configuration
 
 ## Deployment
 
-Pushes to `main` and published article changes delivered by the existing Sanity webhook
-deploy through the official Astro and GitHub Pages actions with `CONTENT_SOURCE=sanity`.
-All builds use root-relative routes and assets for `gotlandstider.se`; the former GitHub
-project-subpath preview target has been retired.
+The repository is prepared for the approved migration to Cloudflare Workers
+Builds and Workers Static Assets. The application remains statically generated:
+GitHub supplies source and review, Cloudflare builds `main` with `npm run build`,
+and `wrangler.jsonc` deploys `./dist`. Sanity will trigger rebuilds through a
+private Cloudflare Deploy Hook after the separate webhook approval gate.
+
+Production has not been cut over yet. Pushes to `main` and published article
+changes still deploy through the existing GitHub Pages workflow during migration
+and stabilization. `public/CNAME`, the Pages workflow, and its secrets remain in
+place for rollback until their separate removal approval gate.
+
+All builds use root-relative routes and assets for `gotlandstider.se`; the former
+GitHub project-subpath preview target has been retired. See the
+[Cloudflare migration runbook](docs/cloudflare-migration.md) for build settings,
+environment variable names, manual account steps, verification gates, and rollback.
 
 Before merging a change that makes Sanity authentication mandatory, create a
 short-lived Viewer token in Sanity and add it to GitHub as the repository secret

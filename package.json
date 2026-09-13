@@ -10,6 +10,10 @@
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "build:sanity": "CONTENT_SOURCE=sanity ASTRO_TELEMETRY_DISABLED=1 astro build",
     "build:markdown": "CONTENT_SOURCE=markdown ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "postbuild": "node scripts/assert-no-public-secrets.mjs",
+    "postbuild:sanity": "node scripts/assert-no-public-secrets.mjs",
+    "postbuild:markdown": "node scripts/assert-no-public-secrets.mjs",
+    "cloudflare:dry-run": "wrangler deploy --dry-run",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "check": "CONTENT_SOURCE=sanity ASTRO_TELEMETRY_DISABLED=1 astro check",
     "check:markdown": "CONTENT_SOURCE=markdown ASTRO_TELEMETRY_DISABLED=1 astro check",
@@ -37,6 +41,7 @@
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "4.131.1"
   }
 }

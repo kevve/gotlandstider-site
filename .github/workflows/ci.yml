@@ -31,7 +31,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 24
+          node-version-file: .node-version
           cache: npm
 
       - name: Install dependencies
@@ -80,7 +80,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Run Sanity integration tests
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           if [ "$FULL_SANITY" = "true" ]; then
             npm run test:sanity:full
@@ -91,12 +91,12 @@ jobs:
           SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
           FULL_SANITY: ${{ github.event_name == 'workflow_dispatch' && inputs.full_sanity }}
 
-      - name: Note private Sanity checks skipped for fork
-        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
-        run: echo "Sanity-backed checks are skipped because GitHub does not expose repository secrets to forked pull requests."
+      - name: Note private Sanity checks skipped for pull request
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "Authenticated Sanity checks run only on trusted main pushes and manual workflow dispatches."
 
       - name: Upload Sanity Playwright artifacts
-        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ !cancelled() && github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: playwright-report-sanity
