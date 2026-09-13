@@ -1,7 +1,9 @@
 # Cloudflare Workers hosting migration
 
-Status: repository preparation only. Production still uses GitHub Pages until the
-separate production-cutover approval gate is completed.
+Status: repository and non-production Workers preparation complete. Manual
+Cloudflare build variables and the Sanity-to-Cloudflare deploy hook are
+configured. Production still uses GitHub Pages until the separate
+production-cutover approval gate is completed.
 
 ## Architecture
 
@@ -82,9 +84,10 @@ The Sanity credential must be read-only and limited to the minimum dataset
 access needed to query the private production dataset. Do not use draft-preview
 or write-capable credentials for production static builds.
 
-## Manual Cloudflare setup (Human Gate B and C)
+## Manual Cloudflare setup (Human Gates B and C)
 
-Do not perform these steps until their explicit approval gate:
+These account-level steps were completed manually. Keep them as the operational
+reference; do not automate account authorization or secret entry:
 
 1. In Cloudflare, create/connect a Workers Builds project to
    `kevve/gotlandstider-site` using Cloudflare's GitHub App.
@@ -144,23 +147,30 @@ GitHub CI checks.
 
 ## Sanity deploy hook (Human Gate D)
 
-Create the deploy path only after a Cloudflare preview/staging deployment is
-healthy:
+The deploy path was configured manually after the Cloudflare staging deployment
+was verified healthy:
 
-1. Create a Cloudflare Deploy Hook for the production branch.
-2. Treat the generated URL as a secret and do not commit or paste it into logs.
-3. Replace the existing Sanity-to-GitHub deployment webhook only after explicit
-   approval.
-4. Configure create, update, and delete events for published documents. Disable
-   drafts and version documents.
-5. Use `_type in ["article", "location"]` so referenced location changes also
-   rebuild generated article output.
+1. The Cloudflare Deploy Hook targets `main`.
+2. Its generated URL is a credential. Never inspect, commit, log, screenshot, or
+   paste it into chat; rotate it if exposed.
+3. The Sanity webhook targets the `production` dataset with HTTP `POST`.
+4. Create, update, and delete events are enabled for published documents. Drafts
+   and document versions are disabled.
+5. The filter is `_type in ["article", "location"]`, so referenced location
+   changes also rebuild generated article output.
+6. The existing Sanity-to-GitHub webhook remains enabled during stabilization so
+   GitHub Pages stays current and usable for rollback.
 
 Publishing, unpublishing, or deleting a relevant document should trigger one
 build. Failed hooks leave the last successful static deployment serving; inspect
 Sanity delivery attempts and Workers build logs, then retry after correcting the
 cause. Do not point a deploy hook back at Sanity or otherwise create a trigger
 loop.
+
+Do not create artificial production content only to test the webhook. Confirm the
+end-to-end trigger on the next approved editorial publish, unpublish, or delete by
+matching its Sanity delivery timestamp to a successful Workers build. The deploy
+hook URL itself does not need to be viewed for that verification.
 
 ## Preview verification and cutover gate
 
@@ -170,29 +180,115 @@ articles, embedded videos, Sanity content, images/assets, canonicals, sitemap,
 robots, metadata, Open Graph, structured data, redirects, the custom 404 page,
 trailing slashes, mobile rendering, major browsers, HTTPS, and basic performance.
 
+Verified non-production evidence on 2026-09-13:
+
+- A clean Node 24 build generated 29 Astro pages and passed the post-build secret
+  scanner.
+- The `main` Workers deployment and a branch preview completed successfully.
+- All 28 sitemap pages returned the expected status and matched production for
+  title, canonical URL, description, H1, robots metadata, Open Graph metadata,
+  and JSON-LD types.
+- Sitemap output was byte-for-byte identical to production and contained 19
+  video entries.
+- Representative navigation, article, category, embedded-video, image, asset,
+  redirect, trailing-slash, and custom-404 behavior passed.
+- Desktop and mobile Chromium/Brave rendering passed without horizontal
+  overflow. The mobile menu and responsive navigation behaved correctly.
+- The `workers.dev` hostname returns `X-Robots-Tag: noindex`; fingerprinted
+  `/_astro/` assets return an immutable one-year browser cache policy.
+- HTTPS and basic performance checks passed. No mixed-content, redirect-loop,
+  CORS, or CSP regression was observed.
+- GitHub Pages remains configured with `gotlandstider.se`, and the Pages workflow
+  remained active with a successful deployment after the Workers migration PRs.
+
+Known staging-only differences:
+
+- Cloudflare's zone-managed additions to `robots.txt` are not present on the
+  `workers.dev` hostname. Verify them after the custom domain is attached.
+- Plain HTTP behavior on `workers.dev` differs from the production zone. Verify
+  the existing apex HTTP-to-HTTPS and www-to-apex rules immediately after
+  cutover.
+
+Pre-cutover routing inventory recorded on 2026-09-13:
+
+| Host                   | Type  | Target            | Proxy   | TTL  |
+| ---------------------- | ----- | ----------------- | ------- | ---- |
+| `gotlandstider.se`     | A     | `185.199.108.153` | Proxied | Auto |
+| `gotlandstider.se`     | A     | `185.199.109.153` | Proxied | Auto |
+| `gotlandstider.se`     | A     | `185.199.110.153` | Proxied | Auto |
+| `gotlandstider.se`     | A     | `185.199.111.153` | Proxied | Auto |
+| `www.gotlandstider.se` | CNAME | `kevve.github.io` | Proxied | Auto |
+
+There are no zone-level Worker Routes. Four active redirect rules must remain in
+their current order:
+
+1. `migrate-sommarens-konserter-slug`: the legacy concert article path redirects
+   permanently to its current `/artiklar/` path.
+2. `migrate-basta-strander-slug`: the legacy beach article path redirects
+   permanently to its current `/artiklar/` path.
+3. `Migrate legacy articles to artiklar`: `/articles` and `/articles/*` on apex
+   or www redirect permanently to the corresponding `/artiklar` path on the
+   apex.
+4. `Canonicalize www to apex`: all www paths redirect permanently to the same
+   path on `https://gotlandstider.se`.
+
+Zone-wide Always Use HTTPS, TLS 1.3, and Automatic HTTPS Rewrites are enabled.
+The apex is covered by active managed edge certificates. GitHub Pages uses the
+custom domain `gotlandstider.se`, build type `workflow`, with `main` as its
+configured source; Cloudflare currently provides HTTPS enforcement at the zone.
+
 Production-cutover checklist:
 
-- [ ] Cloudflare preview deployment healthy
-- [ ] Clean build succeeds
-- [ ] Production-equivalent environment configured
-- [ ] Secrets configured manually
-- [ ] Main routes verified
-- [ ] Content verified
-- [ ] Assets verified
-- [ ] SEO metadata verified
-- [ ] Sitemap verified
-- [ ] robots.txt verified
-- [ ] Redirects verified
-- [ ] 404 verified
-- [ ] Sanity content verified
-- [ ] TLS/custom domain plan verified
-- [ ] Rollback procedure documented
-- [ ] Existing GitHub Pages deployment still operational
+- [x] Cloudflare preview deployment healthy
+- [x] Clean build succeeds
+- [x] Production-equivalent environment configured
+- [x] Secrets configured manually
+- [x] Main routes verified
+- [x] Content verified
+- [x] Assets verified
+- [x] SEO metadata verified
+- [x] Sitemap verified
+- [x] robots.txt verified
+- [x] Redirects verified
+- [x] 404 verified
+- [x] Sanity content verified
+- [x] TLS/custom domain plan verified
+- [x] Rollback procedure documented
+- [x] Existing GitHub Pages deployment still operational
 - [ ] Human approval received
 
-Before requesting cutover approval, record the exact existing DNS records,
-proxy state, redirect rules, and Pages configuration. Bind the apex custom domain
-only after approval. Preserve the current www-to-apex and legacy URL redirects.
+Before requesting cutover approval, record the exact existing apex and www DNS
+records, proxy state, TTL, redirect rules, and Pages configuration. Do not store
+unrelated DNS records or account data in the repository. Preserve the current
+www-to-apex and legacy URL redirects.
+
+## Manual production cutover (Human Gate E)
+
+Cloudflare Workers Static Assets is the origin, so use a Worker Custom Domain,
+not a Worker Route. A Custom Domain is an exact-hostname binding; the apex binding
+does not include `www`.
+
+Only after explicit Human Gate E approval:
+
+1. Reconfirm the pre-cutover inventory above and that the latest GitHub Pages
+   workflow is successful. Do not change the www CNAME or any redirect rule.
+2. The apex currently uses four proxied GitHub Pages A records, not a CNAME, so
+   Cloudflare's documented CNAME restriction does not apply. Do not pre-delete
+   the A records. Use the Custom Domain flow and review its proposed DNS change;
+   stop instead of deleting additional records if Cloudflare reports an
+   unexpected conflict.
+3. In Workers & Pages, open `gotlandstider-site`, then Settings > Domains & Routes
+   > Add > Custom Domain. Add only `gotlandstider.se`.
+4. Wait until the binding and automatically managed certificate are active. Do
+   not bind `www.gotlandstider.se` to the Worker while www remains the redirecting
+   hostname.
+5. Confirm that the existing proxied www DNS record and redirect rule still send
+   `www.gotlandstider.se` to `https://gotlandstider.se` in one hop.
+6. Run the post-cutover checks for HTTPS, apex/www redirects, homepage,
+   representative content, assets, sitemap, robots, canonicals, 404 behavior,
+   cache headers, and current Sanity content.
+7. Keep GitHub Pages, its deployment workflow, `public/CNAME`, and its secrets
+   unchanged throughout the stabilization period.
 
 ## Rollback during stabilization
 
@@ -200,9 +296,9 @@ Rollback is triggered by an unavailable production hostname, broken primary
 routes/content/assets, incorrect redirects or canonicals, TLS failure, or another
 material regression that cannot be corrected immediately.
 
-1. Remove or detach the new Workers custom-domain binding.
-2. Restore the exact pre-cutover apex DNS record and proxy state recorded during
-   the cutover checklist.
+1. Remove or detach the `gotlandstider.se` Workers Custom Domain.
+2. Remove the generated Worker DNS mapping if it remains, then restore the four
+   proxied apex A records listed in the pre-cutover inventory with TTL Auto.
 3. Confirm the GitHub Pages deployment and `public/CNAME` are still enabled.
 4. Purge the Cloudflare zone cache using the existing least-privilege GitHub
    workflow or the Cloudflare dashboard.
@@ -210,11 +306,12 @@ material regression that cannot be corrected immediately.
    canonical URLs, HTTPS, and 404 response against the last known-good Pages
    deployment.
 
-DNS recovery can be delayed by resolver caching up to the previous record TTL,
-although proxied Cloudflare changes normally become visible sooner. Keep the
-Pages workflow, `public/CNAME`, its secrets, and the previous deployment intact
-through the agreed stabilization period. Disabling or deleting them requires a
-separate approval gate.
+Cloudflare proxied records normally use a 300-second TTL, but local resolvers can
+take longer to refresh. Removing a Worker Custom Domain does not automatically
+remove its generated Advanced Certificate; leaving it temporarily does not affect
+rollback functionality. Keep the Pages workflow, `public/CNAME`, its secrets, and
+the previous deployment intact through the agreed stabilization period. Disabling
+or deleting them requires a separate approval gate.
 
 ## Current references
 
@@ -225,3 +322,5 @@ separate approval gate.
 - [Cloudflare: Static Assets headers](https://developers.cloudflare.com/workers/static-assets/headers/)
 - [Cloudflare: SSG and custom 404 handling](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/)
 - [Cloudflare: Deploy Hooks](https://developers.cloudflare.com/workers/ci-cd/builds/deploy-hooks/)
+- [Cloudflare: Worker Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
+- [Cloudflare: DNS TTL](https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl/)
