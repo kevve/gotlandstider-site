@@ -1,0 +1,4 @@
+/artiklar /artiklar/ 301
+/kategorier /kategorier/ 301
+/artiklar/:slug /artiklar/:slug/ 301
+/kategorier/:slug /kategorier/:slug/ 301
