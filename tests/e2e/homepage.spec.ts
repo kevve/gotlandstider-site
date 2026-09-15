@@ -21,6 +21,20 @@ test.describe("homepage", () => {
     await expect(page.locator('a[href$="/artiklar/"]').first()).toBeAttached();
   });
 
+  test("footer links to the YouTube channel in a new tab", async ({ page }) => {
+    await page.goto("/");
+
+    const youtubeLink = page
+      .locator('footer nav[aria-label="Sociala medier"]')
+      .getByRole("link", { name: "YouTube" });
+    await expect(youtubeLink).toHaveAttribute(
+      "href",
+      "https://www.youtube.com/@gotlandstider",
+    );
+    await expect(youtubeLink).toHaveAttribute("target", "_blank");
+    await expect(youtubeLink).toHaveAttribute("rel", "noreferrer");
+  });
+
   test("shows three unique archive cards without depending on random titles", async ({
     page,
   }) => {
