@@ -6,3 +6,7 @@ https://:version.:subdomain.workers.dev/*
 # Astro fingerprints generated assets, so repeat visitors can cache them safely.
 /_astro/*
   Cache-Control: public, max-age=31556952, immutable
+
+# Plain-text responses need an explicit charset for consistent decoding.
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
